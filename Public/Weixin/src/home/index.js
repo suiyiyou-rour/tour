@@ -166,3 +166,5 @@ wx.ready(function () {
         imgUrl: public + '/Weixin/image/wxbg.png',
     });
 })
+
+//git 试一试
