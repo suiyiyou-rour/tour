@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>分销商注册--随意游</title>
+
+    <link rel="stylesheet" href="__PUBLIC__/Page/dist/fregister.min.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_469978_jh7pzgqlg14i.css">
+
+</head>
+
+<body>
+<div class="top">
+
+</div>
+<div>
+    <img class="bg" src="__PUBLIC__/Page/image/bg-login.png" alt="注册背景">
+</div>
+
+<div class="content">
+    <div class="left">
+        <div class="l-top">成为分销商</div>
+
+        <div class="l-c">
+            <label class="lc-title">公司名称：</label>
+            <input type="text" class="lc-text lc-long" placeholder="请输入公司名称">
+        </div>
+
+        <div class="l-c">
+            <label class="lc-title">联系人：</label>
+            <input type="text" class="lc-text" placeholder="请输入您的名字">
+        </div>
+
+        <div class="l-c">
+            <label class="lc-title">邮箱：</label>
+            <input type="text" class="lc-text" placeholder="请输入邮箱">
+        </div>
+
+        <div class="l-c">
+            <label class="lc-title">传真号：</label>
+            <input type="text" class="lc-text" placeholder="请输入传真号">
+        </div>
+
+        <div class="l-c">
+            <label class="lc-title">城市：</label>
+            <select class="lc-select">
+                <option value="1" class="lc-opt">福州</option>
+                <option value="1" class="lc-opt">泉州</option>
+                <option value="1">厦门</option>
+            </select>
+            <select class="lc-select">
+                <option value="1">福州</option>
+                <option value="1">泉州</option>
+                <option value="1">厦门</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="right">
+        <div class="l-top"></div>
+        <div>
+            <div class="l-top-tx">请上传营业执照正反面。</div>
+            <div id="fileUploadContent">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/Page/dist/fregister.min.js"></script>
+
+</html>

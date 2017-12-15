@@ -1,0 +1,347 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei";
+}
+
+li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+#topTips{
+    width: 100%;
+    background: #eeeeee;
+    font-size: 12px;
+    line-height: 40px;
+
+    .top-tips{
+        width: 1000px;
+        margin: 0 auto;
+        text-align: right;
+
+        .top-item{
+            display: inline-block;
+            margin-left: 20px;
+            line-height: 40px;
+            height: 40px;
+            color: #777;
+
+            .syy{
+                font-size: 22px;
+                vertical-align: middle;
+                padding: 3px;
+            }
+        }
+
+        #wxCode:hover{
+            color: #3385ff;
+            cursor: pointer;
+        }
+    }
+}
+
+#nav{
+    width: 100%;
+    border-top: 1px solid #cecece;
+    border-bottom: 1px solid #cecece;
+    background: #fff;
+
+    .nav-box{
+        width: 1000px;
+        margin: 0 auto;
+        height: 76px;
+        position: relative;
+
+        .nav-item-on{
+            color: #fff;
+            background: #3385ff;
+            display: inline-block;
+            height: 76px;
+            line-height: 76px;
+            cursor: pointer;
+            width: 100px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .nav-item{
+            color: #777;
+            display: inline-block;
+            height: 76px;
+            line-height: 76px;
+            cursor: pointer;
+            width: 100px;
+            text-align: center;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #3385ff;
+                border-bottom: 3px solid #3385ff;
+            }
+        }
+
+        .login-register{
+            float: right;
+
+            .lr{
+                line-height: 76px;
+                color: #777;
+                text-decoration: none;
+                margin-left: 10px;
+                font-size: 14px;
+
+                &:hover{
+                    color: #3385ff;
+                }
+            }
+        }
+    }
+}
+
+.content{
+    width: 1000px;
+    margin: 20px auto 0;
+    overflow: hidden;
+    position: relative;
+    height: 664px;
+
+
+    .content-left{
+        width: 440px;
+        float: left;
+    }
+
+    #carousel{
+        height: 260px;
+        .pro-img{
+            width: 100%;
+            height: 260px;
+        }
+    }
+
+    #datePriceTable{
+        width: 100%;
+        border: 1px solid #cecece;
+        margin-top: 30px;
+
+        .date-price{
+            color: #ff0000;
+        }
+
+        .js_choose{
+            border: 1px solid #cecece;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .js_choose.on {
+            background: #3385ff;
+            color: #dadada;
+            .date-price {
+                color: #fff;
+            }
+        }
+
+        .disabled{
+            background: #eaeaea;
+        }
+
+        #timeChange{
+            margin: 0 135px;
+        }
+
+        #controllerTime{
+            line-height: 34px;
+        }
+        th{
+            line-height: 20px;
+        }
+        td{
+            text-align: center;
+            font-size: 12px;
+            height: 50px;
+            vertical-align: top;
+            color: #777;
+            width: 14%;
+        }
+        .monthBtn{
+            background: #3385ff;
+            color: #fff;
+            padding: 1px 5px;
+            border-radius: 2px;
+        }
+        #prevMonthBtn,#nextMonthBtn{
+            cursor: pointer;
+
+            &:hover{
+                background-color: #abcdf8;
+            }
+        }
+        .price-week{
+            background: #abcdf8;
+        }
+    }
+
+    .content-right{
+        width: 540px;
+        float: right;
+
+        .pro-name{
+            font-size: 22px;
+        }
+
+        .price-range{
+            width: 100%;
+            background: #eaeaea;
+            color: #ff6f00;
+            padding: 20px 0;
+            padding-left: 10px;
+            margin-top: 30px;
+
+            em{
+                font-size: 22px;
+                font-style: normal;
+                font-weight: bold;
+            }
+
+            strong{
+                font-size: 34px;
+            }
+
+            .sales{
+                color: #777;
+                font-size: 12px;
+                margin-left: 20px;
+            }
+        }
+
+        .choose-num{
+            margin-top: 20px;
+            padding: 10px;
+            overflow: hidden;
+            .item-name{
+                color: #777;
+                font-size: 12px;
+                float: left;
+                line-height: 30px;
+            }
+            .item-inp{
+                float: left;
+                margin-left: 10px;
+                width: 80px;
+                height: 28px;
+
+                .amount{
+                    border: 1px solid #cecece;
+                    overflow: hidden;
+                    
+                    .inputs{
+                        float: left;
+                        line-height: 28px;
+                        font-size: 13px;
+                        padding-left: 10px;
+                    }
+
+                    .btns{
+                        float: right;
+                        width: 14px;
+                        height: 28px;
+                        font-size: 5px;
+                        text-align: center;
+                        border-left: 1px solid #cecece;
+                        
+                        .add,.red{
+                            display: block;
+                            height: 14px;
+                            line-height: 14px;
+                            cursor: pointer;
+
+                            &:hover{
+                                background-color: #3385ff;
+                                color: #fff; 
+                            }
+                        }
+                        .add{
+                            border-bottom: 1px solid #cecece; 
+                            box-sizing: border-box;
+                        }
+                    }
+                }
+            }
+        }
+
+        .res-price{
+            width: 540px;
+            background: #eaeaea;
+            height: 50px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            
+            #resPrice{
+                font-size: 34px;
+                margin-top: 10px;
+                padding-left: 10px;
+                color: #ff6f00;
+                line-height: 50px;
+            }
+
+            #nowBuy{
+                float: right;
+                color: #fff;
+                background: #ff9d00;
+                line-height: 50px;
+                font-size: 20px;
+                width: 130px;
+                text-align: center;
+                cursor: pointer;
+
+                &:hover{
+                    background-color: #ff6f00;
+                }
+            }
+        }
+    }
+}
+
+#proMessage{
+    width: 1000px;
+    margin: 50px auto 0;
+
+    ul{
+        border-bottom: 2px solid #cecece;
+        box-sizing: border-box;
+    }
+
+    .nav-item{
+        display: inline-block;
+        line-height: 50px;
+        padding: 0 20px;
+        font-size: 18px;
+        cursor: pointer;
+        position: relative;
+        top: 2px;
+
+        &:hover{
+            color: #3385ff;
+        }
+
+        &.on{
+            color: #3385ff;
+            border-bottom: 2px solid #3385ff;
+        }
+    }
+
+    .item{
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 30px;
+        padding-left: 30px;
+        border-left: 5px solid #3385ff;
+        margin: 30px 0;
+    }
+}

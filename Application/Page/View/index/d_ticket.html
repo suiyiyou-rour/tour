@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <link rel="stylesheet" href="__PUBLIC__/Page/dist/d_ticket.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_469978_0ku5qokkalb4kj4i.css">
+    <link rel="icon" type="image/jpg" href="__PUBLIC__/Page/image/logo-icon.jpg">
+</head>
+<script>
+    window.controller = "__CONTROLLER__";
+</script>
+<body>
+
+    <header id="topTips">
+        <div class="top-tips">
+            <div class="top-item">
+                <i class="syy icon-dianhua"></i>官方咨询电话 : 18512009795</div>
+            <div class="top-item" id="wxCode">
+                <i class="syy icon-erweima"></i>微信公众号</div>
+        </div>
+    </header>
+
+    <div id="nav">
+        <div class="nav-box">
+            <div class="nav-item">首页</div>
+            <a href="./p_route.html">
+                <div class="nav-item">跟团游</div>
+            </a>
+            <a href="./p_hotel.html">
+                <div class="nav-item">景酒套餐</div>
+            </a>
+            <a href="./p_ticket.html">
+                <div class="nav-item-on">景区门票</div>
+            </a>
+
+            <div class="login-register">
+                <a class="lr" href="#">登陆</a>
+                <a class="lr" href="#">注册</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="buy-step">
+            <div class="circular on" style="margin-left: 20px"></div>
+            <div class="line on"></div>
+            <div class="line"></div>
+            <div class="circular"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="circular"></div>
+            <div id="stepName">
+                <span class="step-name on">提交订单</span>
+                <span class="step-name" style="margin: 0 162px;">确认支付</span>
+                <span class="step-name">完成购买</span>
+            </div>
+        </div>
+        <div id="production">
+            <img id="proPic" src="" alt="">
+            <p id="proName">--</p>
+            <p class="date-time">
+                出行日期 :
+                <span id="date">--</span>
+            </p>
+            <p class="num">
+                数量 :
+                <span id="numDate" class="num-date"></span>
+            </p>
+        </div>
+        <h2 class="title">
+            <span class="sn">1</span>预订人信息
+            <span class="tips">( 用于接收订单反馈 )</span>
+        </h2>
+        <div id="reserveMess">
+            <div class="item">
+                <input class="item-inp" type="text" id="name" placeholder="请输入您的真实姓名">
+            </div>
+            <div class="item" id="oneIdentify">
+                <input class="item-inp" type="text" id="identify" placeholder="请输入身份证信息">
+            </div>
+            <div class="item">
+                <input class="item-inp" type="text" id="mobile" placeholder="请输入您的联系手机">
+            </div>
+            <div class="item marks">
+                <textarea class="item-inp" type="text" id="marks" placeholder="备注信息"></textarea>
+            </div>
+        </div>
+        <h2 class="title" id="messContentTitle">
+            <span class="sn">2</span>出游人信息
+        </h2>
+        <div id="travelerMess">
+            
+        </div>
+    </div>
+    <div id="priceMess">
+        <p class="total-price">支付总金额 : <b>￥</b><span id="totalPrice">--</span></p>
+        <div class="agree">
+            <input type="checkbox" checked id="agreement">
+            <label for="agreement">我已阅读并同意 <a href="#">《随意游服务使用协议》</a></label>
+            <button id="commitOrder">提交订单</button>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="footer-content">
+            <img class="bottom-logo" src="__PUBLIC__/Page/image/bottom.png" alt="" width="150">
+        </div>
+    </footer>
+
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/Page/dist/d_ticket.min.js"></script>

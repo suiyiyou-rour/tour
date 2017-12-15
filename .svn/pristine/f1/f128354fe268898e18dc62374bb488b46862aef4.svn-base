@@ -1,0 +1,151 @@
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <link rel="stylesheet" href="/Public/Page/dist/home.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_469978_0ku5qokkalb4kj4i.css">
+    <link rel="icon" type="image/jpg" href="/Public/Page/image/logo-icon.jpg">
+</head>
+
+<body>
+
+<header id="topTips">
+    <div class="top-tips">
+        <div class="top-item">
+            <i class="syy icon-dianhua"></i>官方咨询电话 : 18512009795
+        </div>
+        <div class="top-item" id="wxCode">
+            <i class="syy icon-erweima"></i>微信公众号
+        </div>
+    </div>
+</header>
+
+<div id="nav">
+    <div class="nav-box">
+        <a href="<?php echo U('index');?>">
+            <div class="nav-item-on">首页</div>
+        </a>
+        <a href="<?php echo U('groupList');?>">
+            <div class="nav-item">跟团游</div>
+        </a>
+        <a href="<?php echo U('seceneyList');?>">
+            <div class="nav-item">景酒套餐</div>
+        </a>
+        <a href="<?php echo U('tickList');?>">
+            <div class="nav-item">景区门票</div>
+        </a>
+
+        <div class="login-register">
+            <a class="lr" href="#">登陆</a>
+            <a class="lr" href="#">注册</a>
+        </div>
+    </div>
+</div>
+
+<div id="background">
+    <img id="bigBg" src="/Public/Page/image/bg.jpg" alt="">
+
+    <div id="searchBox">
+        <div style="margin-left:30px;" class="item on">
+            全部
+        </div>
+        <div class="item">
+            跟团游
+        </div>
+        <div class="item">
+            景酒套餐
+        </div>
+        <div class="item">
+            景区门票
+        </div>
+        <div class="item-box" style="display:none">
+            <input class="seach-inp" type="text" id="allSearchInp" placeholder="请输入关键字搜索">
+            <button class="search-btn" id="allSearchBtn"><i class="syy icon-sousuo"></i></button>
+        </div>
+        <div class="item-box">
+            <input class="seach-inp" type="text" id="routeSearchInp" placeholder="我想去...">
+            <div class="date-box">
+                <input type="text" readonly class="seach-inp datepicker-here" id="routeBeginTime">
+                <i class="syy icon-rl"></i>
+            </div>
+            <div class="date-box">
+                <input type="text" readonly class="seach-inp datepicker-here" id="routeEndTime">
+                <i class="syy icon-rl"></i>
+            </div>
+            <button id="routeSearchBtn" class="search-btn"><i class="syy icon-sousuo"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="content">
+    <div class="title">
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+        <h1>跟团游</h1>
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <div class="content-item">
+            <img class="pic" src="/Public/Page/image/pro.jpg" alt="">
+            <div class="mess">
+                <p class="name">花开花谢水长眠花开花谢水长眠花开花</p>
+                <p class="detail">
+                    花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长花谢水长眠</p>
+                <p class="price-box">
+                    售价 : ￥<span class="price">458</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+        <h1>景酒套餐</h1>
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <div class="content-item">
+            <img class="pic" src="/Public/Page/image/pro.jpg" alt="">
+            <div class="mess">
+                <p class="name">花开花谢水长眠花开花谢水长眠花开花</p>
+                <p class="detail">
+                    花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长花谢水长眠</p>
+                <p class="price-box">
+                    售价 : ￥<span class="price">458</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+        <h1>景区门票</h1>
+        <img class="line" src="/Public/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <div class="content-item">
+            <img class="pic" src="/Public/Page/image/pro.jpg" alt="">
+            <div class="mess">
+                <p class="name">花开花谢水长眠花开花谢水长眠花开花</p>
+                <p class="detail">
+                    花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长眠花开花谢水长花谢水长眠</p>
+                <p class="price-box">
+                    售价 : ￥<span class="price">458</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="footer">
+    <div class="footer-content">
+        <img class="bottom-logo" src="/Public/Page/image/bottom.png" alt="" width="150">
+    </div>
+</footer>
+
+</body>
+<script src="/Public/common/jquery-2.1.1.min.js"></script>
+<script src="/Public/Page/dist/home.min.js"></script>
+
+</html>

@@ -1,0 +1,11 @@
+<?php
+/**
+ * 数据处理
+ */
+namespace Page\Model;
+use Think\Model;
+class IndexModel extends Model{
+    public function index(){
+        echo 1;
+    }
+}

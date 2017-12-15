@@ -1,0 +1,282 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Microsoft YaHei';
+}
+
+body{
+    padding-bottom: 52px;
+}
+
+.red {
+    font-size: 20px;
+    color: #ff1900;
+    font-weight: bold;
+}
+
+#reserveMess {
+    .title {
+        line-height: 30px;
+        text-align: center;
+        font-size: 16px;
+        position: relative;
+        background: #eaeaea;
+    }
+    .ticket-mess {
+        color: #888888;
+        padding: 5px 10px;
+        line-height: 20px;
+        border-top: 1px solid #cecece;
+        border-bottom: 1px solid #cecece;
+        #ticketName {
+            font-size: 13px;
+        }
+        .ticket {
+            font-size: 12px;
+        }
+
+        #tips{
+            color: #ff0000;
+            font-size: 12px;
+            display: none;
+        }
+    }
+    #ticketNumBox ,#dfcBox{
+
+        #peopleNum,#zfNum{
+            border-bottom: 1px solid #cecece;
+        }
+
+        .subtitle {
+            line-height: 20px;
+            background: #3385ff;
+            width: 70px;
+            text-align: center;
+            color: #fff;
+            margin: 20px 0 0;
+            font-size: 14px;
+        }
+        .num-box {
+            line-height: 40px;
+            border-top: 1px solid #cecece;
+            overflow: hidden;
+
+            .one-price{
+                font-size: 14px;
+                color: #777;
+                margin-left: 8px;
+                float: left;
+            }
+
+            .item-name{
+                width: 30%;
+                font-size: 14px;
+                color: #777;
+                text-align: center;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .js_add,.js_red{
+            border: 1px solid #3385ff;
+            outline: none;
+            background: #fff;
+            padding: 0 2px;
+            line-height: 26px;
+            float: left;
+
+            &:active{
+                background-color: #b2d2ff;
+            }
+        }
+
+        .select-num {
+            margin-right: 10px;
+            width: 120px;
+            float: right;
+            overflow: hidden;
+            margin-top: 6px;
+            .iconfont {
+                color: #3385ff;
+                line-height: 26px;
+            }
+
+            .choose-num{
+                margin: 0 5px;
+                width: 60px;
+                line-height: 26px;
+                text-align: center;
+                display: block;
+                border: 1px solid #cecece;
+                float: left;
+            }
+        }
+        #oneTicket {
+            font-size: 13px;
+            color: #888888;
+            margin-left: 10px;
+        }
+        .total {
+            font-size: 12px;
+            text-align: right;
+            padding-right: 15px;
+            line-height: 30px;
+            border-bottom: 1px solid #cecece;
+            background: #eaeaea;
+        }
+    }
+    .reserve-know {
+        line-height: 30px;
+        font-size: 12px;
+        border-bottom: 1px solid #cecece;
+        #mustKnow {
+            text-decoration: underline;
+        }
+        #reserveCheck {
+            margin: 0 5px 0 10px;
+        }
+        input[type=checkbox] {
+            position: relative;
+            width: 14px;
+            height: 14px;
+        }
+        input[type=checkbox]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 14px;
+            height: 14px;
+            line-height: 14px;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            border: 1px solid #d5d5d5;
+            background: #fff;
+        }
+        input[type=checkbox]:checked::before {
+            color: #fff;
+            content: '\2714';
+            background: #3385ff;
+        }
+    }
+    .bottom-box {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        font-size: 13px;
+        background: #eaeaea;
+        .order-total {
+            margin-left: 10px;
+            float: left;
+            line-height: 47px;
+        }
+        #goTourBtn {
+            outline: none;
+            border: none;
+            color: #fff;
+            background: #ff1900;
+            line-height: 50px;
+            width: 160px;
+            font-size: 18px;
+            float: right;
+        }
+    }
+}
+
+#tourristMess {
+    
+    #itemContainer{
+        background: #eaeaea;
+        overflow: hidden;
+
+        .red{
+            font-size: 12px;
+            color: #ff1900;
+        }
+    }
+
+    .item-container{
+        border-top: 1px solid #cecece;
+        margin-top: 10px;
+    }
+    .title {
+        line-height: 30px;
+        text-align: center;
+        font-size: 16px;
+        position: relative;
+        border-bottom: 1px solid #cecece;
+        background: #eaeaea;
+        .icon-zuojiantou {
+            position: absolute;
+            line-height: 30px;
+            left: 0;
+            padding: 0 7px;
+            color: #3385ff;
+        }
+    }
+    .item-box {
+        background: #fff;
+        font-size: 13px;
+        line-height: 30px;
+        border-bottom: 1px solid #cecece;
+        .item-p {
+            margin-left: 10px;
+        }
+        .item-inp {
+            padding-left: 8px;
+            outline: none;
+            border: none;
+        }
+    }
+    .remarks-box {
+        border-top: 20px solid #eaeaea;
+        .title {
+            border-top: 1px solid #cecece;
+            background: #fff;
+            text-align: left;
+            padding-left: 10px;
+            font-size: 13px;
+            border-bottom: none;
+            .iconfont {
+                font-size: 12px;
+                margin: 0 3px;
+                color: #cecece;
+            }
+        }
+        #remarks {
+            margin-top: 5px;
+            padding: 0 10px 5px;
+            border: none;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+            overflow-y: hidden;
+            width: 100%;
+            border-bottom: 1px solid #cecece;
+        }
+    }
+    .bottom-box {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        font-size: 13px;
+        background: #eaeaea;
+        .order-total {
+            margin-left: 10px;
+        }
+        #takeOrderBtn {
+            outline: none;
+            border: none;
+            color: #fff;
+            background: #ff1900;
+            line-height: 50px;
+            width: 120px;
+            font-size: 18px;
+        }
+    }
+}

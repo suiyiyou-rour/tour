@@ -1,0 +1,300 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Microsoft YaHei';
+}
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+
+body{
+    padding-top: 50px;
+}
+
+#homeBoxPage{
+
+    #fxsMessBox{
+        width: 100%;
+        background: linear-gradient(to left, #006aff, #00ccff);
+        height: 100px;
+        position: relative;
+    
+        .fxs-mess{
+            margin-left: 5%;
+            float: left;
+            margin-top: 10px;
+        }
+    
+        .pic-box{
+            float: left;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            margin-left: 7%;
+            margin-top: 10px;
+        }
+
+        #fxsPic{
+            width: 100%;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .fxs-name{
+            color: #fff;
+            font-size: 16px;
+            line-height: 30px;
+        }
+        .fxs-job,.fxs-mobile{
+            color: #fff;
+            font-size: 14px;
+        }
+
+        #getMoney{
+            position: absolute;
+            color: #fff;
+            display: block;
+            line-height: 30px;
+            right: 5%;
+            bottom: 9px;
+            background: linear-gradient(to top, #ff9100, #ffee00);
+            width: 50px;
+            border-radius: 3px;
+            text-align: center;
+        }
+    }
+
+    .search-box{
+        width: 100%;
+        height: 50px;
+        background: rgba(206,206,206,0.7);
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-shadow: 0 2px 10px rgba(206,206,206,0.7);
+        z-index: 99;
+    
+        #inputBox{
+            background: #fff;
+            width: 80%;
+            padding: 0 8px;
+            height: 32px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 9px auto 0;
+            line-height: 32px;
+    
+            .icon-sousuo{
+                font-size: 16px;
+                color: #8b8b8b;
+            }
+    
+            .search-inp{
+                outline: none;
+                border: none;
+                margin-left: 10px;
+                width: 80%;
+            }
+        }
+
+        #searchBtn{
+            outline: none;
+            border: none;
+            color: #fff;
+            background: #3385ff;
+            padding: 3px 7px;
+            border-radius: 3px;
+
+            &:active{
+                background-color: #5da1ff;
+            }
+        }
+    }
+    
+    #carouselBg{
+        width: 100%;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+
+        #pointers{
+            width: 42px;
+            z-index: 2;
+            position: absolute;
+            bottom: 10px;
+            left: calc(50% - 20px);
+
+            .pointer{
+                width: 8px;
+                height: 8px;
+                margin-left: 2px;
+                background: #fff;
+                border-radius: 50%;
+                display: inline-block;
+
+                &.on{
+                    background: #3385ff;
+                }
+            }
+        }
+
+        .item-bg{
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            top: 0;
+            left: 100%;
+        
+            &.on{
+                left: 0;
+            }
+
+            img{
+                width: 100%;
+                height: 200px;
+            }
+        }
+    }
+    
+    .module{
+        padding: 10px 0 7px;
+        border-bottom: 1px solid #cecece;
+        overflow: hidden;
+    
+        .module-a{
+            float: left;
+            width: 33.3%;
+            box-sizing: border-box;
+    
+            .syy{
+                font-size: 40px;
+                color: #fff;
+            }
+        
+            .module-icon{
+                width: 60px;
+                height: 60px;
+                text-align: center;
+                margin: 0 auto;
+                line-height: 60px;
+                border-radius: 15px;
+                box-shadow: 1px 2px 10px #848484;
+    
+                &.gentuan{
+                    background: linear-gradient(to top, #ff0000,#ff9100);
+                }
+    
+                &.jiudian{
+                    background: linear-gradient(to top, #1b8d00,#c9e400);
+                }
+    
+                &.menpiao{
+                    background: linear-gradient(to top, #006aff,#00ccff);
+                }
+                &.dingdan{
+                    background: linear-gradient(to top, #ff9100,#ffee00);
+                }
+            }
+    
+            .module-name{
+                font-size: 14px;
+                text-align: center;
+                color: #5d5d5d;
+                line-height: 26px;
+            }
+        }
+    }
+    
+    #production{
+        width: 100%;
+        background: #f1f1f1;
+        overflow: hidden;
+        padding-bottom: 10px;
+    
+        .pro-title{
+            color: #fff;
+            font-weight: bold;
+            font-size: 15px;
+            width: 70px;
+            background: #006aff;
+            padding-left: 10px;
+            margin-top: 5px;
+        }
+    
+        .item{
+            position: relative;
+            width: 84%;
+            margin: 10px auto 0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 1px 1px 1px #656565;
+    
+            .pro-pic{
+                display: block;
+                width: 100%;
+                height: 150px;
+            }
+    
+            .pro-name{
+                width: 100%;
+                font-size: 13px;
+                position: absolute;
+                bottom: 0;
+                background: rgba(206,206,206,0.7);
+                color: #fff;
+                padding: 3px 5px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                line-height: 20px;
+            }
+        }
+    
+    
+        .mess-item{
+            background: #fff;
+            width: 100%;
+            height: 42px;
+            margin-bottom: 3px;
+    
+            .mess-pic{
+                width: 28px;
+                display: inline-block;
+                border-radius: 2px;
+                margin-left: 10px;
+            }
+    
+            .mess-explain{
+                font-size: 12px;
+                color: #5d5d5d;
+                width: 72%;
+                height: 42px;
+                line-height: 42px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+    
+            .syy{
+                margin-right: 10px;
+            }
+        }
+    }
+    #bottomBox{
+        text-align: center;
+        font-size: 12px;
+        line-height: 20px;
+        color: #cecece;
+        padding: 10px 0;
+        background: #ececec;
+    
+        .icon-dianhua{
+            font-size: 12px;
+        }
+    }
+    
+}

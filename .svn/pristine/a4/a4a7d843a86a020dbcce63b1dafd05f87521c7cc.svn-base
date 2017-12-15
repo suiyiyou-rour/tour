@@ -1,0 +1,11 @@
+<?php
+/**
+ * 数据逻辑
+ */
+namespace Page\Logic;
+use Think\Model;
+class IndexLogic extends Model{
+    public function index(){
+        echo 2;
+    }
+}

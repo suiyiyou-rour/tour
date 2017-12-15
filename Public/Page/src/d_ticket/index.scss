@@ -1,0 +1,389 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei";
+}
+
+a{
+    text-decoration: none;
+}
+
+#topTips{
+    width: 100%;
+    background: #eeeeee;
+    font-size: 12px;
+    line-height: 40px;
+
+    .top-tips{
+        width: 1000px;
+        margin: 0 auto;
+        text-align: right;
+
+        .top-item{
+            display: inline-block;
+            margin-left: 20px;
+            line-height: 40px;
+            height: 40px;
+            color: #777;
+
+            .syy{
+                font-size: 22px;
+                vertical-align: middle;
+                padding: 3px;
+            }
+        }
+
+        #wxCode:hover{
+            color: #3385ff;
+            cursor: pointer;
+        }
+    }
+}
+
+#nav{
+    width: 100%;
+    border-top: 1px solid #cecece;
+    border-bottom: 1px solid #cecece;
+    background: #fff;
+
+    .nav-box{
+        width: 1000px;
+        margin: 0 auto;
+        height: 76px;
+        position: relative;
+
+        .nav-item-on{
+            color: #fff;
+            background: #3385ff;
+            display: inline-block;
+            height: 76px;
+            line-height: 76px;
+            cursor: pointer;
+            width: 100px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .nav-item{
+            color: #777;
+            display: inline-block;
+            height: 76px;
+            line-height: 76px;
+            cursor: pointer;
+            width: 100px;
+            text-align: center;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #3385ff;
+                border-bottom: 3px solid #3385ff;
+            }
+        }
+
+        .login-register{
+            float: right;
+
+            .lr{
+                line-height: 76px;
+                color: #777;
+                text-decoration: none;
+                margin-left: 10px;
+                font-size: 14px;
+
+                &:hover{
+                    color: #3385ff;
+                }
+            }
+        }
+    }
+}
+
+.content{
+    width: 1000px;
+    margin: 0 auto;
+    position: relative;
+
+    .buy-step{
+        width: 600px;
+        height: 50px;
+        overflow: hidden;
+        margin-top: 30px;
+        position: relative;
+
+        #stepName{
+            width: 100%;
+            height: 20px;
+            float: left;
+            font-size: 14px;
+            color: #777;
+
+            .step-name.on{
+                color: #3385ff;
+            }
+        }
+
+        .circular,.line{
+            float: left;
+        }
+
+        .circular{
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+            border: 5px solid #cecece;
+            border-radius: 50%;
+
+            &.on{
+                border: 5px solid #3385ff;
+            }
+        }
+
+        .line{
+            width: 100px;
+            height: 5px;
+            background: #cecece;
+            margin-top: 8px;
+
+            &.on{
+                background: #3385ff;
+            }
+        }
+    }
+
+    #production{
+        position: absolute;
+        width: 310px;
+        top: 0;
+        right: 0;
+        border: 1px solid #cecece;
+
+        #proPic{
+            display: block;
+            width: 100%;
+            height: 182px;
+        }
+
+        #proName{
+            color: #777;
+            padding: 8px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #cecece;
+        }
+
+        .date-time{
+            padding: 8px;
+            color: #777;
+            font-size: 12px;
+            color: #4b4b4b;
+
+            #date{
+                color: #3a3a3a;
+                margin-left: 10px;
+            }
+        }
+
+        .num{
+            padding: 8px;
+            color: #777;
+            font-size: 12px;
+
+            .num-date{
+                color: #3a3a3a;
+                margin-left: 10px;
+            }
+        }
+    }
+
+    #messContentTitle{
+        display: none;
+    }
+
+    .title{
+        font-size: 18px;
+        color: #333;
+        line-height: 22px;
+        margin-top: 30px;
+
+        .sn{
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #3385ff;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;   
+            border-radius: 50%;
+            line-height: 24px;
+            margin-right: 12px;
+        }
+
+        .tips{
+            display: inline-block;
+            font-size: 14px;
+            color: #888888;
+            margin-left: 10px;
+        }
+    }
+
+    #reserveMess{
+        margin-left: 36px;
+    }
+
+    #oneIdentify{
+        display: none;
+    }
+
+    .item{
+
+        border: 1px solid #cecece;
+        padding: 4px 8px;
+        width: 250px;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 16px;
+        position: relative;
+        border-left: 1px solid #ff0000;   
+
+        &.on,&.on.marks{
+            border: 1px solid #3385ff;
+        }
+
+        &.marks{
+            width: 530px;
+            height: 54px;
+            border-left-color: #cecece;
+            padding: 4px 8px;
+        }
+
+        .item-inp{
+            outline: none;
+            border: none;
+            width: 240px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0);
+            padding-left: 5px;
+        }
+
+        #marks{
+            display: block;
+            width: 535px;
+            height: 54px;
+            font-size: 14px;
+            line-height: 18px;
+            background: #FFF;
+            color: #666;
+            resize: none;
+            box-sizing: border-box;
+            padding: 5px 0 5px 5px;
+        }
+    }
+
+    #travelerMess{
+        width: 400px;
+        margin-left: 36px;
+    }
+
+    .one-person{
+        border: 1px solid #cecece;
+        padding: 0 10px 16px;
+        margin-top: 10px;
+
+        .number{
+            font-weight: normal;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+    }
+}
+
+#priceMess{
+    width: 1000px;
+    margin: 30px auto 220px;
+    position: relative;
+
+    .total-price{
+        text-align: right;
+        line-height: 50px;
+        border-top: 1px solid #cecece;
+        border-bottom: 1px solid #cecece;
+
+        b{
+            color: #f60;
+            margin-left: 20px;
+        }
+        #totalPrice{
+            color: #f60;
+            font-size: 30px;
+        }
+    }
+
+    .agree{
+        font-size: 12px;
+        line-height: 40px;
+        margin-top: 20px;
+
+        a{
+            color: #3385ff;
+        }
+
+        input[type=checkbox] {  
+            position: relative;  
+            width: 14px;
+            height: 14px;
+            margin-top: 1px;
+        }  
+        input[type=checkbox]::before{  
+            content:'';  
+            position: absolute;  
+            top: 0;
+            left: 0;
+            width: 14px;  
+            height: 14px;
+            line-height:14px;  
+            text-align: center;  
+            color:white;
+            font-size:12px;
+            border:1px solid #d5d5d5;
+            background: #fff;
+        }  
+        input[type=checkbox]:checked::before {  
+            color:#fff;
+            content: '\2714';
+            background: #3385ff;
+        }
+    }
+
+    #commitOrder{
+        border: none;
+        outline: none;
+        position: absolute;
+        right: 0;   
+        bottom: 0;
+        color: #fff;
+        background: #ff9d00;
+        line-height: 40px;
+        font-size: 20px;
+        width: 130px;
+        text-align: center;
+        cursor: pointer;
+
+        &:hover{
+            background-color: #f60;
+        }
+    }
+}
+
+
+#footer{
+    width: 100%;
+    height: 180px;
+    background: #323232;
+    .footer-content{
+        width: 1000px;
+        margin: 0 auto;
+
+        .bottom-logo{
+            margin-top: 15px;
+        }
+    }
+}

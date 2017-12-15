@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <link rel="stylesheet" href="__PUBLIC__/Page/dist/home.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_469978_0ku5qokkalb4kj4i.css">
+    <link rel="icon" type="image/jpg" href="__PUBLIC__/Page/image/logo-icon.jpg">
+</head>
+
+<body>
+
+<header id="topTips">
+    <div class="top-tips">
+        <div class="top-item">
+            <i class="syy icon-dianhua"></i>官方咨询电话 : 18512009795
+        </div>
+        <div class="top-item" id="wxCode">
+            <i class="syy icon-erweima"></i>微信公众号
+        </div>
+    </div>
+</header>
+
+<div id="nav">
+    <div class="nav-box">
+        <a style="text-decoration:none;" href="{:U('index')}">
+            <div class="nav-item-on">首页</div>
+        </a>
+        <a style="text-decoration:none;" href="{:U('groupList')}">
+            <div class="nav-item">跟团游</div>
+        </a>
+        <a style="text-decoration:none;" href="{:U('seceneyList')}">
+            <div class="nav-item">景酒套餐</div>
+        </a>
+        <a style="text-decoration:none;" href="{:U('tickList')}">
+            <div class="nav-item">景区门票</div>
+        </a>
+
+        <div class="login-register">
+            <notempty name='mobile'>
+                <a class="lr" href="">{$mobile}</a>
+                <a class="lr" href="{:U('Tourist/logingOut')}">退出</a>
+                <else/>
+                <a class="lr" href="{:U('Tourist/usershowLogin')}">登陆</a>
+                <a class="lr" href="{:U('Tourist/userRegistShow')}">注册</a>
+            </notempty>
+
+        </div>
+    </div>
+</div>
+
+<div id="background">
+    <img id="bigBg" src="__PUBLIC__/Page/image/bg.jpg" alt="">
+
+    <div id="searchBox" style="display:none">
+        <div style="margin-left:30px;" class="item on">
+            全部
+        </div>
+        <div class="item">
+            跟团游
+        </div>
+        <div class="item">
+            景酒套餐
+        </div>
+        <div class="item">
+            景区门票
+        </div>
+        <div class="item-box" style="display:none">
+            <input class="seach-inp" type="text" id="allSearchInp" placeholder="请输入关键字搜索">
+            <button class="search-btn" id="allSearchBtn"><i class="syy icon-sousuo"></i></button>
+        </div>
+        <div class="item-box">
+            <input class="seach-inp" type="text" id="routeSearchInp" placeholder="我想去...">
+            <div class="date-box">
+                <input type="text" readonly class="seach-inp datepicker-here" id="routeBeginTime">
+                <i class="syy icon-rl"></i>
+            </div>
+            <div class="date-box">
+                <input type="text" readonly class="seach-inp datepicker-here" id="routeEndTime">
+                <i class="syy icon-rl"></i>
+            </div>
+            <button id="routeSearchBtn" class="search-btn"><i class="syy icon-sousuo"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="content">
+    <div class="title">
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+        <h1>跟团游</h1>
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <volist name='group' id='g'>
+            <div class="content-item">
+                <img class="pic" src="{$g.imgFile}" alt="">
+                <div class="mess">
+                    <p class="name">{$g.g_name}</p>
+                    <p class="detail">
+                        出发地：{$g.g_go_address}<br>
+                        目的地：{$g.g_e_address}
+                    </p>
+                    <p class="price-box">
+                        售价 : ￥<span class="price">{$g.price}</span>
+                    </p>
+                </div>
+                <button class="now-reserve">立即预定</button>
+            </div>
+        </volist>
+    </div>
+    <div class="title">
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+        <h1>景酒套餐</h1>
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <volist name='seceny' id='v'>
+            <div class="content-item">
+                <img class="pic" src="{$v.imgfile}" alt="">
+                <div class="mess">
+                    <p class="name">{$v.s_name}</p>
+                    <p class="detail">
+                        <volist name='v[s_tj_ly]' id='st'>
+                            {$st.val}
+                        </volist>
+                    </p>
+                    <p class="price-box">
+                        售价 : ￥<span class="price">{$v.my_price}</span>
+                    </p>
+                </div>
+                <button class="now-reserve">立即预定</button>
+            </div>
+        </volist>
+    </div>
+    <div class="title">
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+        <h1>景区门票</h1>
+        <img class="line" src="__PUBLIC__/Page/image/ltt.jpg" alt="">
+    </div>
+    <div class="content-box">
+        <volist name='tick' id='t'>
+            <div class="content-item">
+                <img class="pic" src="{$t.imgFile}" alt="">
+                <div class="mess">
+                    <p class="name">{$t.t_tick_name}</p>
+                    <p class="detail">
+                        景点地点： {$t.tick_spot}</br>
+                        景点城市：{$t.t_tick_city}</p>
+                    <p class="price-box">
+                        售价 : ￥<span class="price">{$t.t_tick_my_price}</span>
+                    </p>
+                </div>
+                <button class="now-reserve">立即预定</button>
+            </div>
+        </volist>
+    </div>
+</div>
+
+<footer id="footer">
+    <div class="footer-content">
+        <img class="bottom-logo" src="__PUBLIC__/Page/image/bottom.png" alt="" width="150">
+    </div>
+</footer>
+
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/Page/dist/home.min.js"></script>
+
+</html>

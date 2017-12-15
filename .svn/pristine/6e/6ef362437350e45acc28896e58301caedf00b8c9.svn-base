@@ -1,0 +1,95 @@
+<?php
+/**
+ * Created by zhang.
+ * User: zhang
+ * Date: 2017/11/13
+ * Time: 9:17
+ */
+
+namespace Home\Controller;
+
+
+use Think\Controller;
+
+class IndexController extends Controller
+{
+    /**
+     * 网站首页
+     */
+    public function index()
+    {
+        $this->display();
+    }
+
+    /**
+     * 跟团游
+     */
+    public function groupList()
+    {
+        $this->display();
+    }
+
+    /**
+     * 景就套餐
+     */
+    public function seceneyList()
+    {
+        $this->display();
+    }
+
+    /**
+     * 门票
+     */
+    public function tickList()
+    {
+        $page = I('post.page');
+        if (empty($page)) {
+            $page = 0;
+        } else {
+            $page--;
+        }
+        //城市搜索
+        if (!empty(I('post.ci'))) {
+            $ci = I('post.ci');
+            $where['t_tick_city'] = array('like', "%$ci%");
+        }
+        //景点
+        if (!empty(I('post.spot'))) {
+            $s = I('post.ci');
+            $where['t_tick_spot'] = array('like', "%$s%");
+        }
+        $where['t_tick_del'] = array('neq', '1');
+        $where['t_tick_type'] = array('eq', '4');
+        $dd = date("Y-m-d", time());
+        $dt = strtotime($dd);
+        $where['unix_timestamp(t_tick_sj_time)'] = array('elt', $dt);
+        $where['unix_timestamp(t_tick_xj_time)'] = array('egt', $dt);
+        $tickList = M('tick')
+            ->field('t_category,t_tick_city,t_tick_my_price,(t_tick_my_price - t_tick_settle_price) as yj,t_tick_date,t_user_id,t_tick_spot,t_tick_cat,t_tick_name,t_tick_file,t_code')
+            ->where($where)->limit($page * 10, 10)->select();
+        foreach ($tickList as &$t) {
+            $img = json_decode($t['t_tick_file'], true);
+            foreach ($img as $i) {
+                if ($i['head'] === 'true') {
+                    $t['imgFile'] = C('img_url') . $i['src'];
+                    break;
+                }
+            }
+            if (empty($t['imgFile'])) {
+                $t['imgFile'] = C('img_url') . $img[0]['src'];
+            }
+        }
+        foreach ($tickList as &$i) {
+            if ($i['t_tick_date'] == 1) {
+                $i['yj'] = $i['t_tick_my_price'] - $i['t_tick_settle_price'];
+            } elseif ($i['t_tick_date'] == 2) {
+                $info = M('tick_price')->field('p_mark_price,p_js_price,min(p_my_price) as price')->where(array('p_code' => $i['t_code'], 'p_user_code' => $i['t_user_id']))->group('p_code')->find();
+                $i['t_tick_my_price'] = $info['price'];
+                $i['p_mark_price'] = $info['p_mark_price'];
+                $i['yj'] = $info['price'] - $info['p_js_price'];
+            }
+        }
+        $this -> assign('tick',$tickList);
+        $this->display();
+    }
+}

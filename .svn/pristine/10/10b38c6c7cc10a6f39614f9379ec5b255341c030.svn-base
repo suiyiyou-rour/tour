@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Microsoft YaHei"; }
+
+#topTips {
+  width: 100%;
+  background: #eeeeee;
+  font-size: 12px;
+  line-height: 40px; }
+  #topTips .top-tips {
+    width: 1000px;
+    margin: 0 auto;
+    text-align: right; }
+    #topTips .top-tips .top-item {
+      display: inline-block;
+      margin-left: 20px;
+      line-height: 40px;
+      height: 40px;
+      color: #777; }
+      #topTips .top-tips .top-item .syy {
+        font-size: 22px;
+        vertical-align: middle;
+        padding: 3px; }
+    #topTips .top-tips #wxCode:hover {
+      color: #3385ff;
+      cursor: pointer; }
+
+#nav {
+  width: 100%;
+  border-top: 1px solid #cecece;
+  border-bottom: 1px solid #cecece;
+  background: #fff; }
+  #nav .nav-box {
+    width: 1000px;
+    margin: 0 auto;
+    height: 76px;
+    position: relative; }
+    #nav .nav-box .nav-item-on {
+      color: #fff;
+      background: #7bb2ff;
+      display: inline-block;
+      height: 76px;
+      line-height: 76px;
+      cursor: pointer;
+      width: 100px;
+      text-align: center;
+      box-sizing: border-box; }
+    #nav .nav-box .nav-item {
+      color: #777;
+      display: inline-block;
+      height: 76px;
+      line-height: 76px;
+      cursor: pointer;
+      width: 100px;
+      text-align: center;
+      box-sizing: border-box; }
+      #nav .nav-box .nav-item:hover {
+        color: #3385ff;
+        border-bottom: 3px solid #3385ff; }
+    #nav .nav-box .login-register {
+      float: right; }
+      #nav .nav-box .login-register .lr {
+        line-height: 76px;
+        color: #777;
+        text-decoration: none;
+        margin-left: 10px;
+        font-size: 14px; }
+        #nav .nav-box .login-register .lr:hover {
+          color: #3385ff; }
+
+#background {
+  width: 100%;
+  position: relative; }
+  #background #bigBg {
+    width: 100%; }
+  #background #searchBox {
+    width: 640px;
+    height: 109px;
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    bottom: 45px;
+    border-radius: 10px;
+    left: calc(50% - 320px); }
+    #background #searchBox .item {
+      margin-top: 5px;
+      color: #fff;
+      line-height: 30px;
+      cursor: pointer;
+      display: inline-block;
+      padding: 3px 5px;
+      border-radius: 3px;
+      box-shadow: none;
+      transition: box-shadow 200ms; }
+      #background #searchBox .item.on {
+        box-shadow: 0 0 20px #3385ff inset;
+        transition: box-shadow 200ms; }
+      #background #searchBox .item:hover {
+        box-shadow: 0 0 20px #3385ff inset;
+        transition: box-shadow 200ms; }
+    #background #searchBox .item-box {
+      margin-left: 30px;
+      line-height: 68px; }
+      #background #searchBox .item-box .date-box {
+        display: inline-block;
+        position: relative;
+        width: 130px; }
+        #background #searchBox .item-box .date-box .icon-rl {
+          position: absolute;
+          right: 5px;
+          color: #3385ff;
+          top: 0;
+          font-size: 20px; }
+      #background #searchBox .item-box .datepicker-here {
+        cursor: pointer; }
+      #background #searchBox .item-box #routeSearchInp {
+        width: 250px;
+        display: inline-block; }
+      #background #searchBox .item-box #routeBeginTime {
+        width: 120px; }
+      #background #searchBox .item-box #routeEndTime {
+        width: 120px; }
+      #background #searchBox .item-box #routeSearchBtn {
+        margin: 0; }
+      #background #searchBox .item-box .seach-inp {
+        width: 515px;
+        height: 36px;
+        font-size: 16px;
+        padding-left: 8px;
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid #cecece;
+        background: #fff;
+        box-shadow: none;
+        transition: box-shadow 300ms; }
+        #background #searchBox .item-box .seach-inp:focus {
+          box-shadow: 0 0 15px #3385ff;
+          transition: box-shadow 300ms; }
+      #background #searchBox .item-box .search-btn {
+        outline: none;
+        border: none;
+        background: #3385ff;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 16px;
+        line-height: 38px;
+        width: 50px;
+        margin-left: 5px;
+        cursor: pointer; }
+        #background #searchBox .item-box .search-btn:hover {
+          background: #6aaaff; }
+        #background #searchBox .item-box .search-btn .icon-sousuo {
+          font-size: 20px; }
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJwcm9fbGlzdC5taW4uY3NzIiwic291cmNlUm9vdCI6IiJ9*/

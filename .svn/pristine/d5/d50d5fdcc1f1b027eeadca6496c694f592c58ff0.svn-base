@@ -1,0 +1,11 @@
+<?php
+/**
+ * 服务接口
+ */
+namespace Page\Service;
+use Think\Model;
+class IndexService extends Model{
+    public function index(){
+        echo 3;
+    }
+}
