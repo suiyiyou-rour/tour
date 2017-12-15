@@ -167,4 +167,4 @@ wx.ready(function () {
     });
 })
 
-//git 试一试
+//git 试一试  别人能不能拉到
