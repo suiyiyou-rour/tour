@@ -56,7 +56,7 @@ class OrderLogic extends Model
             $AllSell = $g_no_kc_num + $g_need_kc_num;
         }
 
-        $data['g_pay_time'] = date('Y-m-d H-i-s',time());
+        $data['g_pay_time'] = date("Y-m-d H:i:s", time());
         $Model = M(); // 实例化一个空对象
         $Model->startTrans(); // 开启事务
         $om = $Model->table('lf_group_order')->where('g_order_sn=' . $orderSn)->data($data)->save();
@@ -98,7 +98,7 @@ class OrderLogic extends Model
             return false;
         }
 
-        $o_data['t_pay_time'] = date('Y-m-d H-i-s',time());
+        $o_data['t_pay_time'] = date("Y-m-d H:i:s", time());
         $o_data['t_tick_order_type'] = 2;
         $Model = M();
         $Model->startTrans(); // 开启事务
@@ -134,11 +134,11 @@ class OrderLogic extends Model
                     }else{
                         $data['p_ck'] = 0;      //价格日历库存
                     }
-
                 }
-
+            }else{
+                return false;
             }
-            $data['p_sell_num'] = $data['p_sell_num'] + $orderInfo['t_tick_num'];       //价格日历销量
+            $data['p_sell_num'] = $priceInfo['p_sell_num'] + $orderInfo['t_tick_num'];       //价格日历销量
             //更新价格日历
             $ym = $Model->table('lf_tick_price')->where($pwhere)->save($data);
         }
@@ -205,13 +205,14 @@ class OrderLogic extends Model
             $pdata['p_sell_num'] = $pinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
             $pm = $Model->table('lf_seceny_price')->where($pwhere)->save($pdata);
         }
-        $osave['o_pay_time']    =   date('Y-m-d H-i-s',time());      //支付时间
+        $osave['o_pay_time']    =   date('Y-m-d H:i:s',time());      //支付时间
         $osave['o_order_type']  =   2;                                //订单状态
         $om = $Model->table('lf_seceny_order')->where(array('o_order_sn' => $orderSn))->save($osave);
         $ym = $Model->table('lf_scenery')->where(array('s_user_id' => $orderInfo['o_user_id'], 's_code' => $orderInfo['o_seceny_code']))->setInc('s_sell', $orderInfo['o_num']);
 
         if ($om && $pm && $ym) {
             $Model->commit();
+
             return true;
         } else {
             $Model->rollBack();
@@ -266,6 +267,10 @@ class OrderLogic extends Model
             $zfprice += $v["price"] * $v["num"];
         }
         return $zfprice;
+    }
+
+    public function ikbc(){
+
     }
 
 }

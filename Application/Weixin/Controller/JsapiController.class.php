@@ -107,9 +107,15 @@ class JsapiController extends Controller
 
         if ($outputdata["mark"] == "group") {
             $result = D("Order", "Logic")->updateGroupOrder($outputdata["order_sn"]);
+            if($result){
+                $this->groupNote($outputdata["order_sn"]);
+            }
         } else if ($outputdata["mark"] == "tick") {
             //todo 测试中
             $result = D("Order", "Logic")->updateTickOrder($outputdata["order_sn"]);
+            if($result){
+                $this->tickNote($outputdata["order_sn"]);
+            }
         } else if ($outputdata["mark"] == "scenery") {
             //todo 要测试
             $result = D("Order", "Logic")->updateSceneryOrder($outputdata["order_sn"]);
@@ -127,5 +133,32 @@ class JsapiController extends Controller
         exit;
     }
 
+    private function groupNote($orderSn){//发送短信通知供应商
+        //供应商短信通知
+        $payStatus = M('group_order')->field("g_user_id,g_group_name,g_name,g_pay_time")->where('g_order_sn=' . $orderSn)->find();
+        if($payStatus["g_user_id"]){
+            $pSwhere["sp_id"] = $payStatus["g_user_id"];
+            $pSwhere["sp_open"] = 1;
+            $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
+            if($paySp["sp_mobile"]){
+                $WxSms = new \Weixin\Controller\SmsController();
+                $WxSms->SmsTo($paySp["sp_mobile"],$payStatus["g_group_name"],$payStatus["g_name"],$payStatus["g_pay_time"]);
+            }
+        }
+    }
+
+    private function tickNote($orderSn){//发送短信通知供应商
+        //供应商短信通知
+        $orderInfo = M('tick_order')->field("t_tick_id,t_tick_name,t_order_user_name,t_pay_time")->where(array('t_order_sn' => $orderSn))->find();
+         if($orderInfo["t_tick_id"]){
+                $pSwhere["sp_id"] = $orderInfo["t_tick_id"];
+                $pSwhere["sp_open"] = 1;
+                $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
+                if($paySp["sp_mobile"]){
+                    $WxSms = new \Weixin\Controller\SmsController();
+                    $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"],$orderInfo["t_pay_time"]);
+                }
+            }
+    }
 
 }

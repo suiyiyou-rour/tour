@@ -188,7 +188,7 @@ class SmsController extends Controller
     public function SmsTo($mobile,$productName,$userName,$time)
     {                                                                                             
         // 参数校验
-        if($mobile && $productName && $userName && $time){
+        if(!$mobile || !$productName || !$userName || !$time){
             return 0;
         }
 
@@ -197,7 +197,7 @@ class SmsController extends Controller
         $this->templateCode = 'SMS_112470379';
         
         // 请求接口
-        $params = '{"productName":"' . $productName . '","userName":"' .$userName . ',"time":"'.$time.'}';
+        $params = '{"productName":"' . $productName . '","userName":"' .$userName . '","time":"'.$time.'"}';
         $result = $this->sendVerify($mobile, $params);
         if($result){
             return 1;
