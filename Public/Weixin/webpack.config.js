@@ -47,6 +47,9 @@ var webpackConfig = {
                     use: ['css-loader', 'autoprefixer-loader', 'sass-loader']
                 })
                 // use: ['css-loader' ,'sass-loader']
+            },{
+                test: /\.html$/,
+                use: ['html-loader']
             }
         ]
     },
