@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <link rel="stylesheet" href="__PUBLIC__/Page/dist/p_detail.min.css">
+    <link rel="icon" type="image/jpg" href="__PUBLIC__/Page/image/logo-icon.jpg">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_469978_u31swlk810za1yvi.css">
+</head>
+
+<body>
+<header id="topTips">
+    <div class="top-tips">
+        <div class="top-item">
+            <i class="syy icon-dianhua"></i>官方咨询电话 : 18512009795
+        </div>
+        <div class="top-item" id="wxCode">
+            <i class="syy icon-erweima"></i>微信公众号
+        </div>
+    </div>
+</header>
+
+<div id="nav">
+    <div class="nav-box">
+        <a href="./home.html">
+            <div class="nav-item-on">首页</div>
+        </a>
+        <a href="./p_route.html">
+            <div class="nav-item">跟团游</div>
+        </a>
+        <a href="./p_hotel.html">
+            <div class="nav-item">景酒套餐</div>
+        </a>
+        <a href="./p_ticket.html">
+            <div class="nav-item">景区门票</div>
+        </a>
+
+        <div class="login-register">
+            <a class="lr" href="#">登陆</a>
+            <a class="lr" href="#">注册</a>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="content-left">
+        <div id="carousel">
+            <ul>
+                <li>
+                    <img class="pro-img" src="__PUBLIC__/Page/image/pro.jpg" alt="">
+                </li>
+            </ul>
+        </div>
+        <table id="datePriceTable">
+            <thead>
+            <tr>
+                <th colspan="7" id="controllerTime">
+                            <span id="prevMonthBtn" class="monthBtn">
+                                <i class="syy icon-zuojiantou"></i>
+                            </span>
+                    <span id="timeChange">
+                                <b id="priceYear">2017</b>年
+                                <b id="priceMonth">11</b>月
+                            </span>
+                    <span id="nextMonthBtn" class="monthBtn">
+                                <i class="syy icon-xiangyoujiantou"></i>
+                            </span>
+                </th>
+            </tr>
+            <tr class="price-week">
+                <th>日</th>
+                <th>一</th>
+                <th>二</th>
+                <th>三</th>
+                <th>四</th>
+                <th>五</th>
+                <th>六</th>
+            </tr>
+            </thead>
+            <tbody id="priceDay">
+
+            </tbody>
+        </table>
+    </div>
+    <div class="content-right">
+        <p class="pro-name">
+            【元旦预售】深圳/广州/香港/澳门-曼谷+芭提雅+沙美岛6天5晚半自助（2晚国际五星+3晚泳池四星+3大本地集市+1天自由行+王权免税店+全国联运）
+        </p>
+        <p class="price-range">
+            <span>￥</span>
+            <strong id="price">2998~4899</strong>
+            <span class="sales">销量： 299</span>
+        </p>
+        <div class="choose-mess">
+            <div class="item">
+                <span class="item-name">选择日期 : </span>
+                <div id="days" class="days">
+                    <input id="chooseDay" type="text" readonly placeholder="请选择日期">
+                    <i class="syy icon-xiangxia"></i>
+                    <table>
+                        <table id="littleDatePriceTable">
+                            <thead>
+                            <tr>
+                                <th colspan="7" id="littleControllerTime">
+                                            <span id="prevMonthBtn" class="monthBtn">
+                                                <i class="syy icon-zuojiantou"></i>
+                                            </span>
+                                    <span id="littleTimeChange">
+                                                <b id="littlePriceYear">2017</b>年
+                                                <b id="littlePriceMonth">11</b>月
+                                            </span>
+                                    <span id="littleNextMonthBtn" class="monthBtn">
+                                                <i class="syy icon-xiangyoujiantou"></i>
+                                            </span>
+                                </th>
+                            </tr>
+                            <tr class="price-week">
+                                <th>日</th>
+                                <th>一</th>
+                                <th>二</th>
+                                <th>三</th>
+                                <th>四</th>
+                                <th>五</th>
+                                <th>六</th>
+                            </tr>
+                            </thead>
+                            <tbody id="littlePriceDay">
+
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+        <div class="choose-num">
+            <div class="item">
+                <p class="item-name">数量选择 : </p>
+                <div class="item-inp">
+                    <div class="amount">
+                        <p class="inputs">
+                            <span>成人</span>
+                            <span class="num">1</span>
+                        </p>
+                        <div class="btns">
+                            <span class="add">＋</span>
+                            <span class="red">－</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-inp">
+                    <div class="amount">
+                        <p class="inputs">
+                            <span>儿童</span>
+                            <span class="num">0</span>
+                        </p>
+                        <div class="btns">
+                            <span class="add">＋</span>
+                            <span class="red">－</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-inp">
+                    <div class="amount">
+                        <p class="inputs">
+                            <span>房间</span>
+                            <span class="num">1</span>
+                        </p>
+                        <div class="btns">
+                            <span class="add">＋</span>
+                            <span class="red">－</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="res-price">
+            <span id="resPrice">--</span>
+            <span id="nowBuy">立即购买</span>
+        </div>
+    </div>
+</div>
+
+<div id="proMessage">
+    <ul>
+        <li class="nav-item on">产品介绍</li>
+        <li class="nav-item">费用说明</li>
+        <li class="nav-item">使用说明</li>
+        <li class="nav-item">购买须知</li>
+    </ul>
+    <h2 class="item">产品介绍</h2>
+    <h2 class="item">费用说明</h2>
+    <h2 class="item">使用说明</h2>
+    <h2 class="item">购买须知</h2>
+</div>
+
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/Page/dist/p_detail.min.js"></script>
+
+</html>

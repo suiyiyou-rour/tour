@@ -1,9 +1,6 @@
 require('./index.scss');
 var toast = require('COMMON/toast.js');
 toast.show();
-//订单详情
-var detail = require('./detail/index.html');
-require('./detail/index.js');
 
 var list = $('#list'),
     typeList = $('#typeList'),

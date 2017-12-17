@@ -1,0 +1,20 @@
+<volist name='group' id='g'>
+    <div class="content-item">
+        <img class="pic" src="{$g.imgFile}" alt="">
+        <div class="mess">
+            <p class="name">{$g.g_name}</p>
+            <p class="detail">
+                出发地：{$g.g_go_address}<br>
+                目的地：{$g.g_e_address}
+            </p>
+            <p class="sales-volume">销量 :
+                <span class="sales-num">{$g.g_sell}</span>
+            </p>
+            <p class="price-box">
+                售价 : ￥
+                <span class="price">{$g.price}</span> 起
+            </p>
+        </div>
+        <button class="now-reserve">立即预定</button>
+    </div>
+</volist>
