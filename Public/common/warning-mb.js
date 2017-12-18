@@ -69,5 +69,5 @@ var warning = function( text , callback ){
 if (typeof module !== 'undefined' && typeof exports === 'object') {
     module.exports = warning;
 } else {
-    window.datePrice = warning;
+    window.warning = warning;
 }
