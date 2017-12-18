@@ -93,37 +93,54 @@ class JsapiController extends Controller
     public function notify_url()
     {
         $xml = $GLOBALS['HTTP_RAW_POST_DATA']; //返回的xml
+        if(empty($xml)){
+            return;
+        }
         libxml_disable_entity_loader(true);
         $postObj = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)));
 //        $postStr = file_get_contents("php://input");
 //        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $outputdata["order_sn"]     =    $postObj->out_trade_no;        //订单号
-        $outputdata["openid"]       =    $postObj->openid;               //openid
-        $outputdata["price"]        =    ($postObj->total_fee) / 100;    //价格
-        $outputdata["mark"]         =    $postObj->attach;               //标记
-        $outputdata["date"]         =    date("Y-m-d H:i:s");           //添加时间
-        $outputdata["xml"]          =     $xml;                           //微信返回的整个xml
+        $outputdata["order_sn"]         =       $postObj->out_trade_no;        //订单号
+        $outputdata["openid"]           =       $postObj->openid;               //openid
+        $outputdata["price"]            =       ($postObj->total_fee) / 100;    //价格
+        $outputdata["mark"]             =       $postObj->attach;               //标记
+        $outputdata["date"]             =       date("Y-m-d H:i:s");           //添加时间
+        $outputdata["xml"]              =       $xml;                           //微信返回的整个xml
+        if(empty($outputdata["order_sn"])){
+            return;
+        }
+        //记录添加
         $record = M('pay_record')->data($outputdata)->add();
-
+        if(!$record){
+            return;
+        }
+        //数据分类型
         if ($outputdata["mark"] == "group") {
             $result = D("Order", "Logic")->updateGroupOrder($outputdata["order_sn"]);
-            if($result){
-                $this->groupNote($outputdata["order_sn"]);
+            //code 0 订单异常 ;1 正常; 2 订单处理正常,销量库存处理异常
+            if($result["code"] != 0){
+                $this->groupNote($outputdata["order_sn"],$result["num"]);
             }
         } else if ($outputdata["mark"] == "tick") {
-            //todo 测试中
             $result = D("Order", "Logic")->updateTickOrder($outputdata["order_sn"]);
-            if($result){
-                $this->tickNote($outputdata["order_sn"]);
+            if($result["code"] != 0){
+                $this->tickNote($outputdata["order_sn"],$result["num"]);
             }
         } else if ($outputdata["mark"] == "scenery") {
             //todo 要测试
             $result = D("Order", "Logic")->updateSceneryOrder($outputdata["order_sn"]);
         }
-        if ($result) {
-            //更新状态写入 记录表
-            M('pay_record')->data(array("bool" => '1'))->where("id =" . $record)->save();
+        if($result["code"] == 1){
+            $prwhere["bool"] = "1";
+        }else if($result["code"] == 2){
+            $prwhere["bool"] = "2";
+        }else{
+            $prwhere["bool"] = "0";
         }
+        $prwhere["error_info"] = $result["msg"];
+
+        M('pay_record')->data($prwhere)->where(array("id" => $record))->save();
+
 
 
         /* 如果不回复这个xml  微信会给我们发送三次xml */
@@ -133,7 +150,7 @@ class JsapiController extends Controller
         exit;
     }
 
-    private function groupNote($orderSn){//发送短信通知供应商
+    private function groupNote($orderSn,$num){//发送短信通知供应商
         //供应商短信通知
         $payStatus = M('group_order')->field("g_user_id,g_group_name,g_name,g_pay_time")->where('g_order_sn=' . $orderSn)->find();
         if($payStatus["g_user_id"]){
@@ -142,12 +159,12 @@ class JsapiController extends Controller
             $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
             if($paySp["sp_mobile"]){
                 $WxSms = new \Weixin\Controller\SmsController();
-                $WxSms->SmsTo($paySp["sp_mobile"],$payStatus["g_group_name"],$payStatus["g_name"],$payStatus["g_pay_time"]);
+                $WxSms->SmsTo($paySp["sp_mobile"],$payStatus["g_group_name"],$payStatus["g_name"]."，共".$num."人",$payStatus["g_pay_time"]);
             }
         }
     }
 
-    private function tickNote($orderSn){//发送短信通知供应商
+    private function tickNote($orderSn,$num){//发送短信通知供应商
         //供应商短信通知
         $orderInfo = M('tick_order')->field("t_tick_id,t_tick_name,t_order_user_name,t_pay_time")->where(array('t_order_sn' => $orderSn))->find();
          if($orderInfo["t_tick_id"]){
@@ -156,7 +173,7 @@ class JsapiController extends Controller
                 $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
                 if($paySp["sp_mobile"]){
                     $WxSms = new \Weixin\Controller\SmsController();
-                    $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"],$orderInfo["t_pay_time"]);
+                    $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"]."，共".$num."人",$orderInfo["t_pay_time"]);
                 }
             }
     }

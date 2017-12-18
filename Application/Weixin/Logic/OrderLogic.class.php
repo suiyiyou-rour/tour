@@ -14,54 +14,50 @@ class OrderLogic extends Model
      */
     public function updateGroupOrder($orderSn)
     {
-        $payStatus = M('group_order')->where('g_order_sn=' . $orderSn)->find();
+        $payStatus = M('group_order')->where(array('g_order_sn'=>$orderSn))->find();
         if (!$payStatus) {
-            return false;
+            return array("code" =>0,"msg"=>"没有这条订单");
         }
 
-        $all = $payStatus["g_child_num"] + $payStatus["g_man_num"];     //总人数
-        $time = strtotime($payStatus["g_go_time"]);                      //出发时间
+        $all    =    $payStatus["g_child_num"] + $payStatus["g_man_num"];     //总人数
+        $time   =   strtotime($payStatus["g_go_time"]);                      //出发时间
         $groupInfo = M('group_price')
             ->field('g_no_kc_num,g_need_kc_num,g_sell_num')
             ->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code'], 'unix_timestamp(g_go_time)' => $time))
             ->find();
-
-        //判断 免库存是否大于总人g_no_kc_num  大于的话 去需确认库存g_need_kc_num 如果两个都不够先扣需确认库存，订单状态变成8待确认
         if (!$groupInfo) {
-            return false;
+            return array("code"=>0,"msg"=>"没有商品价格数据");
         }
-        $g_no_kc_num = $groupInfo["g_no_kc_num"];//免确认库存
-        $g_need_kc_num = $groupInfo["g_need_kc_num"];//需确认库存
-        $g_sell_num = $groupInfo["g_sell_num"];//价格日历销量
-        if($g_no_kc_num == 0 && $g_need_kc_num == 0){
-            return false;
-        }
+        //判断 免库存是否大于总人g_no_kc_num  大于的话 去需确认库存g_need_kc_num 如果两个都不够先扣需确认库存，订单状态变成8待确认
+        $g_no_kc_num = $groupInfo["g_no_kc_num"];                       //免确认库存
+        $g_need_kc_num = $groupInfo["g_need_kc_num"];                   //需确认库存
+        $g_sell_num = $groupInfo["g_sell_num"];                         //价格日历销量
+
         if ($all < ($g_no_kc_num + $g_need_kc_num)) {
             if ($all <= $g_no_kc_num) {                                   // 总人数小于等于免确认库存
-                $savewhere["g_no_kc_num"] = $g_no_kc_num - $all;        //免 = 免 - all 需不动
-                $data["g_order_type"] = 2;                              // 订单状态为2未消费
+                $savewhere["g_no_kc_num"] = $g_no_kc_num - $all;         //免 = 免 - all 需不动
+                $data["g_order_type"] = 2;                               // 订单状态为2未消费
             } else if ($all > $g_no_kc_num && $all < $g_need_kc_num) {    // 总人数大于免确认库存 小于需要确认库存
-                $savewhere["g_need_kc_num"] = $g_need_kc_num - $all;    //需 = 需 - all 免不动
-                $data["g_order_type"] = 8;                              // 订单状态为8
+                $savewhere["g_need_kc_num"] = $g_need_kc_num - $all;     //需 = 需 - all 免不动
+                $data["g_order_type"] = 8;                               // 订单状态为8
             } else {                                                      //总人数大于免确认库存 也大于需要确认库存
-                $savewhere["g_no_kc_num"] = 0;                          //免 0
+                $savewhere["g_no_kc_num"] = 0;                           //免 0
                 $savewhere["g_need_kc_num"] = $g_need_kc_num - ($all - $g_no_kc_num);//需 = 免 - （ all - 免 ）
                 $data["g_order_type"] = 8;                                // 订单状态为8
             }
             $AllSell = $all;                                               //销量
-        } else {                                                            //总人数大于所有库存
+        } else {                                                           //总人数大于所有库存
             $savewhere["g_no_kc_num"] = 0;
             $savewhere["g_need_kc_num"] = 0;
-            $data["g_order_type"] = 8;                                      // 订单状态为8
+            $data["g_order_type"] = 8;                                    // 订单状态为8
             $AllSell = $g_no_kc_num + $g_need_kc_num;
         }
 
         $data['g_pay_time'] = date("Y-m-d H:i:s", time());
         $Model = M();                                                           // 实例化一个空对象
-        $Model->startTrans();                                                   // 开启事务
-        $om = $Model->table('lf_group_order')->where('g_order_sn=' . $orderSn)->data($data)->save();
-        //更改订单状态
-//                M('group_order')->where('g_order_sn=' . $orderSn)->data($data)->save();
+//        $Model->startTrans();                                                   // 开启事务
+        $om = $Model->table('lf_group_order')->where(array('g_order_sn'=>$orderSn))->data($data)->save();       //更改订单状态
+//                M('group_order')->where(array('g_order_sn'=>$orderSn))->data($data)->save();
         //价格更新库存 增加价格日历销量
         $savewhere["g_sell_num"] = $all + $g_sell_num;                      //价格日历销量
         $pm = $Model->table('lf_group_price')->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code'], 'unix_timestamp(g_go_time)' => $time))->data($savewhere)->save();
@@ -71,13 +67,23 @@ class OrderLogic extends Model
         $gm = $Model->table("lf_group")->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code']))->setInc('g_sell', $AllSell);
 
 //                M("group")->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code']))->setInc('g_sell', $AllSell);
-        if ($om && $pm && $gm) {
-            $Model->commit();
-            return true;
-        } else {
-            $Model->rollBack();
-            return false;
+        if(!$om){
+            return array("code" => 0, "msg" => "订单状态保存失败" ,"num"=>$all);
         }
+        if(!$gm){
+            return array("code" => 2,"msg" => "总销量保存异常","num"=>$all);
+        }
+        if(!$pm){
+            return array("code" => 2,"msg" => "价格日历数据保存异常","num"=>$all);
+        }
+        return array("code" => 1,"msg" => "","num"=>$all);
+//        if ($om && $pm && $gm) {
+////            $Model->commit();
+//            return true;
+//        } else {
+////            $Model->rollBack();
+//            return false;
+//        }
     }
 
 
@@ -87,24 +93,29 @@ class OrderLogic extends Model
     public function updateTickOrder($orderSn)
     {
         if (empty($orderSn)) {
-            return false;
+            return array("code" =>0,"msg"=>"订单号错误");
         }
         $orderInfo = M('tick_order')->where(array('t_order_sn' => $orderSn))->find();
+        if(empty($orderInfo)){
+            return array("code" =>0,"msg"=>"没有这条订单");
+        }
 //        var_dump(M('tick_order')->_sql());
-        $tickInfo = M('tick')->field('t_tick_date,t_tick_sell,t_tick_kc')
+        $tickInfo = M('tick')
+            ->field('t_tick_date,t_tick_sell,t_tick_kc')
             ->where(array('t_code' => $orderInfo['t_tick_code']))
             ->find();
-        if (empty($orderInfo) || empty($tickInfo)) {
-            return false;
+        if (empty($tickInfo)) {
+            return array("code" =>0,"msg"=>"没有商品价格数据");
         }
 
-        $o_data['t_pay_time'] = date("Y-m-d H:i:s", time());
-        $o_data['t_tick_order_type'] = 2;
+        $o_data['t_pay_time']           =   date("Y-m-d H:i:s", time());            //付款时间
+        $o_data['t_tick_order_type']   =    2;                                      //订单状态
         $Model = M();
-        $Model->startTrans(); // 开启事务
+//        $Model->startTrans(); // 开启事务
         //todo 更新 销量 库存 改变订单状态
         $om = $Model->table('lf_tick_order')->where(array('t_order_sn' => $orderSn))->save($o_data);
 
+        $ck_errorinfo = 1;
         if ($tickInfo['t_tick_date'] == 1 ) {       //有效期
             $ywhere['unix_timestamp(y_b_time)']     =       array('elt', strtotime($orderInfo['t_go_date']));
             $ywhere['unix_timestamp(y_e_time)']     =       array('egt', strtotime($orderInfo['t_go_date']));
@@ -119,7 +130,7 @@ class OrderLogic extends Model
                     }
                 }
             }else{
-                return false;
+                $ck_errorinfo = 0;
             }
             //有效期表跟更新销量
             $ym = $Model->table('lf_tick_y')->where(array($ywhere))->setInc('y_sell_num', $orderInfo['t_tick_num']);
@@ -136,7 +147,7 @@ class OrderLogic extends Model
                     }
                 }
             }else{
-                return false;
+                $ck_errorinfo = 0;
             }
             $data['p_sell_num'] = $priceInfo['p_sell_num'] + $orderInfo['t_tick_num'];       //价格日历销量
             //更新价格日历
@@ -146,13 +157,26 @@ class OrderLogic extends Model
         $tsdata['t_tick_sell'] = $tickInfo['t_tick_sell'] + $orderInfo['t_tick_num'];
         $pm = $Model->table('lf_tick')->where(array('t_code' => $orderInfo['t_tick_code'], 't_user_id' => $orderInfo['t_tick_id']))->save($tsdata);
 
-        if ($om && $pm && $ym) {
-            $Model->commit();
-            return true;
-        } else {
-            $Model->rollBack();
-            return false;
+        if(!$om){
+            return array("code" => 0, "msg" => "订单状态保存失败" ,"num"=>$orderInfo['t_tick_num']);
         }
+        if($ck_errorinfo == 0){
+            return array("code" => 2, "msg" => "价格日历或者有效期字段不是数字" ,"num"=>$orderInfo['t_tick_num']);
+        }
+        if(!$pm){
+            return array("code" => 2,"msg" => "总销量库存保存异常","num"=>$orderInfo['t_tick_num']);
+        }
+        if(!$ym){
+            return array("code" => 2,"msg" => "价格日历或者有效期数据保存异常","num"=>$orderInfo['t_tick_num']);
+        }
+        return array("code" => 1,"msg" => "","num"=>$orderInfo['t_tick_num']);
+//        if ($om && $pm && $ym) {
+////            $Model->commit();
+//            return true;
+//        } else {
+////            $Model->rollBack();
+//            return false;
+//        }
     }
 
     /**
