@@ -3,7 +3,8 @@
  *  列表显示接口
  */
 namespace Weixin\Controller;
-class ListController extends BaseController {
+use Think\Controller;
+class ListController extends Controller {
     // 首页推荐列表
     public function RecommendList(){
         //todo 表里没东西查询字段先注释 三种各两个 销量降序 id升序

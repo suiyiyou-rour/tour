@@ -19,8 +19,8 @@ class OrderLogic extends Model
             return false;
         }
 
-        $all = $payStatus["g_child_num"] + $payStatus["g_man_num"];//总人数
-        $time = strtotime($payStatus["g_go_time"]);//出发时间
+        $all = $payStatus["g_child_num"] + $payStatus["g_man_num"];     //总人数
+        $time = strtotime($payStatus["g_go_time"]);                      //出发时间
         $groupInfo = M('group_price')
             ->field('g_no_kc_num,g_need_kc_num,g_sell_num')
             ->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code'], 'unix_timestamp(g_go_time)' => $time))
@@ -57,13 +57,13 @@ class OrderLogic extends Model
         }
 
         $data['g_pay_time'] = date("Y-m-d H:i:s", time());
-        $Model = M(); // 实例化一个空对象
-        $Model->startTrans(); // 开启事务
+        $Model = M();                                                           // 实例化一个空对象
+        $Model->startTrans();                                                   // 开启事务
         $om = $Model->table('lf_group_order')->where('g_order_sn=' . $orderSn)->data($data)->save();
         //更改订单状态
 //                M('group_order')->where('g_order_sn=' . $orderSn)->data($data)->save();
         //价格更新库存 增加价格日历销量
-        $savewhere["g_sell_num"] = $all + $g_sell_num; //价格日历销量
+        $savewhere["g_sell_num"] = $all + $g_sell_num;                      //价格日历销量
         $pm = $Model->table('lf_group_price')->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code'], 'unix_timestamp(g_go_time)' => $time))->data($savewhere)->save();
 
 //                M('group_price')->where(array('g_user_code' => $payStatus['g_user_id'], 'g_code' => $payStatus['g_group_code'], 'unix_timestamp(g_go_time)' => $time))->data($savewhere)->save();

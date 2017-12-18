@@ -3,7 +3,8 @@
  * 详情接口
  */
 namespace Weixin\Controller;
-class DetailController extends BaseController {
+use Think\Controller;
+class DetailController extends Controller {
     public function index(){}
 
     // 商品详情

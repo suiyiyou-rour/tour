@@ -112,7 +112,7 @@ class WeixinController extends Controller {
                 {
                     "type":"view",
                     "name":"新人专享",
-                    "url":"http://www.suiyiyou.net/index.php/weixin/index/laterOn"
+                    "url":"https://hd.webportal.cc/15711502/5dAj7uy7xjIoOziSd3q8Vg/load.html?style=13"
                 },
                 {
                     "type":"view",
