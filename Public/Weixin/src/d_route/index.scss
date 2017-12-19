@@ -226,13 +226,18 @@ body{
         font-size: 13px;
         line-height: 30px;
         border-bottom: 1px solid #cecece;
+        overflow: hidden;
         .item-p {
             margin-left: 10px;
+            float: left;
         }
         .item-inp {
             padding-left: 8px;
             outline: none;
             border: none;
+            float: left;
+            line-height: 30px;
+            width: 70%;
         }
     }
     .remarks-box {
