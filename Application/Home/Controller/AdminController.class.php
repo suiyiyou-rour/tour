@@ -387,7 +387,7 @@ class AdminController extends BaseController
     {
         $type = I('post.type');//成功为 2 失败为 4
         $id = I('post.id');
-        $flag = M('user')->where(array('user_id' => $id))->save(array('user_type' => $type));
+        $flag = M('user')->where(array('user_id' => $id))->save(array('user_type' => $type,'user_id' => $id));
         if ($flag) {
             $this->ajaxReturn(array('code' => 1));
         } else {
