@@ -382,13 +382,14 @@ class AdminController extends BaseController
         $info['user_js_file'] = C('img_url') . $info['user_js_file'];
         $this->ajaxReturn($info);
     }
-
+    
     public function shJsx()
     {
         $type = I('post.type');//成功为 2 失败为 4
         $id = I('post.id');
         $flag = M('user')->where(array('user_id' => $id))->save(array('user_type' => $type,'user_id' => $id));
         if ($flag) {
+            M('jxs_money')->add(array('jxs_code' => $id ,'jxs_already_money'=> 0,'jxs_no_money' =>0 ,'jxs_all_money'=>0));
             $this->ajaxReturn(array('code' => 1));
         } else {
             $this->ajaxReturn(array('code' => 0));
