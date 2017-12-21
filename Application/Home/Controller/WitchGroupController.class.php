@@ -594,16 +594,89 @@ class WitchGroupController extends BaseController
     {
         $order_sn = I('post.orderSn');
         $user_id = $this->userId;//供应商Id
-        $orderType = M('group_order')->where('g_order_sn =' . $order_sn)->getField('g_order_type');
-        if ($orderType == '2') {
+        $orderInfo = M('group_order')
+            ->field("g_order_type,g_jxs_code,g_order_price,g_man_js_price,g_man_num,g_child_js_price,g_child_num,g_dfc_js_price,g_dfc_num")
+            ->where(array("g_order_sn" => $order_sn))->find();
+
+        //订单状态 2未消费
+        if(empty($orderInfo) || $orderInfo["g_order_type"] != "2"){
+            $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
+        }
+
+        //没有经销商的情况 todo 没有经销商 账单清单怎么算
+        if(empty($orderInfo["g_jxs_code"])){
             $result = M('group_order')->where(array('g_order_sn' => $order_sn, 'g_user_id' => $user_id))->save(array('g_order_type' => '1', 'g_user_time' => time()));
-            if ($result) {
-                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
-            } else {
+            if (!$result) {
                 $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
             }
+            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+        }
+
+        //经销商不存在的情况
+        $jxs_moneyInfo = M('jxs_money')->where(array("jxs_code" => $orderInfo["g_jxs_code"]))->find();
+        if(empty($jxs_moneyInfo)){
+            $this->ajaxReturn(array('code' => '0', 'msg' => '经销商账户不存在'));
+        }
+
+        //经销商佣金 = 订单总价格 - （大人人数 * 结算价格 + 儿童价格 * 儿童结算价格 + 单房差分数 * 单房差结算价格）
+        $jxsYJ = $orderInfo["g_order_price"] - ($orderInfo["g_man_js_price"] * $orderInfo["g_man_num"] + $orderInfo["g_child_js_price"] * $orderInfo["g_child_num"] + $orderInfo["g_dfc_js_price"] * $orderInfo["g_dfc_num"]);
+//       echo "佣金 = ".$jxsYJ."<br/>";
+//       echo "订单总价格 = ".$orderInfo["g_order_price"]."<br/>";
+//       echo "大人结算价格 = ".($orderInfo["g_man_js_price"] * $orderInfo["g_man_num"])."<br/>";
+//       echo "儿童结算价格 = ".($orderInfo["g_child_js_price"] * $orderInfo["g_child_num"])."<br/>";
+//       echo "单房差结算价格 = ".($orderInfo["g_dfc_js_price"] * $orderInfo["g_dfc_num"])."<br/>";
+
+        $jxs_bill_check = M('jxs_bill')->where(array("tb_jxs_code" => $orderInfo["g_jxs_code"],"tb_code" => "1","tb_order_id" => $order_sn))->find();
+        //账单表里有记录 错误情况
+        if($jxs_bill_check){
+            $ModelOne = M();           // 实例化一个空对象
+            $ModelOne->startTrans();  // 开启事务
+            $omOne = $ModelOne->table('lf_group_order')->where(array('g_order_sn' => $order_sn, 'g_user_id' => $user_id))->save(array('g_order_type' => '1', 'g_user_time' => time()));
+            //账单表添加记录
+            $saveBillOne["tb_order_id"] = $order_sn;                            //订单编号
+            $saveBillOne["tb_jxs_code"] = $orderInfo["g_jxs_code"];            //经销商code
+            $saveBillOne["tb_money"] = $jxsYJ;                                  //进账金额
+            $saveBillOne["tb_type"] = "group";                                  //订单类型
+            $saveBillOne["tb_code"] = "6";                                      //状态 6异常
+            $saveBillOne["tb_balance"] = $jxs_moneyInfo["jxs_no_money"];       //账户余额  未加
+            $saveBillOne["tb_time"] = date("Y-m-d H:i:s", time());              //时间
+            $saveBillOne["tb_remark_info"] = "数据库已有进账数据";              //备注
+            $gmOne = $ModelOne->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["t_jsx_code"]))->data($saveBillOne)->add();
+            if ($omOne && $gmOne) {
+                $ModelOne->commit();
+                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+            } else {
+                $ModelOne->rollBack();
+                $this->ajaxReturn(array('code' => '0', 'msg' => '操作失败，请联系管理员'));
+            }
+        }
+////              var_dump($orderInfo);
+//       return;
+
+        $Model = M();           // 实例化一个空对象
+        $Model->startTrans();  // 开启事务
+        //更新订单状态
+        $om = $Model->table('lf_group_order')->where(array('g_order_sn' => $order_sn, 'g_user_id' => $user_id))->save(array('g_order_type' => '1', 'g_user_time' => time()));
+        //jxs_money 增加经销商总金额
+        $jxs_no_money = $jxs_moneyInfo["jxs_no_money"] + $jxsYJ;                               //未提现金额
+        $jxs_all_money = $jxs_moneyInfo["jxs_already_money"] + $jxs_no_money;                 //总金额
+        $pm = $Model->table("lf_jxs_money")->where(array("jxs_code" => $orderInfo["g_jxs_code"]))->save(array('jxs_no_money' => $jxs_no_money, 'jxs_all_money' => $jxs_all_money));
+        //账单表添加记录
+        $saveBill["tb_order_id"] = $order_sn;                            //订单编号
+        $saveBill["tb_jxs_code"] = $orderInfo["g_jxs_code"];            //经销商code
+        $saveBill["tb_money"] = $jxsYJ;                                   //进账金额  已加
+        $saveBill["tb_type"] = "group";                                  //订单类型
+        $saveBill["tb_code"] = "1";                                      //状态 1进账
+        $saveBill["tb_balance"] = $jxs_no_money;                         //账户余额
+        $saveBill["tb_time"] = date("Y-m-d H:i:s", time());             //时间
+        $gm = $Model->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["g_jxs_code"]))->data($saveBill)->add();
+        if ($om && $pm && $gm) {
+//           $Model->rollBack();
+            $Model->commit();
+            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
         } else {
-            $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
+            $Model->rollBack();
+            $this->ajaxReturn(array('code' => '0', 'msg' => '操作失败，请联系管理员'));
         }
     }
 
