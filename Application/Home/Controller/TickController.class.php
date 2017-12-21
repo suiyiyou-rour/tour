@@ -636,7 +636,7 @@ class TickController extends BaseController
             return;
         }
         $user_id = $this->userId;//供应商Id
-        $orderInfo = M('tick_order')->field("t_tick_order_type,t_jsx_code,t_order_sn,t_tick_js_price")->where(array("t_order_sn" => $order_sn))->find();
+        $orderInfo = M('tick_order')->field("t_tick_order_type,t_jsx_code,t_order_sn,t_tick_js_price,t_tick_price,t_tick_num")->where(array("t_order_sn" => $order_sn))->find();
         //订单状态 2未消费
         if(empty($orderInfo) || $orderInfo["t_tick_order_type"] != "2"){
             $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
@@ -657,6 +657,9 @@ class TickController extends BaseController
             $this->ajaxReturn(array('code' => '0', 'msg' => '经销商账户不存在'));
         }
 
+        //经销商佣金 = 订单总价格 - 结算价格 * 人数
+        $jxsYJ = $orderInfo["t_tick_price"] - ( $orderInfo["t_tick_js_price"] * $orderInfo["t_tick_num"] );
+
         $jxs_bill_check = M('jxs_bill')->where(array("tb_jxs_code" => $orderInfo["t_jsx_code"],"tb_code" => "1","tb_order_id" => $order_sn))->find();
         //账单表里有记录 错误情况
         if($jxs_bill_check){
@@ -666,7 +669,7 @@ class TickController extends BaseController
             //账单表添加记录
             $saveBillOne["tb_order_id"] = $order_sn;                            //订单编号
             $saveBillOne["tb_jxs_code"] = $orderInfo["t_jsx_code"];            //经销商code
-            $saveBillOne["tb_money"] = $orderInfo["t_tick_js_price"];          //进账金额
+            $saveBillOne["tb_money"] = $jxsYJ;                                  //进账金额
             $saveBillOne["tb_type"] = "tick";                                   //订单类型
             $saveBillOne["tb_code"] = "6";                                      //状态 6异常
             $saveBillOne["tb_balance"] = $jxs_moneyInfo["jxs_no_money"];       //账户余额  未加
@@ -687,13 +690,13 @@ class TickController extends BaseController
         //更新订单状态
         $om = $Model->table('lf_tick_order')->where(array('t_order_sn' => $order_sn, 't_tick_id' => $user_id))->save(array('t_tick_order_type' => '1', 't_tick_use_time' => time()));
         //jxs_money 增加经销商总金额
-        $jxs_no_money = $jxs_moneyInfo["jxs_no_money"] + $orderInfo["t_tick_js_price"];      //未提现金额
+        $jxs_no_money = $jxs_moneyInfo["jxs_no_money"] + $jxsYJ;                               //未提现金额
         $jxs_all_money = $jxs_moneyInfo["jxs_already_money"] + $jxs_no_money;                 //总金额
         $pm = $Model->table("lf_jxs_money")->where(array("jxs_code" => $orderInfo["t_jsx_code"]))->save(array('jxs_no_money' => $jxs_no_money, 'jxs_all_money' => $jxs_all_money));
         //账单表添加记录
         $saveBill["tb_order_id"] = $order_sn;                            //订单编号
         $saveBill["tb_jxs_code"] = $orderInfo["t_jsx_code"];            //经销商code
-        $saveBill["tb_money"] = $orderInfo["t_tick_js_price"];          //进账金额  已加
+        $saveBill["tb_money"] = $jxsYJ;                                    //进账金额  已加
         $saveBill["tb_type"] = "tick";                                   //订单类型
         $saveBill["tb_code"] = "1";                                      //状态 1进账
         $saveBill["tb_balance"] = $jxs_no_money;                         //账户余额
