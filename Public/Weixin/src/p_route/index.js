@@ -477,25 +477,6 @@ var nowDate = new Date(),
     priceMonth = $('#priceMonth'),
     priceYear = $('#priceYear');
 
-//价格日历手势图切换
-new AlloyFinger(document.getElementById('datePriceTable'), {
-
-    swipe: function (evt) {
-
-        var dir = evt.direction;
-
-        if (dir == "Left") {
-
-            nextMonthBtn.click();
-
-        } else if (dir == "Right") {
-
-            prevMonthBtn.click();
-
-        }
-    }
-})
-
 //立即购买
 $('#nowBuyBtn').click(function () {
     var text = $('#proPrice').text();

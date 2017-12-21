@@ -344,25 +344,6 @@ $.ajax({
     }
 })
 
-//价格日历手势图切换
-new AlloyFinger(document.getElementById('datePriceTable'), {
-
-    swipe: function (evt) {
-
-        var dir = evt.direction;
-
-        if (dir == "Left") {
-
-            nextMonthBtn.click();
-
-        } else if (dir == "Right") {
-
-            prevMonthBtn.click();
-
-        }
-    },
-})
-
 
 //价格日历选择
 var priceBox = $('#proPrice'),

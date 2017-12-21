@@ -1,4 +1,5 @@
 require('./index.scss');
+require('COMMON/bottom-menu.js');
 var toast = require('COMMON/toast.js');
 toast.show();
 

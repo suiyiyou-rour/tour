@@ -1,4 +1,5 @@
 require('./index.scss');
+require('COMMON/bottom-menu.js');
 var AlloyFinger = require('COMMON/alloy_finger.js');
 var Alert = require('COMMON/Alert-mb.js');
 
