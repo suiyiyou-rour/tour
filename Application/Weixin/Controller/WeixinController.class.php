@@ -116,8 +116,8 @@ class WeixinController extends Controller {
                 },
                 {
                     "type":"view",
-                    "name":"出游礼包",
-                    "url":"http://www.suiyiyou.net/index.php/weixin/index/laterOn"
+                    "name":"冬至大派送",
+                    "url":"https://hd.faisco.cn/14229940/bfF8R9_jIgppxSpiGdpLVw/load.html?style=60"
                 },
                 {
                     "type":"view",

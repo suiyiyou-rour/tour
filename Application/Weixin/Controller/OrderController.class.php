@@ -169,7 +169,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * 门票订单下单 todo 测试中
+     * 门票订单下单
      */
     public function addTickOrder()
     {
