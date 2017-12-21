@@ -627,21 +627,85 @@ class TickController extends BaseController
 
     /**
      * 确认消费 按钮
+     * 2017/12/21 修改 刘
      */
     public function confirmConsumption()
     {
         $order_sn = I('post.orderSn');
+        if(empty($order_sn)){
+            return;
+        }
         $user_id = $this->userId;//供应商Id
-        $orderType = M('tick_order')->where('t_order_sn =' . $order_sn)->getField('t_tick_order_type');
-        if ($orderType == '2') {
+        $orderInfo = M('tick_order')->field("t_tick_order_type,t_jsx_code,t_order_sn,t_tick_js_price")->where(array("t_order_sn" => $order_sn))->find();
+        //订单状态 2未消费
+        if(empty($orderInfo) || $orderInfo["t_tick_order_type"] != "2"){
+            $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
+        }
+
+        //没有经销商的情况 todo 没有经销商 账单清单怎么算
+        if(empty($orderInfo["t_jsx_code"])){
             $result = M('tick_order')->where(array('t_order_sn' => $order_sn, 't_tick_id' => $user_id))->save(array('t_tick_order_type' => '1', 't_tick_use_time' => time()));
-            if ($result) {
-                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
-            } else {
+            if (!$result) {
                 $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
             }
+            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+        }
+
+        //经销商存在的情况
+        $jxs_moneyInfo = M('jxs_money')->where(array("jxs_code" => $orderInfo["t_jsx_code"]))->find();
+        if(empty($jxs_moneyInfo)){
+            $this->ajaxReturn(array('code' => '0', 'msg' => '经销商账户不存在'));
+        }
+
+        $jxs_bill_check = M('jxs_bill')->where(array("tb_jxs_code" => $orderInfo["t_jsx_code"],"tb_code" => "1","tb_order_id" => $order_sn))->find();
+        //账单表里有记录 错误情况
+        if($jxs_bill_check){
+            $ModelOne = M();           // 实例化一个空对象
+            $ModelOne->startTrans();  // 开启事务
+            $omOne = $ModelOne->table('lf_tick_order')->where(array('t_order_sn' => $order_sn, 't_tick_id' => $user_id))->save(array('t_tick_order_type' => '1', 't_tick_use_time' => time()));
+            //账单表添加记录
+            $saveBillOne["tb_order_id"] = $order_sn;                            //订单编号
+            $saveBillOne["tb_jxs_code"] = $orderInfo["t_jsx_code"];            //经销商code
+            $saveBillOne["tb_money"] = $orderInfo["t_tick_js_price"];          //进账金额
+            $saveBillOne["tb_type"] = "tick";                                   //订单类型
+            $saveBillOne["tb_code"] = "6";                                      //状态 6异常
+            $saveBillOne["tb_balance"] = $jxs_moneyInfo["jxs_no_money"];       //账户余额  未加
+            $saveBillOne["tb_time"] = date("Y-m-d H:i:s", time());              //时间
+            $saveBillOne["tb_remark_info"] = "数据库已有进账数据";              //备注
+            $gmOne = $ModelOne->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["t_jsx_code"]))->data($saveBillOne)->add();
+            if ($omOne && $gmOne) {
+                $ModelOne->commit();
+                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+            } else {
+                $ModelOne->rollBack();
+                $this->ajaxReturn(array('code' => '0', 'msg' => '操作失败，请联系管理员'));
+            }
+        }
+
+        $Model = M();           // 实例化一个空对象
+        $Model->startTrans();  // 开启事务
+        //更新订单状态
+        $om = $Model->table('lf_tick_order')->where(array('t_order_sn' => $order_sn, 't_tick_id' => $user_id))->save(array('t_tick_order_type' => '1', 't_tick_use_time' => time()));
+        //jxs_money 增加经销商总金额
+        $jxs_no_money = $jxs_moneyInfo["jxs_no_money"] + $orderInfo["t_tick_js_price"];      //未提现金额
+        $jxs_all_money = $jxs_moneyInfo["jxs_already_money"] + $jxs_no_money;                 //总金额
+        $pm = $Model->table("lf_jxs_money")->where(array("jxs_code" => $orderInfo["t_jsx_code"]))->save(array('jxs_no_money' => $jxs_no_money, 'jxs_all_money' => $jxs_all_money));
+        //账单表添加记录
+        $saveBill["tb_order_id"] = $order_sn;                            //订单编号
+        $saveBill["tb_jxs_code"] = $orderInfo["t_jsx_code"];            //经销商code
+        $saveBill["tb_money"] = $orderInfo["t_tick_js_price"];          //进账金额  已加
+        $saveBill["tb_type"] = "tick";                                   //订单类型
+        $saveBill["tb_code"] = "1";                                      //状态 1进账
+        $saveBill["tb_balance"] = $jxs_no_money;                         //账户余额
+        $saveBill["tb_time"] = date("Y-m-d H:i:s", time());             //时间
+        $gm = $Model->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["t_jsx_code"]))->data($saveBill)->add();
+        if ($om && $pm && $gm) {
+//           $Model->rollBack();
+            $Model->commit();
+            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
         } else {
-            $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
+            $Model->rollBack();
+            $this->ajaxReturn(array('code' => '0', 'msg' => '操作失败，请联系管理员'));
         }
     }
 
