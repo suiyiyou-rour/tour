@@ -1,57 +1,59 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: 'Microsoft YaHei';
 }
-.title{
+
+a{
+    text-decoration: none;
+    color: #3385ff;
+}
+
+.title {
     line-height: 40px;
     background: #fff;
     color: #3385ff;
-    .syy{
+    overflow: hidden;
+    .syy {
         margin-left: 10px;
         font-size: 20px;
     }
-
-    .detail{
+    .detail {
         margin-right: 10px;
         font-size: 16px;
         float: right;
     }
 }
-.money-box{
+
+.money-box {
     border-top: 1px solid #3385ff;
     border-bottom: 1px solid #3385ff;
     background: #fff;
     height: 150px;
     text-align: center;
     color: #3385ff;
-
-    .syy{
+    .syy {
         font-size: 60px;
     }
-
-    #money{
+    #money {
         font-size: 30px;
         margin-left: 26px;
     }
-
-    .unit{
+    .unit {
         margin-left: 10px;
     }
 }
 
-.money-inp-box{
+.money-inp-box {
     line-height: 50px;
     border-bottom: 1px solid #3385ff;
-
-    .cash-money{
+    .cash-money {
         font-size: 14px;
         color: #777;
         margin-left: 5px;
         color: #3385ff;
     }
-
-    #moneyInp{
+    #moneyInp {
         height: 50px;
         outline: none;
         border: none;
@@ -59,8 +61,7 @@
         font-size: 16px;
         padding-left: 5px;
     }
-
-    #allCashBtn{
+    #allCashBtn {
         margin-right: 5px;
         font-size: 14px;
         line-height: 30px;
@@ -71,13 +72,28 @@
         border-radius: 2px;
         float: right;
         margin-top: 10px;
-
-        &:active{
-            background-color: #62a1fa; 
+        &:active {
+            background-color: #62a1fa;
         }
     }
 }
-#cashBtn{
+
+.remarks{
+    border-bottom: 1px solid #3385ff;
+
+    #remarks{
+        padding: 8px;
+        display: block;
+        width: 100%;
+        height: 70px;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+        resize:none;
+    }
+}
+
+#cashBtn {
     background: #3385ff;
     text-align: center;
     color: #fff;
@@ -85,8 +101,61 @@
     width: 94%;
     margin: 20px auto;
     border-radius: 3px;
-
-    &:active{
-        background-color: #62a1fa; 
+    &:active {
+        background-color: #62a1fa;
     }
+}
+
+#detailBox {
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+
+    #detailList {
+        position: fixed;
+        width: 70%;
+        height: 100%;
+        top: 0;
+        left: 100%;
+        background: #fff;
+        box-shadow: 1px 0 35px #777;
+        padding-bottom: 79px;
+        overflow-y: scroll;
+        
+        #back {
+            position: fixed;
+            width: 70%;
+            text-align: center;
+            background: #62a1fa;
+            color: #fff;
+            font-weight: bold;
+            line-height: 36px;
+            bottom: 37px;
+        }
+    }
+}
+
+#explain{
+    color: #777;
+    font-size: 12px;
+    padding: 0 10px 20px;
+
+    .item{
+        margin-top: 10px;
+    }
+
+    .title{
+        text-align: center;
+        font-size: 16px;
+        color: #777;
+    }
+
+    .subtitle{
+        color: #000;
+    }
+
 }

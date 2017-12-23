@@ -120,17 +120,22 @@ td {
 .monthBtn {
     background: #3385ff;
     color: #fff;
-    padding: 1px 5px;
-    border-radius: 2px;
+    line-height: 28px;
+    width: 100px;
+    border: 3px solid #fff;
+    box-sizing: border-box;
+
+    &:active{
+        background: #77adfd;
+    }
 }
 
 #prevMonthBtn {
-    margin-right: 20px;
-    background: #eaeaea;
+    float: left;
 }
 
 #nextMonthBtn {
-    margin-left: 20px;
+    float: right;
 }
 
 .price-week {
