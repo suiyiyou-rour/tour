@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>海报上传</title>
+    <link rel="stylesheet" href="__PUBLIC__/Page/dist/b_share.min.css">
+    <link rel="icon" type="image/jpg" href="__PUBLIC__/Page/image/logo-icon.jpg">
+</head>
+
+<body>
+    <div class="top">
+
+    </div>
+    <div>
+        <img class="bg" src="__PUBLIC__/Page/image/bg-login.png" alt="注册背景">
+    </div>
+        <div class="content">
+            <div class="left">
+                <div class="l-top">海报上传</div>
+                <form  enctype="multipart/form-data" method="post" id="formData" name="formData">
+                    <div class="l-c">
+                        <label class="lc-title">商品类型：</label>
+                        <select class="lc-select" id="type" name="type">
+                            <option value="tick" class="lc-opt">门票</option>
+                            <option value="group" class="lc-opt">跟团</option>
+                            <option value="scenery" class="lc-opt">酒景</option>
+                        </select>
+                    </div>
+                    <div class="l-c">
+                        <label class="lc-title">产品号：</label>
+                        <input type="text" class="lc-text" id="code" name="code" placeholder="请输入产品号">
+                    </div>
+
+                    <div class="l-c">
+                        <label class="lc-title"></label>
+                        <input type="button" class="lc-text bg-ff c-ff" value="选择海报" id="clickFile" />
+                        <input type="file" id="file" name="file" style="display:none;">
+                    </div>
+                </form>
+                <span class="btn" id="submit">确认上传</span>
+            </div>
+
+            <div class="right">
+                <div class="l-top"></div>
+                <div>
+                    <div class="l-top-tx"></div>
+                    <img src="" id="readImg">
+                </div>
+            </div>
+        </div>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/Page/dist/b_share.min.js"></script>
+
+</html>

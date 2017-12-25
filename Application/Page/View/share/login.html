@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <link rel="icon" type="image/jpg" href="__PUBLIC__/Page/image/logo-icon.jpg">
+</head>
+<body style="text-align:center;padding:300px 0 0 0">
+<p><input type="text" placeholder="账号" id="id"></p>
+<p><input type="password"  placeholder="密码" id="password"></p>
+<p><input type="button" value="登录" id="login_btn"></p>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script>
+    var id = $('#id'),password = $('#password'),loginBtn = $('#login_btn');
+
+    loginBtn.click(function(){
+        $.ajax({
+            url:"{:U('Share/login')}",
+            method:'post',
+            data:{
+                "id":id.val(),
+                'pwd':password.val()
+            },
+            success:function(res){
+                if(res.code == 200){
+                    location.href = "{:U('Share/back')}";
+                }
+            }
+        });
+    });
+
+    $(document).keypress(function(e) {  
+    // 回车键事件  
+       if(e.which == 13) {  
+            loginBtn.click();  
+        }  
+    }); 
+</script>
+</html>
