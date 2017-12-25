@@ -1,12 +1,25 @@
 //需要页面上有 window.controller = '__CONTROLLER__';
 function menu() {
     //tab链接
-    var menu = {
-        home: controller + '/home',
-        order: controller + '/order',
-        route: controller + '/s_route',
-        ticket: controller + '/s_ticket'
-    }
+    var menuArr = [
+        {
+            src: controller + '/home',
+            icon: 'icon-home',
+            name: '首页'
+        }, {
+            src: controller + '/order',
+            icon: 'icon-dingdan',
+            name: '订单'
+        }, {
+            src: controller + '/s_route',
+            icon: 'icon-xianlu',
+            name: '线路'
+        }, {
+            src: controller + '/s_ticket',
+            icon: 'icon-menpiao',
+            name: '门票'
+        }
+    ]
 
     var box = $('<div id="bottomMenu"></div>');
     box.css({
@@ -15,24 +28,29 @@ function menu() {
         justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%',
-        height: '36px',
+        height: '54px',
         bottom: '0',
         background: '#fff',
         borderTop: '1px solid #cecece'
     })
 
+    var html = '';
+    for (var i = 0; i < menuArr.length; i++) {
+        html += '<a href=' + menuArr[i].src + '><i class="syy ' + menuArr[i].icon + '"></i><p>' + menuArr[i].name + '</p></a>';
+    }
 
-    var html = '<a href=' + menu.home + '><i class="syy icon-home"></i></a>' +
-        '<a href=' + menu.order + '><i class="syy icon-dingdan"></i></a>' +
-        '<a href=' + menu.route + '><i class="syy icon-xianlu"></i></a>' +
-        '<a href=' + menu.ticket + '><i class="syy icon-menpiao"></i></a>';
-    
     box.html(html);
-    $('body').css('paddingBottom','36px').append(box);
+    $('body').css('paddingBottom', '54px').append(box);
 
     $('#bottomMenu i').css({
-        fontSize: '26px',
+        fontSize: '24px',
         color: '#777'
+    })
+
+    $('#bottomMenu p').css({
+        fontSize: '12px',
+        color: '#777',
+        textAlign: 'center'
     })
 }
 

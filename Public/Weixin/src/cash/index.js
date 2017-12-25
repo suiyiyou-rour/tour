@@ -190,6 +190,12 @@ $('#cashBtn').click(function () {
 })
 
 function showDetailList(data) {
+
+    if(data.length == 0 && page == 1){
+        $('#noOrder').show();
+        return false;
+    }
+
     var html = '';
     for (var i = 0; i < data.length; i++) {
         html += '<div class="item"><div class="item-m">' +

@@ -122,6 +122,24 @@ a {
         box-shadow: 1px 0 35px #777;
         padding-bottom: 79px;
         overflow-y: scroll;
+
+        #noOrder{
+            text-align: center;
+            display: none;
+            .syy.icon-no-order{
+                display: block;
+                font-size: 100px;
+                color: #cecece;
+                margin-top: 15%;
+            }
+        
+            .tips{
+                text-align: center;
+                color: #777;
+                font-size: 18px;
+            }
+        }
+
         #back {
             position: fixed;
             width: 70%;
