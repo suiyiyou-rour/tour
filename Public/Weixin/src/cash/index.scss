@@ -4,7 +4,7 @@
     font-family: 'Microsoft YaHei';
 }
 
-a{
+a {
     text-decoration: none;
     color: #3385ff;
 }
@@ -78,10 +78,9 @@ a{
     }
 }
 
-.remarks{
+.remarks {
     border-bottom: 1px solid #3385ff;
-
-    #remarks{
+    #remarks {
         padding: 8px;
         display: block;
         width: 100%;
@@ -89,7 +88,7 @@ a{
         border: none;
         outline: none;
         box-sizing: border-box;
-        resize:none;
+        resize: none;
     }
 }
 
@@ -107,14 +106,12 @@ a{
 }
 
 #detailBox {
-
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
     display: none;
-
     #detailList {
         position: fixed;
         width: 70%;
@@ -125,7 +122,6 @@ a{
         box-shadow: 1px 0 35px #777;
         padding-bottom: 79px;
         overflow-y: scroll;
-        
         #back {
             position: fixed;
             width: 70%;
@@ -136,26 +132,51 @@ a{
             line-height: 36px;
             bottom: 37px;
         }
+        .item {
+            height: 40px;
+            font-size: 12px;
+            padding: 5px;
+            border-bottom: 1px solid #cecece;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: #777;
+            .type{
+                text-align: center;
+            }
+            .money{
+                font-size: 18px;
+                text-align: center;
+            }
+            .now{
+                text-align: center;
+            }
+            .green{
+                color: #00b100;
+            }
+            .red{
+                color: #ff0000;
+            }
+            .blue{
+                color: #3385ff;
+            }
+        }
     }
 }
 
-#explain{
+#explain {
     color: #777;
     font-size: 12px;
     padding: 0 10px 20px;
-
-    .item{
+    .item {
         margin-top: 10px;
     }
-
-    .title{
+    .title {
         text-align: center;
         font-size: 16px;
         color: #777;
     }
-
-    .subtitle{
+    .subtitle {
         color: #000;
     }
-
 }

@@ -1,12 +1,14 @@
-var warning = function( text , callback ){
+var Confirm = function( text , callback ){
 
     var _this = this;
 
-    this.text = text || '哪里出了点问题!';
+    this.text = text || '';
     this.bg = $('<div></div>');
     this.box = $('<div></div>');
     this.p = $('<p></p>');
-    this.btn = $('<p>知道了</p>');
+    this.btnBox = $('<div></div>');
+    this.ybtn = $('<p>确定</p>');
+    this.nbtn = $('<p>取消</p>');
 
     this.p.html(this.text);
 
@@ -24,7 +26,6 @@ var warning = function( text , callback ){
         width: '90%',
         height: '100px',
         background: '#fff',
-        textAlign: 'center',
         margin: '65% auto 0',
         position: 'relative',
         borderRadius: '5px',
@@ -35,39 +36,65 @@ var warning = function( text , callback ){
     this.p.css({
         fontSize: '14px',
         color: '#777',
-        padding: '0 5px',
-        lineHeight: '70px'
+        padding: '8px',
     })
 
-    this.btn.css({
+    this.btnBox.css({
         width: '100%',
+        height: '30px',
+        position: 'absolute',
+        bottom: '0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    })
+
+    this.ybtn.css({
+        width: '50%',
         height: '30px',
         lineHeight : '30px',
         fontSize: '15px',
         color: '#fff',
         textAlign: 'center',
-        position: 'absolute',
-        bottom: '0',
         borderTop: '1px solid #3385ff',
         boxSizing: 'border-box',
         background: 'rgb(131,176,243)'
     })
 
-    this.box.append(this.p,this.btn);
+    this.nbtn.css({
+        width: '50%',
+        height: '30px',
+        lineHeight : '30px',
+        fontSize: '15px',
+        color: '#3385ff',
+        textAlign: 'center',
+        borderTop: '1px solid #3385ff',
+        boxSizing: 'border-box',
+        background: 'rgb(255,255,255)'
+    })
+
+    this.btnBox.append(this.ybtn,this.nbtn);
+    this.box.append(this.p,this.btnBox);
     this.bg.append(this.box);
     $('body').append(this.bg);
     this.box.animate({opacity: '1'},300);
 
-    this.btn.click(function(){
+    this.ybtn.click(function(){
         _this.box.animate({opacity: '0'},300,function(){
             _this.bg.remove();
             if(callback) callback();
         });
     });
+
+    this.nbtn.click(function(){
+        _this.box.animate({opacity: '0'},300,function(){
+            _this.bg.remove();
+        });
+    })
 }
 
 if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = warning;
+    module.exports = Confirm;
 } else {
-    window.warning = warning;
+    window.Confirm = Confirm;
 }
