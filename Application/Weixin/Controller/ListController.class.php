@@ -270,10 +270,7 @@ class ListController extends Controller {
 
     // 酒景套餐列表
     public function SceneryList(){
-        return;
-        //todo 佣金计算有问题 2017.12.07 后调整
         $page = I('page');
-
         if (empty($page)) {
             $page = 0;
         } else {
@@ -298,39 +295,56 @@ class ListController extends Controller {
             ->order('s_sell desc ,s_create_time desc')
             ->limit($page * 10, 10)
             ->select();
+        if(!$scenery){
+            $this->ajaxReturn(array("code" => 200 , "data" =>array()));
+        }
         $this->GroupHeadImg($scenery,"s_img");    // 处理首图
         $this->AddMark($scenery,"scenery");  // 添加标记
 
+        //判断是不是分销商自己
+        $jsremark = $this->checkJS();
+
         foreach ($scenery as &$ls) {
             if ($ls['s_tick_date'] == 1) {
-                $priceshow = M('scenery_yx')->field('min(y_my_price) as price,y_mark_price,y_js_price ')
-                    ->where(array('y_code' => $ls['code'], 'y_user_id' => $ls['s_user_id']))
-                    ->group('y_code')
-                    ->find();
-                $ls['price']     =  $priceshow['price'];
-                $ls['yj']           =  $priceshow['price'] - $priceshow['y_js_price'];
-                $ls['mark_price']   =  $priceshow['y_mark_price'];
-//                echo M('scenery_yx')->_sql()."<br/>";
+                $infoWhere["y_code"] = $ls['code'];                             //套餐编码
+                $infoWhere["y_user_id"] = $ls['s_user_id'];                    //供应商编码
+//               $infoWhere["unix_timestamp(y_date)"]     =          array('EGT', $dt);         //出发时间
+                $minPrice = M('scenery_yx')->field('min(y_my_price) as price')->where($infoWhere)->group('y_code')->find();
+                if($minPrice["price"]){                 //上线有价格
+                    if($jsremark){                      //是经销商
+                        $sceneryInfo = M("scenery_yx")->field('y_js_price,y_my_price as price')->where($infoWhere)->where("y_my_price =".$minPrice["price"])->find();
+                        $ls['js_price']    =  $sceneryInfo['y_js_price'];                           //结算价格
+                        $ls['yj']             =  $sceneryInfo['price'] - $sceneryInfo['y_js_price'];   //佣金
+                    }
+                    $ls['price']     =  $minPrice['price'];            //最低价格
+                }else{              //删除没有价格的那一条
+
+                }
             } else {
-                $priceshow = M('seceny_price')
-                    ->field('min(p_my_price) as price ,p_mark_price,p_js_price')
-                    ->where(array('p_code' => $ls['code'], 'p_user_code' => $ls['s_user_id']))
-                    ->group('p_code')
-                    ->find();
-                $ls['price'] = $priceshow['price'];
-                $ls['yj'] = $priceshow['price'] - $priceshow['p_js_price'];
-                $ls['mark_price'] = $priceshow['p_mark_price'];
+                $infoWhere["p_code"] = $ls['code'];                             //套餐编码
+                $infoWhere["p_user_code"] = $ls['s_user_id'];                    //供应商编码
+//               $infoWhere["unix_timestamp(p_date)"]     =          array('EGT', $dt);         //出发时间
+                $minPrice = M('seceny_price')->field('min(p_my_price) as price')->where($infoWhere)->group('p_code')->find();
+                if($minPrice["price"]){                 //上线有价格
+                    $ls['price']     =  $minPrice['price'];            //最低价格
+                    if($jsremark){                      //是经销商
+                        $sceneryInfo = M("seceny_price")->field('p_js_price,p_my_price as price')->where($infoWhere)->where("p_my_price =".$minPrice["price"])->find();
+                        $ls['js_price']    =  $sceneryInfo['p_js_price'];                           //结算价格
+                        $ls['yj']           =  $sceneryInfo['price'] - $sceneryInfo['p_js_price'];   //佣金
+                    }
+                }else{              //删除没有价格的那一条
+
+                }
             }
         }
 
 //        print_r($scenery);
 //        exit();
-        $Returndata["code"]  = 200;
-        if($scenery == null){
-            $scenery =[];
-        }
-        $Returndata["data"]  = $scenery;
-        $this->ajaxReturn($Returndata);
+//        if($scenery == null){
+//            $scenery =[];
+//            return;
+//        }
+        $this->ajaxReturn(array("code" => 200 , "data" =>$scenery));
     }
 
     // 处理首图
