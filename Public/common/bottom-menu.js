@@ -56,7 +56,7 @@ function menu() {
 
 
 if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = new menu();
+    module.exports = new menu(); 
 } else {
     window.menu = new menu();
 }
