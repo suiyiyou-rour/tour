@@ -54,16 +54,14 @@ function checkIdentity(identity) {
 
 
 //从url取数据
-var onePrice = getCookie('price'),   //成人价格
-    code = urlKey('shopCode'),           //商品id
+var code = urlKey('shopCode'),           //商品id
     type = urlKey('shopType'),           //商品类型
-    name = getCookie('name'),        //商品名
-    date = getCookie('date'),        //出游日期
+    name = getCookie('name'),            //商品名
+    date = getCookie('date'),            //出游日期
+    onePrice = getCookie('price'),       //价格
     dateArr = date.split('-'),
     bottomTotalPri = $('#bottomTotalPri'),
     KC = getCookie('kc'),
-    oneIdentify = getCookie('oneIdentify'),
-    useDate = getCookie('use'),
     dataJson = {
         0: '周一',
         1: '周二',
@@ -72,32 +70,12 @@ var onePrice = getCookie('price'),   //成人价格
         4: '周五',
         5: '周六',
         6: '周日'
-    }
+    };
 
-if (useDate) {
-    useDate = JSON.parse(useDate);
-    timeHtml = useDate.limit;
-    $('#tips').show();
-    for (var i = 0; i < 7; i++) {
-        if (useDate.time[i] == 'true') {
-            timeHtml += ' <span> ' + dataJson[i] + ' </span>';
-        }
-    }
-    if (useDate.no) {
-        timeHtml += ' <p><span>不可用日期 : </span> ';
-        for (var i = 0; i < useDate.no.length; i++) {
-            timeHtml += useDate.no[i] + ' ';
-        }
-        timeHtml += '</p>';
-    }
-    $('#ticketTime').html(timeHtml);
-
-} else {
-    $('#ticketTime').text(date + '(' + getDateWeek(dateArr[0], dateArr[1], dateArr[2]) + ')');
-}
 $('#onePrice').text(onePrice);
 $('#totalPri').text(onePrice);
 bottomTotalPri.text(onePrice);
+$('#ticketTime').text(date + '(' + getDateWeek(dateArr[0], dateArr[1], dateArr[2]) + ')');
 
 //商品名存半小时cookie，判断是否有商品名
 if (name) {
@@ -105,11 +83,6 @@ if (name) {
 } else {
     //没有的话跳转商品详情页面
     location.href = controller + '/p_ticket?shopCode=' + code + '&shopType=' + type;
-}
-
-//是否需要填写身份证
-if (mess == '1' || mess == '2') {
-    $('#oneIdentify').show();
 }
 
 toast.hide();
@@ -156,11 +129,7 @@ $('#goTourBtn').click(function () {
 
     if ($('#reserveCheck').prop('checked')) {
 
-        var confirmText = '是否确认' + $('#ticketTime').text() + '出行?';
-
-        if (useDate) {
-            confirmText = '此产品为有效期模式,游玩日期'+$('#ticketTime').text()+',确认购买?';
-        }
+        var confirmText = '是否确认' + $('#ticketTime').text() + '入住?';
 
         if (confirm(confirmText)) {
             $('#reserveMess').fadeOut(200, function () {
@@ -169,19 +138,6 @@ $('#goTourBtn').click(function () {
 
             var resPrice = bottomTotalPri.text();
             $('#orderTotalPri').text(resPrice);
-
-            if (mess == '2') {
-                var itemBox = $('#secItem'),
-                    html = '',
-                    ticketNum = +$('#ticketNum').text() - 1;
-
-                for (var i = 0; i < ticketNum; i++) {
-                    html += '<div class="item-container"><div class="item-box"><p class="item-p"><span class="red">' + (i + 2) + '.</span>游客姓名 : </p><input class="item-inp name" placeholder="姓名" type="text"></div>' +
-                        '<div class="item-box"><p class="item-p">身份证号 : </p><input class="item-inp identify" type="text" placeholder="若是儿童输入出生日期"></div></div>';
-                }
-
-                itemBox.html(html);
-            }
         }
     } else {
         Alert('请先确认预定须知!!!');
@@ -199,80 +155,6 @@ $('.iconfont.icon-zuojiantou').click(function () {
 
 //确认下单
 $('#takeOrderBtn').click(function () {
-
-    var tourName = $('#tourName').val();
-    if (!tourName) {
-        Alert('请填写第1位游客的真实姓名!');
-        return false;
-    }
-
-    var tourMobile = $('#tourMobile').val();
-    if (tourMobile) {
-        if (!(/^1\d{10}$/.test(tourMobile))) {
-            Alert("第1位游客手机号码有误，请重填");
-            return false;
-        }
-    } else {
-        Alert('请填写第1位游客的手机号码!');
-        return false;
-    }
-
-    var tourIdentify = $('#tourIdentify').val();
-    if ($('#oneIdentify').css('display') == 'block') {
-        if (tourIdentify) {
-            if (!checkIdentity(tourIdentify)) {
-                Alert('第1位游客身份证号码错误!');
-                return false;
-            }
-        } else {
-            Alert('请输入第1位游客的身份证号码!');
-            return false;
-        }
-    }
-
-    var remarks = $('#remarks').val();
-
-    var data = {};
-    data.playerInfo = [];    //空数组怎么发不出去？？
-
-    var len = $('.item-container').length;
-
-    if (len > 0) {
-        for (var i = 0; i < len; i++) {
-            var itemContainer = $('.item-container').eq(i);
-            var nameVal = itemContainer.find('.name').val();
-            var idetVal = itemContainer.find('.identify').val();
-
-            if (!nameVal) {
-                Alert('请输入第' + (i + 2) + '位游客的姓名!');
-                return false;
-            }
-
-            if (!idetVal) {
-                Alert('请输入第' + (i + 2) + '位游客的身份证或出生日期!');
-                return false;
-            }
-
-            var json = {
-                name: nameVal,
-                identify: idetVal
-            }
-
-            data.playerInfo.push(json);  //身份数组
-        }
-    }
-
-    data.code = urlKey('shopCode');
-    data.gyscode = getCookie('user');
-
-    data.identification = tourIdentify; //身份证
-    data.mobile = tourMobile;           //游客手机
-    data.name = tourName;               //第一位游客姓名
-    data.jxscode = '';                  //以后的分销商pid
-    data.remarks = remarks;             //备注
-    data.date = date;                   //出行时间
-    data.num = +$('#ticketNum').text(); //数量
-    data.totalPrice = $('#orderTotalPri').text();  //总价
 
     var _this = $(this);
 

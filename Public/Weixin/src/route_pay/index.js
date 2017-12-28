@@ -29,8 +29,8 @@ function dataRender(data) {
     $('#proNum').html(data.g_group_code);
     $('#orderName').html(data.g_group_name);
 
-    var timeArr = data.g_order_time.split('-');
-    $('#orderTime').html(data.g_order_time + '(' + getDateWeek(timeArr[0], timeArr[1], timeArr[2]) + ')');
+    var timeArr = data.g_go_time.split('-');
+    $('#orderTime').html(data.g_go_time + '(' + getDateWeek(timeArr[0], timeArr[1], timeArr[2]) + ')');
 
     $('#manNum').html('￥' + data.g_man_plane_price + ' x ' + data.g_man_num);
     if (data.g_child_num != '0') {
