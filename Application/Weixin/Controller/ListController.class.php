@@ -298,7 +298,7 @@ class ListController extends Controller {
         if(!$scenery){
             $this->ajaxReturn(array("code" => 200 , "data" =>array()));
         }
-        $this->GroupHeadImg($scenery,"s_img");    // 处理首图
+        $this->SceneryHeadImg($scenery,"s_img");    // 处理首图
         $this->AddMark($scenery,"scenery");  // 添加标记
 
         //判断是不是分销商自己
@@ -367,6 +367,25 @@ class ListController extends Controller {
 
     // 处理首图
     public function GroupHeadImg(&$list,$name){
+        foreach ($list as &$val) {
+            $img = json_decode($val[$name], true);
+            foreach ($img as $i) {
+                if ($i['headImg'] === 'true') {
+                    $val['imgFile'] = C('img_url') . $i['imgtitle'];
+                    break;
+                }
+            }
+            if (empty($val['imgFile'])) {
+                $val['imgFile'] = C('img_url') . $img[0]['imgtitle'];
+            }
+            unset($val[$name]);
+        }
+        return $list;
+    }
+
+    // 处理首图Scenery
+    public function SceneryHeadImg(&$list, $name)
+    {
         foreach ($list as &$val) {
             $img = json_decode($val[$name], true);
             foreach ($img as $i) {
