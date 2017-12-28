@@ -291,23 +291,42 @@ class OrderController extends BaseController
             $this->ajaxReturn(array('code' => 403, "msg" => $results["msg"]));
         }
         $postData = $results['msg'];
+
         $mobile = $postData['mobile'];                      //联系人手机号
         $name = $postData['name'];                          //联系人名称
-        $identification = $postData['identification'];     //联系人身份证
-        $code = $postData['gyscode'];                       //商户编码
-        $jxsCode = $postData['jxscode'];                    //经销商编码
-        $seceneyCode = $postData['code'];                   //套餐编码
-        $playInfo = json_encode($postData['info']);         //游玩人信息
         $num = $postData['num'];                            //数量
+        $code = $postData['gyscode'];                       //商户编码
+        $seceneyCode = $postData['code'];                   //套餐编码
+        $jxsCode = cookie('pid');                           //经销商编码
         $date = strtotime($postData['date']);               //游玩日期
+//        $identification = $postData['identification'];     //联系人身份证
+//        $playInfo = json_encode($postData['info']);         //游玩人信息
+
         $result = M('scenery')->where(array('s_code' => $seceneyCode, 's_user_id' => $code))->find();
+        //最大最小购买人数
+        if ($result["s_hotel_buy_m_num"]) {
+            if ($num > $result["s_hotel_buy_b_num"]) {
+                $this->ajaxReturn(array('code' => 304, "msg" => "每单最多购买人数,不能超过" . $result["s_hotel_buy_b_num"] . "人"));
+            }
+        }
+        if ($result["s_hotel_buy_b_num"]) {
+            if ($num < $result["s_hotel_buy_b_num"]) {
+                $this->ajaxReturn(array('code' => 304, "msg" => "每单最少购买人数,不能小于" . $result["s_hotel_buy_m_num"] . "人"));
+            }
+        }
+
+        //价格模式
         if ($result['s_tick_date'] == 1) {
             $cinfo = M('scenery_yx')->where(array('unix_timestamp(y_b_time)' => $date, 'y_code' => $seceneyCode, 'y_user_id' => $code))->find();
             if (empty($cinfo)) {
-                $this->ajaxReturn(array('code' => '0', 'msg' => '非法数据'));
+                $this->ajaxReturn(array('code' => '0', 'msg' => '产品库存价格异常，请及时联系公众号小游'));
             }
-            if ($cinfo['y_ck'] < $num) {
-                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经不够，目前还剩" . $cinfo['y_ck'] . "人"));
+            if($cinfo['y_is_open'] != 1){
+                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经被关闭"));
+            }
+
+            if ($cinfo['y_kc'] < $num) {
+                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经不够，目前还剩" . $cinfo['y_kc'] . "人"));
             }
             $data['o_mark_price'] = $cinfo['y_mark_price'];         //市场价格
             $data['o_plane_price'] = $cinfo['y_my_price'];          //平台价格
@@ -316,14 +335,19 @@ class OrderController extends BaseController
         } elseif ($result['s_tick_date'] == 2) {
             $cinfo = M('seceny_price')->where(array('unix_timestamp(p_date)' => $date, 'p_code' => $seceneyCode, 'p_user_code' => $code))->find();
             if (empty($cinfo)) {
-                $this->ajaxReturn(array('code' => '0', 'msg' => '非法数据'));
+                $this->ajaxReturn(array('code' => '0', 'msg' => '产品库存价格异常，请及时联系公众号小游'));
+            }
+            if($cinfo['p_is_open'] != 1){
+                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经被关闭"));
             }
             if ($cinfo['p_ck'] < $num) {
-                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经不够，目前还剩" . ($num) . "人"));
+                $this->ajaxReturn(array('code' => 304, "msg" => "库存已经不够，目前还剩" . $cinfo['p_ck'] . "人"));
             }
             $data['o_mark_price'] = $cinfo['p_mark_price'];         //市场价格
             $data['o_plane_price'] = $cinfo['p_my_price'];          //平台价格
             $data['o_js_price'] = $cinfo['p_js_price'];             //结算价格
+        }else{
+            $this->ajaxReturn(array('code' => 304 , "msg" => "价格异常，请及时联系公众号小游"));
         }
         $data['o_order_sn'] = $this->createOrderSn();                       //订单编号
         $data['o_order_type'] = 4;                                          //订单情况
@@ -338,7 +362,7 @@ class OrderController extends BaseController
         $data['o_seceny_name'] = $result['s_name'];                        //套餐名称
         $data['o_jxs_code'] = $jxsCode;                                     //经销商编码
         $data['o_order_play_info'] = $playInfo;                             //游玩人信息
-        $data['o_order_add_user'] = $this->user_account;                   //用户手机号
+        $data['o_order_add_user'] = $this->user_account;                   //下单用户手机号
         $data['o_date'] = date("Y-m-d", $date);                             //出游时间
         $data['o_rate'] = $result['s_rate'];                                //佣金比例
         $data['o_tick_id'] = $result['s_view'];                             //景点编码

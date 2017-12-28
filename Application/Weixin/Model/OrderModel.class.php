@@ -257,14 +257,17 @@ class OrderModel extends Model
         if (empty($data['name'])) {
             return array("code" => 0, "msg" => "请填写联系人信息");
         }
-        if (empty($data["identification"]) || !is_Identification_card($data["identification"])) {
-            return array("code" => 0, "msg" => "正确填写身份信息");
+        if (empty($data['num']) || !is_numeric($data['num']) || $data['num'] <= 0) {
+            return array("code" => 0, "msg" => "请正确填写购买数量");
         }
-        if ($data['jsxcode']) {
-            if (!is_numeric($data['jsxcode'])) {
-                return array("code" => 0, "msg" => "经销商编码错误");
-            }
-        }
+//        if (empty($data["identification"]) || !is_Identification_card($data["identification"])) {
+//            return array("code" => 0, "msg" => "正确填写身份信息");
+//        }
+//        if ($data['jsxcode']) {
+//            if (!is_numeric($data['jsxcode'])) {
+//                return array("code" => 0, "msg" => "经销商编码错误");
+//            }
+//        }
         return array("code" => 1, "msg" => $data);
 
     }

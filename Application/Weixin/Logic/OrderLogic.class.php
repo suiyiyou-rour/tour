@@ -185,18 +185,24 @@ class OrderLogic extends Model
     public function updateSceneryOrder($orderSn)
     {
         if (empty($orderSn)) {
-            return false;
+            return array("code" =>0,"msg"=>"订单号错误");
         }
-        $Model = M();
-        $Model->startTrans(); // 开启事务
         $orderInfo = M('seceny_order')->where(array('o_order_sn' => $orderSn))->find();
         if(!$orderInfo){
-            return false;
+            return array("code" =>0,"msg"=>"没有这条订单");
         }
         $sinfo = M('scenery')->where(array('s_user_id' => $orderInfo['o_user_id'], 's_code' => $orderInfo['o_seceny_code']))->find();
         if (!$sinfo) {
-            return false;
+            return array("code" =>0,"msg"=>"商品详细出错");
         }
+        $Model = M();
+//        $Model->startTrans(); // 开启事务
+
+        $masterData['o_pay_time']    =   date('Y-m-d H:i:s',time());      //支付时间
+        $masterData['o_order_type']  =   2;                                //订单状态
+        $om = $Model->table('lf_seceny_order')->where(array('o_order_sn' => $orderSn))->save($masterData);
+
+        $ck_errorinfo = 1;
         if ($sinfo['s_tick_date'] == 1) {
             $ywhere['y_code']                       =       $orderInfo['o_seceny_code'];
             $ywhere['y_user_id']                    =       $orderInfo['o_user_id'];
@@ -204,44 +210,47 @@ class OrderLogic extends Model
             $ywhere['unix_timestamp(y_e_time)']     =       array('elt', strtotime($orderInfo['o_date']));
             $yinfo = M('scenery_yx')->where($ywhere)->find();
             if(!$yinfo){
-                return false;
-            }
-            if($yinfo['y_kc'] >= $orderInfo['o_num']){
-                $ydata['y_kc'] = $yinfo['y_kc'] - $orderInfo['o_num'];      //库存
+                $ck_errorinfo = 0;
             }else{
-                $ydata['y_kc'] = 0;
+                if($yinfo['y_kc'] >= $orderInfo['o_num']){
+                    $ydata['y_kc'] = $yinfo['y_kc'] - $orderInfo['o_num'];      //库存
+                }else{
+                    $ydata['y_kc'] = 0;
+                }
+                $ydata['y_sell_num'] = $yinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
+                $pm = $Model->table('scenery_yx')->where($ywhere)->save($ydata);
             }
-            $ydata['y_sell_num'] = $yinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
-            $pm = $Model->table('scenery_yx')->where($ywhere)->save($ydata);
         } else {
             $pwhere['p_code']                       =           $orderInfo['o_seceny_code'];
             $pwhere['p_user_code']                  =           $orderInfo['o_user_id'];
             $pwhere['unix_timestamp(p_date)']      =            array('eq', strtotime($orderInfo['o_date']));
             $pinfo = M('seceny_price')->where($pwhere)->find();
             if(!$pinfo){
-                return false;
-            }
-            if($pinfo['p_ck'] >= $orderInfo['o_num']){
-                $pdata['p_ck'] = $pinfo['p_ck'] - $orderInfo['o_num'];
+                $ck_errorinfo = 0;
             }else{
-                $pdata['p_ck'] = 0;
+                if($pinfo['p_ck'] >= $orderInfo['o_num']){
+                    $pdata['p_ck'] = $pinfo['p_ck'] - $orderInfo['o_num'];
+                }else{
+                    $pdata['p_ck'] = 0;
+                }
+                $pdata['p_sell_num'] = $pinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
+                $pm = $Model->table('lf_seceny_price')->where($pwhere)->save($pdata);
             }
-            $pdata['p_sell_num'] = $pinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
-            $pm = $Model->table('lf_seceny_price')->where($pwhere)->save($pdata);
         }
-        $osave['o_pay_time']    =   date('Y-m-d H:i:s',time());      //支付时间
-        $osave['o_order_type']  =   2;                                //订单状态
-        $om = $Model->table('lf_seceny_order')->where(array('o_order_sn' => $orderSn))->save($osave);
         $ym = $Model->table('lf_scenery')->where(array('s_user_id' => $orderInfo['o_user_id'], 's_code' => $orderInfo['o_seceny_code']))->setInc('s_sell', $orderInfo['o_num']);
-
-        if ($om && $pm && $ym) {
-            $Model->commit();
-
-            return true;
-        } else {
-            $Model->rollBack();
-            return false;
+        if(!$om){
+            return array("code" => 0, "msg" => "订单状态保存失败" ,"num"=>$orderInfo['o_num']);
         }
+        if($ck_errorinfo == 0){
+            return array("code" => 2, "msg" => "价格日历或者有效期数字查询出错" ,"num"=>$orderInfo['o_num']);
+        }
+        if(!$ym){
+            return array("code" => 2,"msg" => "总销量库存保存异常","num"=>$orderInfo['o_num']);
+        }
+        if(!$pm){
+            return array("code" => 2,"msg" => "价格日历或者有效期数据保存异常","num"=>$orderInfo['o_num']);
+        }
+        return array("code" => 1,"msg" => "","num"=>$orderInfo['o_num']);
     }
 
     /**
