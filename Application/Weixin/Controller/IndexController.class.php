@@ -212,11 +212,23 @@ class IndexController extends BaseController {
         $this->display("common/errFour");
     }
 
-    public function cash(){
+    public function p_hotel(){
+        $this->display("index/p_hotel");
+    }
+
+    public function d_hotel(){
+        $this->display("index/d_hotel");
+    }
+
+    public function hotel_pay(){
+        $this->display("index/hotel_pay");
+    }
+    
+    public function share_poster(){
         $this->display("index/share_poster");
     }
 
-    public function cash(){
+    public function share_info(){
         $this->display("index/share_info");
     }
 
