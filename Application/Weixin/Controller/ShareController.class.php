@@ -18,7 +18,7 @@ class ShareController extends Controller {
         $this->ajaxReturn(array('code' => 200 ,'msg' => $posterData));
     }
 
-    // 关闭门票库存
+  
     public function login(){
         $isJxsCompany = cookie('company');
         $isJxsPhone = cookie('phone');
@@ -28,19 +28,19 @@ class ShareController extends Controller {
         $this->ajaxReturn(array('code' => 200 ,'msg' => "海报详情"));
     }
 
-    // 关闭跟团库存
     public function getImageUrl(){
         $type = I('get.type');
         $code = I('get.code');
 
-        // $isJxsCompany = cookie('company');
-        // $isJxsPhone = cookie('phone');
-        // if(!$isJxsCompany || !$isJxsPhone){
-        //     $this->ajaxReturn(array('code' => 404 ,'msg' => '请注册成为经销商'));
-        // }
-        // if(!$type || !$code){
-        //     $this->ajaxReturn(array('code' => 403 ,'msg' => '请注册成为经销商'));
-        // }
+        $isJxsCompany = cookie('company');
+        $isJxsPhone = cookie('phone');
+        if(!$isJxsCompany || !$isJxsPhone){
+            $this->ajaxReturn(array('code' => 404 ,'msg' => '请注册成为经销商'));
+        }
+        
+        if(!$type || !$code){
+            $this->ajaxReturn(array('code' => 403 ,'msg' => '请注册成为经销商'));
+        }
 
         // 商品不在线上
        
