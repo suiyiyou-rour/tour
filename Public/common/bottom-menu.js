@@ -10,6 +10,10 @@ function menu() {
             src: controller + '/order',
             icon: 'icon-dingdan',
             name: '订单'
+        },{
+            src: controller + '/share_poster',
+            icon: 'icon-earth',
+            name: '推广'
         }, {
             src: controller + '/s_route',
             icon: 'icon-xianlu',

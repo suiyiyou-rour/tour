@@ -52,7 +52,7 @@ class ShareController extends Controller
 
         // 商品不存在
         if(!$res){
-            $this->ajaxReturn(array('code' => 403,'msg' => '商品码错误'));
+           $this->ajaxReturn(array('code' => 403,'msg' => '商品码错误'));
         }
         
         // 海报图片上传
