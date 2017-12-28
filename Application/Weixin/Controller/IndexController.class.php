@@ -107,10 +107,12 @@ class IndexController extends BaseController {
 
     //首页
     public function home(){
-//        $wx = D('WeiXinApi','Service');
-//        $str = $wx->JSSDK();
-//        $this->assign("wxconfig",$str);
-//        echo $str;exit;
+        $jsremark = $this->checkJS();
+        if($jsremark){
+            $this->assign("jsremark","1");
+        }else{
+            $this->assign("jsremark","0");
+        }
         $this->display('index/home');
     }
 
