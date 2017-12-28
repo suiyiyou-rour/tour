@@ -183,16 +183,16 @@ class JsapiController extends Controller
 
     private function sceneryNote($orderSn,$num){//
         //供应商短信通知
-//        $orderInfo = M('tick_order')->field("t_tick_id,t_tick_name,t_order_user_name,t_pay_time")->where(array('t_order_sn' => $orderSn))->find();
-//        if($orderInfo["t_tick_id"]){
-//            $pSwhere["sp_id"] = $orderInfo["t_tick_id"];
-//            $pSwhere["sp_open"] = 1;
-//            $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
-//            if($paySp["sp_mobile"]){
-//                $WxSms = new \Weixin\Controller\SmsController();
-//                $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"]."，共".$num."人",$orderInfo["t_pay_time"]);
-//            }
-//        }
+        $orderInfo = M('seceny_order')->field("o_user_id,o_seceny_name,o_name,o_pay_time")->where(array('o_order_sn' => $orderSn))->find();
+        if($orderInfo["o_user_id"]){
+            $pSwhere["sp_id"] = $orderInfo["o_user_id"];
+            $pSwhere["sp_open"] = 1;
+            $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
+            if($paySp["sp_mobile"]){
+                $WxSms = new \Weixin\Controller\SmsController();
+                $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["o_seceny_name"],$orderInfo["o_name"]."，共".$num."人",$orderInfo["o_pay_time"]);
+            }
+        }
     }
 
 

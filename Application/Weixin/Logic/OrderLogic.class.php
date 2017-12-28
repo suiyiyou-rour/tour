@@ -202,7 +202,7 @@ class OrderLogic extends Model
         $masterData['o_order_type']  =   2;                                //订单状态
         $om = $Model->table('lf_seceny_order')->where(array('o_order_sn' => $orderSn))->save($masterData);
 
-        $ck_errorinfo = 1;
+        $ck_errorinfo = 1;      //错误信息判断
         if ($sinfo['s_tick_date'] == 1) {
             $ywhere['y_code']                       =       $orderInfo['o_seceny_code'];
             $ywhere['y_user_id']                    =       $orderInfo['o_user_id'];

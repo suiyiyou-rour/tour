@@ -352,7 +352,7 @@ class OrderController extends BaseController
         $data['o_order_sn'] = $this->createOrderSn();                       //订单编号
         $data['o_order_type'] = 4;                                          //订单情况
         $data['o_mobile'] = $mobile;                                        //联系人手机号
-        $data['o_identification'] = $identification;                       //联系人身份证
+//        $data['o_identification'] = $identification;                       //联系人身份证
         $data['o_user_id'] = $code;                                         //商户编码
         $data['o_num'] = $num;                                              //购买数量
         $data['o_seceny_code'] = $seceneyCode;                             //套餐编码
@@ -361,7 +361,7 @@ class OrderController extends BaseController
         $data['o_order_time'] = date("Y-m-d H:i:s", time());              //订单添加时间
         $data['o_seceny_name'] = $result['s_name'];                        //套餐名称
         $data['o_jxs_code'] = $jxsCode;                                     //经销商编码
-        $data['o_order_play_info'] = $playInfo;                             //游玩人信息
+//        $data['o_order_play_info'] = $playInfo;                             //游玩人信息
         $data['o_order_add_user'] = $this->user_account;                   //下单用户手机号
         $data['o_date'] = date("Y-m-d", $date);                             //出游时间
         $data['o_rate'] = $result['s_rate'];                                //佣金比例
