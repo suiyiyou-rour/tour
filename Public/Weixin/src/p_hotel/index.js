@@ -219,7 +219,8 @@ var nowDate = new Date(),
     priceLen,
     priceNum = 0,
     name,
-    userId;
+    userId,
+    sCode;
 
 var type = urlKey('shopType'),
     code = urlKey('shopCode'),
@@ -238,6 +239,7 @@ $.ajax({
 
             var data = res.data;
             name = data.s_name;
+            sCode = data.s_code;
             userId = data.s_user_id;
             priceData = res.data.date;
             priceLen = priceData.length;
@@ -365,7 +367,8 @@ function loginConfirm() {
                 setCookie('date', $('#goTime').text(), 30 * 60 * 1000);
                 setCookie('user', userId, 30 * 60 * 1000);
                 setCookie('kc', kc, 30 * 60 * 1000);
-                setCookie('name', name, 30 * 60 * 1000);  //产品名字
+                setCookie('name', name, 30 * 60 * 1000);    //产品名字
+                setCookie('sCode', sCode, 30 * 60 * 1000);  //套餐编码
                 HREF = controller + '/d_hotel?shopCode=' + code + '&shopType=' + type;
                 toast.hide();
                 location.href = HREF;

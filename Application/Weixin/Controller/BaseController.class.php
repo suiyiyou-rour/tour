@@ -18,24 +18,24 @@ class BaseController extends Controller
         // @todo 判断Session openid 没有获取 Session["openid"]
         // @todo 判断数据库 openid 没有就写入
 
-//          $openid = session('openid');
-//          if(!$openid){
-//              $openid = $this ->getOpenId(C("APP_ID"), C("APP_SECRET")); // 获取用户openid
-// //             $openid = $this -> getOpenId(C("APP_ID"), C("APP_SECRET"), 1); // 获取用户openid
-//              $userImg = $this->getImg($openid);
-//              session('openid',$openid);
-//          }
+          $openid = session('openid');
+          if(!$openid){
+              $openid = $this ->getOpenId(C("APP_ID"), C("APP_SECRET")); // 获取用户openid
+ //             $openid = $this -> getOpenId(C("APP_ID"), C("APP_SECRET"), 1); // 获取用户openid
+              $userImg = $this->getImg($openid);
+              session('openid',$openid);
+          }
 
-// //          openid 查询数据库 没数据存  没数据
-//          $useInfo = session('online_use_info');
-//          if(empty($useInfo)){
-//              $useInfo = M('user') ->where(array('user_wx_code' => $openid)) -> find();
-//              if(empty($useInfo)){
-//                  M('user') ->add(array('user_wx_code' => $openid, 'user_head_img' => $userImg));
-//              }elseif($useInfo['user_account'] != null){
-//                  session('online_use_info',$useInfo);
-//              }
-//          }
+ //          openid 查询数据库 没数据存  没数据
+          $useInfo = session('online_use_info');
+          if(empty($useInfo)){
+              $useInfo = M('user') ->where(array('user_wx_code' => $openid)) -> find();
+              if(empty($useInfo)){
+                  M('user') ->add(array('user_wx_code' => $openid, 'user_head_img' => $userImg));
+              }elseif($useInfo['user_account'] != null){
+                  session('online_use_info',$useInfo);
+              }
+          }
     }
 
     /**

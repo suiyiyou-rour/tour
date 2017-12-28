@@ -59,6 +59,8 @@ var code = urlKey('shopCode'),           //商品id
     name = getCookie('name'),            //商品名
     date = getCookie('date'),            //出游日期
     onePrice = getCookie('price'),       //价格
+    userId = getCookie('user'),
+    sCode = getCookie('sCode'),
     dateArr = date.split('-'),
     bottomTotalPri = $('#bottomTotalPri'),
     KC = getCookie('kc'),
@@ -82,7 +84,7 @@ if (name) {
     $('#ticketName').text(name);
 } else {
     //没有的话跳转商品详情页面
-    location.href = controller + '/p_ticket?shopCode=' + code + '&shopType=' + type;
+    location.href = controller + '/p_hotel?shopCode=' + code + '&shopType=' + type;
 }
 
 toast.hide();
@@ -158,21 +160,50 @@ $('#takeOrderBtn').click(function () {
 
     var _this = $(this);
 
+    var tourName = $('#tourName').val();
+    if(!tourName){
+        Alert('请填写顾客姓名!');
+        return false;
+    }
+
+    var tourMobile = $('#tourMobile').val();
+    if (tourMobile) {
+        if (!(/^1\d{10}$/.test(tourMobile))) {
+            Alert("手机号码有误，请重填");
+            return false;
+        }
+    } else {
+        Alert('请填写手机号码!');
+        return false;
+    }
+
+    var remarks = $('#remarks').val();
+
+    var orderJson = {
+        mobile: tourMobile,
+        name: tourName,
+        num: +$('#ticketNum').text(),
+        gyscode: userId,
+        code: sCode,
+        remarks: remarks,
+        date: date
+    };
+
     _this.prop('disabled', true);
     _this.css('backgroundColor', '#ffa69c');
 
     toast.show();
 
     $.ajax({
-        url: 'http://www.suiyiyou.net/index.php/weixin/Order/addTickOrder',
-        data: data,
+        url: 'http://www.suiyiyou.net/index.php/weixin/Order/addSecenyOrder',
+        data: orderJson,
         type: 'POST',
         success: function (res) {
             toast.hide();
             var code = res.code,
                 data = res.data;
             if (code == 200) {
-                location.href = 'http://www.suiyiyou.net/index.php/Weixin/Jsapi/index?orderSn=' + data.orderSn + '&shopType=' + type + '&';
+                location.href = 'http://www.suiyiyou.net/index.php/Weixin/Jsapi/index?orderSn=' + data.o_order_sn + '&shopType=' + type + '&';
             } else {
                 Alert(res.msg);
                 _this.prop('disabled', false);
