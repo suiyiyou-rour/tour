@@ -9,10 +9,13 @@ var argvs = argv._;
 var entry = {
     cash: './src/cash/index.js',
     d_route: './src/d_route/index.js',
+    d_hotel: './src/d_hotel/index.js',
     d_ticket: './src/d_ticket/index.js',
     home: './src/home/index.js',
+    hotel_pay: './src/hotel_pay/index.js',
     login: './src/login/index.js',
     order: './src/order/index.js',
+    p_hotel: './src/p_hotel/index.js',
     p_route: './src/p_route/index.js',
     p_ticket: './src/p_ticket/index.js',
     register: './src/register/index.js',
@@ -20,6 +23,8 @@ var entry = {
     route_pay: './src/route_pay/index.js',
     s_all: './src/s_all/index.js',
     search: './src/search/index.js',
+    share_info: './src/share_info/index.js',
+    share_poster: './src/share_poster/index.js',
     ticket_detail: './src/ticket_detail/index.js',
     ticket_pay: './src/ticket_pay/index.js',
 }
