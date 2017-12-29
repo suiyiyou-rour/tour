@@ -321,14 +321,14 @@ class ListController extends Controller {
 
                 }
             } else {
-                $infoWhere["p_code"] = $ls['code'];                             //套餐编码
-                $infoWhere["p_user_code"] = $ls['s_user_id'];                    //供应商编码
+                $PinfoWhere["p_code"] = $ls['code'];                             //套餐编码
+                $PinfoWhere["p_user_code"] = $ls['s_user_id'];                    //供应商编码
 //               $infoWhere["unix_timestamp(p_date)"]     =          array('EGT', $dt);         //出发时间
-                $minPrice = M('seceny_price')->field('min(p_my_price) as price')->where($infoWhere)->group('p_code')->find();
+                $minPrice = M('seceny_price')->field('min(p_my_price) as price')->where($PinfoWhere)->group('p_code')->find();
                 if($minPrice["price"]){                 //上线有价格
                     $ls['price']     =  $minPrice['price'];            //最低价格
                     if($jsremark){                      //是经销商
-                        $sceneryInfo = M("seceny_price")->field('p_js_price,p_my_price as price')->where($infoWhere)->where("p_my_price =".$minPrice["price"])->find();
+                        $sceneryInfo = M("seceny_price")->field('p_js_price,p_my_price as price')->where($PinfoWhere)->where("p_my_price =".$minPrice["price"])->find();
                         $ls['js_price']    =  $sceneryInfo['p_js_price'];                           //结算价格
                         $ls['yj']           =  $sceneryInfo['price'] - $sceneryInfo['p_js_price'];   //佣金
                     }
