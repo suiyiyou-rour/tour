@@ -311,7 +311,7 @@ class OrderController extends BaseController
             }
         }
         if ($result["s_hotel_buy_m_num"]) {
-            if ($num < $result["s_hotel_buy_b_num"]) {
+            if ($num < $result["s_hotel_buy_m_num"]) {
                 $this->ajaxReturn(array('code' => 304, "msg" => "每单最少购买人数,不能小于" . $result["s_hotel_buy_m_num"] . "人"));
             }
         }

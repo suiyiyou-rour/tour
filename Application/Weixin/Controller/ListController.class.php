@@ -149,7 +149,7 @@ class ListController extends Controller {
         $group = M('group')
             ->where($g_where)
             ->field("g_id as id,g_name as name,g_file,g_code as code,g_user_code,g_sell as sell")
-            ->order("g_sell desc , g_id asc")
+            ->order("g_sell desc")
             ->limit($page * 10, 10)
             ->select();
         if(!$group){
