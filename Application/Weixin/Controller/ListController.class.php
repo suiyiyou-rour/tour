@@ -149,7 +149,7 @@ class ListController extends Controller {
         $group = M('group')
             ->where($g_where)
             ->field("g_id as id,g_name as name,g_file,g_code as code,g_user_code,g_sell as sell")
-            ->order("g_sell desc , g_id asc")
+            ->order("g_sell desc")
             ->limit($page * 10, 10)
             ->select();
         if(!$group){
@@ -298,7 +298,7 @@ class ListController extends Controller {
         if(!$scenery){
             $this->ajaxReturn(array("code" => 200 , "data" =>array()));
         }
-        $this->GroupHeadImg($scenery,"s_img");    // 处理首图
+        $this->SceneryHeadImg($scenery,"s_img");    // 处理首图
         $this->AddMark($scenery,"scenery");  // 添加标记
 
         //判断是不是分销商自己
@@ -321,14 +321,14 @@ class ListController extends Controller {
 
                 }
             } else {
-                $infoWhere["p_code"] = $ls['code'];                             //套餐编码
-                $infoWhere["p_user_code"] = $ls['s_user_id'];                    //供应商编码
+                $PinfoWhere["p_code"] = $ls['code'];                             //套餐编码
+                $PinfoWhere["p_user_code"] = $ls['s_user_id'];                    //供应商编码
 //               $infoWhere["unix_timestamp(p_date)"]     =          array('EGT', $dt);         //出发时间
-                $minPrice = M('seceny_price')->field('min(p_my_price) as price')->where($infoWhere)->group('p_code')->find();
+                $minPrice = M('seceny_price')->field('min(p_my_price) as price')->where($PinfoWhere)->group('p_code')->find();
                 if($minPrice["price"]){                 //上线有价格
                     $ls['price']     =  $minPrice['price'];            //最低价格
                     if($jsremark){                      //是经销商
-                        $sceneryInfo = M("seceny_price")->field('p_js_price,p_my_price as price')->where($infoWhere)->where("p_my_price =".$minPrice["price"])->find();
+                        $sceneryInfo = M("seceny_price")->field('p_js_price,p_my_price as price')->where($PinfoWhere)->where("p_my_price =".$minPrice["price"])->find();
                         $ls['js_price']    =  $sceneryInfo['p_js_price'];                           //结算价格
                         $ls['yj']           =  $sceneryInfo['price'] - $sceneryInfo['p_js_price'];   //佣金
                     }
@@ -367,6 +367,25 @@ class ListController extends Controller {
 
     // 处理首图
     public function GroupHeadImg(&$list,$name){
+        foreach ($list as &$val) {
+            $img = json_decode($val[$name], true);
+            foreach ($img as $i) {
+                if ($i['headImg'] === 'true') {
+                    $val['imgFile'] = C('img_url') . $i['imgtitle'];
+                    break;
+                }
+            }
+            if (empty($val['imgFile'])) {
+                $val['imgFile'] = C('img_url') . $img[0]['imgtitle'];
+            }
+            unset($val[$name]);
+        }
+        return $list;
+    }
+
+    // 处理首图Scenery
+    public function SceneryHeadImg(&$list, $name)
+    {
         foreach ($list as &$val) {
             $img = json_decode($val[$name], true);
             foreach ($img as $i) {

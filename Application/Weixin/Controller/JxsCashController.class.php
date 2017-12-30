@@ -14,11 +14,11 @@ class JxsCashController extends Controller
         parent::__construct();
         header("Content-Type:text/html;charset=utf-8");
         #todo 判断登陆状态
-//         if($this->checkJS()){
-//             return;
-//         };
-//         $this->user_account = $_SESSION["online_use_info"]["user_id"];
-         $this->user_account="54";        //测试
+         if($this->checkJS()){
+             return;
+         };
+         $this->user_account = $_SESSION["online_use_info"]["user_id"];
+//         $this->user_account="54";        //测试
          if (!$this->user_account) {
              $this->ajaxReturn(array('code' => 403, "msg" => "没有登陆或者登陆超时"));
          }
@@ -27,7 +27,8 @@ class JxsCashController extends Controller
 
     //获取经销商余额
     public function getBalance(){
-        $jxs_no_money = M("jxs_money")->where(array("jxs_code"=>$this->user_account))->getField("jxs_no_money");
+        $user_account = $_SESSION["online_use_info"]["user_id"];
+        $jxs_no_money = M("jxs_money")->where(array("jxs_code"=>$user_account))->getField("jxs_no_money");
         if(empty($jxs_no_money)){
             $this->ajaxReturn(array('code' => 304, "msg" => "经销商查询错误"));
         }
