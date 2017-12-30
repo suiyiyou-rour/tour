@@ -62,6 +62,7 @@ var onePrice = getCookie('price'),   //成人价格
     dateArr = date.split('-'),
     bottomTotalPri = $('#bottomTotalPri'),
     KC = getCookie('kc'),
+    mess = getCookie('mess'),
     oneIdentify = getCookie('oneIdentify'),
     useDate = getCookie('use'),
     dataJson = {
