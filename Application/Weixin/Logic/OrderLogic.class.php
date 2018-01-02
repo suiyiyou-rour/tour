@@ -138,16 +138,16 @@ class OrderLogic extends Model
             $pwhere['p_code'] = $orderInfo['t_tick_code'];
             $pwhere['unix_timestamp(p_date)'] = array('eq', strtotime($orderInfo['t_go_date']));
             $priceInfo = M('tick_price')->where($pwhere)->find();
-            if (is_numeric($priceInfo['p_ck'])) {
-                if($priceInfo['p_ck'] != -1){
+            if(!$priceInfo){
+                $ck_errorinfo = 0;
+            }else{
+                if( $priceInfo['p_ck'] !== null && $priceInfo['p_ck'] != -1 ){
                     if(($priceInfo['p_ck'] - $orderInfo['t_tick_num']) >= 0){
                         $data['p_ck'] = $priceInfo['p_ck'] - $orderInfo['t_tick_num'];      //价格日历库存
                     }else{
                         $data['p_ck'] = 0;      //价格日历库存
                     }
                 }
-            }else{
-                $ck_errorinfo = 0;
             }
             $data['p_sell_num'] = $priceInfo['p_sell_num'] + $orderInfo['t_tick_num'];       //价格日历销量
             //更新价格日历
