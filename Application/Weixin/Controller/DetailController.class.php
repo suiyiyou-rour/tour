@@ -12,9 +12,10 @@ class DetailController extends Controller {
     {
         header("Content-Type:text/html;charset=utf-8");
 
-        $type = I('shopType');  // 商品类型
-        $code = I('shopCode');  // 商品code
-        
+       $type = I('shopType');  // 商品类型
+       $code = I('shopCode');  // 商品code
+
+
         if (empty($code) || empty($type)) {
             $this->ajaxReturn(array('code' => '404', 'data' => '','msg' => '请提交产品code和商品类型！'));
         }
@@ -27,7 +28,7 @@ class DetailController extends Controller {
         }elseif($type == 'scenery'){
             $res = $this->sDetail($code);
         }
-        // var_dump($res);
+        //var_dump($res);
         $this->ajaxReturn($res);
     }
 
@@ -106,9 +107,8 @@ class DetailController extends Controller {
             ->select();
             $date   = $this->array_sort($date,'p_date');   // 按时间先后排序
         }
-
-        $newArr = $this->newDate($date,'p_date');      // 重新构造日历数组
         
+        $newArr = $this->newDate($date,'p_date');      // 重新构造日历数组
         $data['date'] = $newArr;
         if(!$data){
             $data = [];
@@ -169,19 +169,18 @@ class DetailController extends Controller {
             $date   = $this->array_sort($date,'y_b_time'); // 按时间排序
             $newArr = $this->newDate($date,'y_b_time');    // 对价格日历
         }else{
-            $date = M('scenery_price')
+            $date = M('seceny_price')
+                    ->field('p_date y_b_time,p_ck y_kc,p_my_price y_my_price')
                     ->where(array(
                         'p_is_open'                 =>  '1',
                         'p_code'                    =>  $tcode,
-                        'unix_timestamp(p_b_time)'  =>  array('egt', $dt))
+                        'unix_timestamp(p_date)'  =>  array('egt', $dt))
                         )
                     ->select();
-
-            $date   = $this->array_sort($date,'p_b_time'); // 按时间排序
-            $newArr = $this->newDate($date,'p_b_time');    // 对价格日历
+            
+            $date   = $this->array_sort($date,'y_b_time'); // 按时间排序
+            $newArr = $this->newDate($date,'y_b_time');    // 对价格日历
         }
-
-
 
         $data['date'] = $newArr;
         if(!$data){
@@ -324,7 +323,7 @@ class DetailController extends Controller {
             for($i=1;$i<32;$i++){
                 $newArr[$j][$i] = '';
                 foreach($date as $key=>$val){
-                    if(substr($val[$code],5,2) == $nowMonth && substr($val[$code],8) == $i && strtotime($val[$code]) >= strtotime(date("Y-m-d", time()))){
+                    if(date('m',strtotime($val[$code])) == $nowMonth && date('d',strtotime($val[$code])) == $i && strtotime($val[$code]) >= strtotime(date("Y-m-d", time()))){
                         $newArr[$j][$i] = $date[$key];
                     }
                 }

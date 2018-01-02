@@ -29,8 +29,8 @@ class ShareController extends Controller {
     }
 
     public function getImageUrl(){
-        $type = I('get.type');
-        $code = I('get.code');
+        $type = I('shopType');
+        $code = I('shopCode');
 
         $isJxsCompany = cookie('company');
         $isJxsPhone = cookie('phone');
@@ -39,11 +39,10 @@ class ShareController extends Controller {
         }
         
         if(!$type || !$code){
-            $this->ajaxReturn(array('code' => 403 ,'msg' => '请注册成为经销商'));
+            $this->ajaxReturn(array('code' => 403 ,'msg' => '参数不正确'));
         }
 
         // 商品不在线上
-       
         $tableWhere = $this->getType($type,$code);
         $res = M($type)->field('1')->where($tableWhere)->find();
         if(!$res){
@@ -59,15 +58,22 @@ class ShareController extends Controller {
             $this->ajaxReturn(array('code' => 403,'msg' => '暂无此海报信息'));
         }
         $imgUrl = $this->getPic($posterData['img_url'],$code,$type);
-        $this->ajaxReturn(array('code' => 202,'msg' => $imgUrl));
+        $this->ajaxReturn(array('code' => 200,'msg' => $imgUrl));
     }
 
     public function qrcode($type,$code){
         $pid = cookie('pid');
 
+        if($type == 'tick'){
+            $page = 'p_ticket';
+        }elseif($type == 'group'){
+            $page = 'p_route';
+        }else {
+            $page = 'p_hotel';
+        }
         $save_path = isset($_GET['save_path'])?$_GET['save_path']:'./Public/qrcode/'; 
         $web_path = isset($_GET['save_path'])?$_GET['web_path']:'./Public/qrcode/';
-        $qr_data = 'http://www.suiyiyou.net/index.php/Weixin/Detail/detail?shopType='.$type.'&shopCode='.$code.'&pid='.$pid;
+        $qr_data = 'http://www.suiyiyou.net/index.php/Weixin/Index/'.$page.'?shopType='.$type.'&shopCode='.$code.'&pid='.$pid;
         $qr_level = isset($_GET['qr_level'])?$_GET['qr_level']:'H';
         $qr_size = isset($_GET['qr_size'])?$_GET['qr_size']:'4'; // 二维码图片大小
         $save_prefix = isset($_GET['save_prefix'])?$_GET['save_prefix']:'ZETA';
@@ -83,8 +89,8 @@ class ShareController extends Controller {
 
         $image = new \Think\Image();
         $image->open($bigImgPath);
-        $image->open($bigImgPath)->water($qCodePath,\Think\Image::IMAGE_WATER_SOUTHEAST)->save("./Public/Page/image/".$code.$type.".jpg");
-        return "./Public/Page/image/".$code.$type.".jpg";
+        $image->open($bigImgPath)->water($qCodePath,\Think\Image::IMAGE_WATER_SOUTHEAST)->save("./Public/qrcode/".$code.$type.".jpg");
+        return "./Public/qrcode/".$code.$type.".jpg";
     }
 
 
@@ -127,4 +133,8 @@ class ShareController extends Controller {
         return $where;
     }
 
+    public function info()
+    {
+        phpinfo();
+    }
 }

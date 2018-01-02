@@ -5,15 +5,14 @@ require('COMMON/bottom-menu.js');
 var prompt = $('#prompt'),
     getJxsUrl = 'http://www.suiyiyou.net/index.php/Weixin/Share/login',
     getImageUrl = 'http://www.suiyiyou.net/index.php/Weixin/Share/getImageUrl',
-    type = GetQueryString('type'),
-    code = GetQueryString('code'),
+    type = GetQueryString('shopType'),
+    code = GetQueryString('shopCode'),
     showPic = $('#showPic');
-
  // 请求是否分销商
  $.ajax({
     url: getJxsUrl,
     success: function (res) {
-        if(res.code == 200){
+        if(res.code != 200){
             prompt.css('display','flex');
             return;
         }
@@ -25,17 +24,18 @@ var prompt = $('#prompt'),
 function getImage(){
     $.ajax({
         url:getImageUrl,
-        data:{'type':type,'code':code},
+        data:{shopType:type,shopCode:code},
         success:function(res){
+
             switch(res.code){
                 case 404:
                     prompt.css('display','flex');
                     break;
                 case 403:
-                    location.href = "http://www.suiyiyou.net/index.php/Weixin/Share/share_poster";
+                    location.href = "http://www.suiyiyou.net/index.php/Weixin/index/share_poster";
                     break;
                 case 200:
-                    showPic.attr('src',res.msg);
+                    showPic.attr('src',"http://www.suiyiyou.net/"+res.msg);
             }
         }
     });

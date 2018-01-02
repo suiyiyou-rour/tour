@@ -24,7 +24,7 @@ $('.box').on('click', '.poster_img', function (e) {
                 prompt.css('display','flex');
                 return;
             }
-            location.href="http://www.suiyiyou.net/index.php/Weixin/index/share_info?code="+code+"&type="+type;
+            location.href="http://www.suiyiyou.net/index.php/Weixin/index/share_info?shopCode="+code+"&shopType="+type;
         }
     });
 });
@@ -44,7 +44,6 @@ function getPoster() {
                 return;
             }
             createHtml(res.msg)
-
         }
     });
 }
