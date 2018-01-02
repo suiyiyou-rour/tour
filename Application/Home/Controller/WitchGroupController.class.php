@@ -669,8 +669,18 @@ class WitchGroupController extends BaseController
         $saveBill["tb_code"] = "1";                                      //状态 1进账
         $saveBill["tb_balance"] = $jxs_no_money;                         //账户余额
         $saveBill["tb_time"] = date("Y-m-d H:i:s", time());             //时间
-        $gm = $Model->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["g_jxs_code"]))->data($saveBill)->add();
-        if ($om && $pm && $gm) {
+        $gm = $Model->table("lf_jxs_bill")->data($saveBill)->add();
+        //供应账单表
+        $billSave["g_b_time"] = strtotime(date('Y-m-d'));
+        $billSave["g_e_time"] = strtotime(date('Y-m-d',strtotime('+1week')));
+        $billSave["g_a_money"] = $jxsYJ;                                        //佣金
+        $billSave["g_user_id"] = $user_id;                                      //商户编码
+        $billSave["g_is_settle"] = "0";                                         //是否结算
+        $billSave["g_order_price"] = $orderInfo["g_order_price"];              //订单总价
+        $billSave["g_order_id"] = $order_sn;                                     //订单id
+        $gy = $Model->table("lf_group_bill")->data($billSave)->add();
+
+        if ($om && $pm && $gm && $gy) {
 //           $Model->rollBack();
             $Model->commit();
             $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
