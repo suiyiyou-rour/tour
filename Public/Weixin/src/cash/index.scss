@@ -120,8 +120,9 @@ a {
         left: 100%;
         background: #fff;
         box-shadow: 1px 0 35px #777;
-        padding-bottom: 79px;
+        padding-bottom: 91px;
         overflow-y: scroll;
+        box-sizing: border-box;
 
         #noOrder{
             text-align: center;

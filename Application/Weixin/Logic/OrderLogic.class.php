@@ -206,8 +206,7 @@ class OrderLogic extends Model
         if ($sinfo['s_tick_date'] == 1) {
             $ywhere['y_code']                       =       $orderInfo['o_seceny_code'];
             $ywhere['y_user_id']                    =       $orderInfo['o_user_id'];
-            $ywhere['unix_timestamp(y_b_time)']     =       array('egt', strtotime($orderInfo['o_date']));
-            $ywhere['unix_timestamp(y_e_time)']     =       array('elt', strtotime($orderInfo['o_date']));
+            $ywhere['unix_timestamp(y_b_time)']     =       array('eq', strtotime($orderInfo['o_date']));
             $yinfo = M('scenery_yx')->where($ywhere)->find();
             if(!$yinfo){
                 $ck_errorinfo = 0;
@@ -218,7 +217,7 @@ class OrderLogic extends Model
                     $ydata['y_kc'] = 0;
                 }
                 $ydata['y_sell_num'] = $yinfo['p_sell_num'] + $orderInfo['o_num'];  //销量
-                $pm = $Model->table('scenery_yx')->where($ywhere)->save($ydata);
+                $pm = $Model->table('lf_scenery_yx')->where($ywhere)->save($ydata);
             }
         } else {
             $pwhere['p_code']                       =           $orderInfo['o_seceny_code'];

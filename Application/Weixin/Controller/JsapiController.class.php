@@ -85,7 +85,7 @@ class JsapiController extends Controller
         }else if($need_type=="tick"){
             $this->display("index/ticket_pay");
         }else if($need_type=="scenery"){
-            $this->display("index/hotal_pay");
+            $this->display("index/hotel_pay");
         }
     }
 
@@ -190,7 +190,7 @@ class JsapiController extends Controller
             $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
             if($paySp["sp_mobile"]){
                 $WxSms = new \Weixin\Controller\SmsController();
-                $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["o_seceny_name"],$orderInfo["o_name"]."，共".$num."人",$orderInfo["o_pay_time"]);
+                $WxSms->SmsTo($paySp["sp_mobile"],"景酒套餐名称：".$orderInfo["o_seceny_name"],$orderInfo["o_name"]."，共".$num."人",$orderInfo["o_pay_time"]);
             }
         }
     }

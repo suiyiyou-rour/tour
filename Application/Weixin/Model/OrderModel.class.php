@@ -260,6 +260,12 @@ class OrderModel extends Model
         if (empty($data['num']) || !is_numeric($data['num']) || $data['num'] <= 0) {
             return array("code" => 0, "msg" => "请正确填写购买数量");
         }
+        if(empty($data['date']) || !is_Date($data['date'])){
+            return array("code" => 0, "msg" => "出发日期格式错误");
+        }
+        if ($data['remarks']) {
+
+        }
 //        if (empty($data["identification"]) || !is_Identification_card($data["identification"])) {
 //            return array("code" => 0, "msg" => "正确填写身份信息");
 //        }
@@ -326,7 +332,7 @@ class OrderModel extends Model
         if (!$order_sn) {
             return array("code" => 0, "msg" => "订单查询错误");
         }
-        $orderInfo["attach"] = "seceny";
+        $orderInfo["attach"] = "scenery";
         $orderInfo["Goods_tag"] = "随意游-景酒套餐";
 
         return array("code" => 1, "msg" => $orderInfo);
