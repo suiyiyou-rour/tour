@@ -1118,11 +1118,13 @@ class SceneryController extends BaseController
 
         //没有经销商的情况 todo 没有经销商 账单清单怎么算
         if(empty($orderInfo["o_jxs_code"])){
-            $result = M('seceny_order')->where(array('o_order_sn' => $order_sn, 'o_user_id' => $user_id))->save(array('o_order_type' => '1', 'o_user_time' => time()));
-            if (!$result) {
-                $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
-            }
-            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+//            $result = M('seceny_order')->where(array('o_order_sn' => $order_sn, 'o_user_id' => $user_id))->save(array('o_order_type' => '1', 'o_user_time' => time()));
+//            if (!$result) {
+//                $this->ajaxReturn(array('code' => '0', 'msg' => '订单错误'));
+//            }
+//            $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+            //没有暂定 李逢账下
+            $orderInfo["g_jxs_code"] = "43";
         }
 
         //经销商不存在的情况
@@ -1131,32 +1133,32 @@ class SceneryController extends BaseController
             $this->ajaxReturn(array('code' => '0', 'msg' => '经销商账户不存在'));
         }
 
-        //经销商佣金 = 订单总价格 - 结算价格 * 分数
+        //经销商佣金 = 订单总价格 - 结算价格 * 份数
         $jxsYJ = $orderInfo["o_order_price"] - ($orderInfo["o_js_price"] * $orderInfo["o_num"]);
 
         $jxs_bill_check = M('jxs_bill')->where(array("tb_jxs_code" => $orderInfo["o_jxs_code"],"tb_code" => "1","tb_order_id" => $order_sn))->find();
         //账单表里有记录 错误情况
         if($jxs_bill_check){
-            $ModelOne = M();           // 实例化一个空对象
-            $ModelOne->startTrans();  // 开启事务
-            $omOne = $ModelOne->table('lf_seceny_order')->where(array('o_order_sn' => $order_sn, 'o_user_id' => $user_id))->save(array('o_order_type' => '1', 'o_user_time' => time()));
-            //账单表添加记录
-            $saveBillOne["tb_order_id"] = $order_sn;                            //订单编号
-            $saveBillOne["tb_jxs_code"] = $orderInfo["o_jxs_code"];            //经销商code
-            $saveBillOne["tb_money"] = $jxsYJ;                                  //进账金额
-            $saveBillOne["tb_type"] = "scenery";                               //订单类型
-            $saveBillOne["tb_code"] = "6";                                      //状态 6异常
-            $saveBillOne["tb_balance"] = $jxs_moneyInfo["jxs_no_money"];       //账户余额  未加
-            $saveBillOne["tb_time"] = date("Y-m-d H:i:s", time());              //时间
-            $saveBillOne["tb_remark_info"] = "数据库已有进账数据";              //备注
-            $gmOne = $ModelOne->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["o_jxs_code"]))->data($saveBillOne)->add();
-            if ($omOne && $gmOne) {
-                $ModelOne->commit();
-                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
-            } else {
-                $ModelOne->rollBack();
+//            $ModelOne = M();           // 实例化一个空对象
+//            $ModelOne->startTrans();  // 开启事务
+//            $omOne = $ModelOne->table('lf_seceny_order')->where(array('o_order_sn' => $order_sn, 'o_user_id' => $user_id))->save(array('o_order_type' => '1', 'o_user_time' => time()));
+//            //账单表添加记录
+//            $saveBillOne["tb_order_id"] = $order_sn;                            //订单编号
+//            $saveBillOne["tb_jxs_code"] = $orderInfo["o_jxs_code"];            //经销商code
+//            $saveBillOne["tb_money"] = $jxsYJ;                                  //进账金额
+//            $saveBillOne["tb_type"] = "scenery";                               //订单类型
+//            $saveBillOne["tb_code"] = "6";                                      //状态 6异常
+//            $saveBillOne["tb_balance"] = $jxs_moneyInfo["jxs_no_money"];       //账户余额  未加
+//            $saveBillOne["tb_time"] = date("Y-m-d H:i:s", time());              //时间
+//            $saveBillOne["tb_remark_info"] = "数据库已有进账数据";              //备注
+//            $gmOne = $ModelOne->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["o_jxs_code"]))->data($saveBillOne)->add();
+//            if ($omOne && $gmOne) {
+//                $ModelOne->commit();
+//                $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
+//            } else {
+//                $ModelOne->rollBack();
                 $this->ajaxReturn(array('code' => '0', 'msg' => '操作失败，请联系管理员'));
-            }
+//            }
         }
 
         $Model = M();           // 实例化一个空对象
@@ -1176,7 +1178,17 @@ class SceneryController extends BaseController
         $saveBill["tb_balance"] = $jxs_no_money;                         //账户余额
         $saveBill["tb_time"] = date("Y-m-d H:i:s", time());             //时间
         $gm = $Model->table("lf_jxs_bill")->where(array("tb_jxs_code" => $orderInfo["o_jxs_code"]))->data($saveBill)->add();
-        if ($om && $pm && $gm) {
+        //供应账单表
+        $GYbillSave["s_b_time"] = strtotime(date('Y-m-d'));
+        $GYbillSave["s_e_time"] = strtotime(date('Y-m-d',strtotime('+1week')));
+        $GYbillSave["s_a_money"] = $jxsYJ;                                        //佣金
+        $GYbillSave["s_user_id"] = $user_id;                                      //商户编码
+        $GYbillSave["s_is_settle"] = "0";                                         //是否结算
+        $GYbillSave["s_order_price"] = $orderInfo["t_tick_price"];           //订单总价
+        $GYbillSave["s_order_id"] = $order_sn;                                     //订单id
+        $gy = $Model->table("lf_seceny_bill")->data($GYbillSave)->add();
+
+        if ($om && $pm && $gm && $gy) {
 //           $Model->rollBack();
             $Model->commit();
             $this->ajaxReturn(array('code' => '1', 'msg' => '操作成功'));
