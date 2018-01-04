@@ -7,8 +7,6 @@ namespace Weixin\Controller;
 use Think\Controller;
 class JxsCashController extends Controller
 {
-    public $user_account;
-
     public function __construct()
     {
         parent::__construct();
@@ -17,9 +15,8 @@ class JxsCashController extends Controller
          if($this->checkJS()){
              return;
          };
-         $this->user_account = $_SESSION["online_use_info"]["user_id"];
 //         $this->user_account="54";        //测试
-         if (!$this->user_account) {
+         if (empty($_SESSION["online_use_info"]["user_id"])) {
              $this->ajaxReturn(array('code' => 403, "msg" => "没有登陆或者登陆超时"));
          }
 
@@ -49,7 +46,7 @@ class JxsCashController extends Controller
         }else{
             $where['tb_code']        =   array('neq', '6');//排除异常状态
         }
-        $where["tb_jxs_code"]   =   $this->user_account;
+        $where["tb_jxs_code"]   =   $_SESSION["online_use_info"]["user_id"];
 
         $res = M("jxs_bill")->where($where)->order("tb_id desc")->limit($page * 10, 10)->select();
         if(empty($res)){
@@ -67,7 +64,7 @@ class JxsCashController extends Controller
         if($money < 100){
             $this->ajaxReturn(array('code' => 304, "msg" => "提现金额不能小于100"));
         }
-        $jxs_money = M("jxs_money")->where(array("jxs_code"=>$this->user_account))->getField("jxs_no_money");
+        $jxs_money = M("jxs_money")->where(array("jxs_code"=>$_SESSION["online_use_info"]["user_id"]))->getField("jxs_no_money");
         if($money > $jxs_money){
             $this->ajaxReturn(array('code' => 304, "msg" => "提现金额不能大于账户余额，当前余额为".$jxs_money));
         }
@@ -90,7 +87,7 @@ class JxsCashController extends Controller
         if($money > 100000){
             $this->ajaxReturn(array('code' => 304, "msg" => "提现金额不能大于100000"));
         }
-        $jxs_code = $this->user_account;
+        $jxs_code = $_SESSION["online_use_info"]["user_id"];
         $jxs_money = M("jxs_money")->where(array("jxs_code"=>$jxs_code))->getField("jxs_no_money");
         if($money > $jxs_money){
             $this->ajaxReturn(array('code' => 304, "msg" => "提现金额不能大于账户余额，当前余额为".$jxs_money));
