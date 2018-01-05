@@ -10,7 +10,7 @@ function menu() {
             src: controller + '/order',
             icon: 'icon-dingdan',
             name: '订单'
-        }, {
+        },{
             src: controller + '/share_poster',
             icon: 'icon-earth',
             name: '推广'
@@ -45,30 +45,25 @@ function menu() {
 
     $('#bottomMenu i').css({
         fontSize: '24px',
-        color: '#777',
-        display: 'block',
-        lineHeight: '38px'
+        color: '#777'
     })
 
     $('#bottomMenu p').css({
         fontSize: '12px',
         color: '#777',
-        textAlign: 'center',
-        lineHeight: '16px'
+        textAlign: 'center'
     })
 
     $('#bottomMenu a').css({
         display: 'inline-block',
-        textAlign: 'center',
         width: '20%',
-        height: '54px',
-        verticalAlign: 'middle'
+        textAlign: 'center'
     })
 }
 
 
 if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = new menu();
+    module.exports = new menu(); 
 } else {
     window.menu = new menu();
 }
