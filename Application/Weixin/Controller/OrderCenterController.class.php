@@ -18,7 +18,7 @@ class OrderCenterController extends BaseController
         if($type== '' || $status == ''){
             $this->ajaxReturn(array('code' => '404', 'msg' => '非法请求'));
         }
-//         $userCode = '18060481803';
+//         $userCode = '18060481803'; 
         $userCode = $_SESSION["online_use_info"]["user_account"]; // 用户code
         if(!$userCode){
             $this->ajaxReturn(array('code' => '404', 'msg' => '用户没有登陆'));
