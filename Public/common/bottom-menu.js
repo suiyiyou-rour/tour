@@ -28,9 +28,6 @@ function menu() {
     var box = $('<div id="bottomMenu"></div>');
     box.css({
         position: 'fixed',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
         width: '100%',
         height: '54px',
         bottom: '0',
@@ -54,6 +51,12 @@ function menu() {
     $('#bottomMenu p').css({
         fontSize: '12px',
         color: '#777',
+        textAlign: 'center'
+    })
+
+    $('#bottomMenu a').css({
+        display: 'inline-block',
+        width: '20%',
         textAlign: 'center'
     })
 }
