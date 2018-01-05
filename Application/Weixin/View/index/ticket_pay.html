@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><if condition="isset($_COOKIE['company'])">
-        {$_COOKIE['company']}
-        <else/> 随意游-suiyiyou.net
-    </if></title>
-    <link rel="stylesheet" href="__PUBLIC__/Weixin/dist/ticket_pay.min.css?st=v1.0.1">
+    <title>
+        <if condition="isset($_COOKIE['company'])">
+            {$_COOKIE['company']}
+            <else/> 随意游-suiyiyou.net
+        </if>
+    </title>
+    <link rel="stylesheet" href="__PUBLIC__/Weixin/dist/ticket_pay.min.css?st=v1.0.3">
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script>
         window.public = "__PUBLIC__";
@@ -23,6 +25,10 @@
     <p class="main-title">待支付订单</p>
     <img id="orderPic" src="" alt="">
     <div id="orderMessBox">
+        <div class="item">
+            <p class="title">过期时间 : </p>
+            <p class="mess" id="orderCount">--</p>
+        </div>
         <div class="item">
             <p class="title">订单号 : </p>
             <p class="mess" id="orderNum">--</p>
@@ -74,7 +80,7 @@
 
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
-            {$jsApiParameters},
+            { $jsApiParameters },
             function (res) {
                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                     alert("支付成功!");

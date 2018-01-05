@@ -1,5 +1,6 @@
 require('./index.scss');
 var Alert = require('COMMON/Alert-mb.js');
+var warning = require('COMMON/warning-mb.js');
 
 //读URL参数
 function urlKey(name) {
@@ -23,6 +24,39 @@ function getDateWeek(year, month, day) {
 }
 
 function dataRender(data) {
+
+    if (data.count == '-1') {
+        warning('订单已过期',function(){
+            location.href = 'http://www.suiyiyou.net/index.php/Weixin/index/order';
+        })
+    } else {
+        var timeBox = $('#orderCount');
+        var count = +data.count;  //时间戳
+        var min = parseInt(count / 60); //分钟数
+        var sec = count % 60; //秒数
+        var timer = setInterval(function () {
+            if (sec == 0) {
+                sec = 59;
+                min--;
+            } else {
+                sec--;
+            }
+            sec < 10 ? timeBox.text(min + ':0' + sec) : timeBox.text(min + ':' + sec);
+            if (min == 0 && sec == 0) {
+                clearInterval(timer);
+                $.ajax({
+                    url: 'http://www.suiyiyou.net/index.php/weixin/Order/CloseOrder',
+                    data: {
+                        shopType: 'group',
+                        orderSn: data.g_order_sn
+                    }
+                })
+                warning('订单已过期',function(){
+                    location.href = 'http://www.suiyiyou.net/index.php/Weixin/index/order';
+                })
+            }
+        }, 1000)
+    };
 
     $('#orderPic').attr('src', data.img);
     $('#orderNum').html(data.g_order_sn);

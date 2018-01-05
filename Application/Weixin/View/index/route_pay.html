@@ -9,7 +9,7 @@
         {$_COOKIE['company']}
         <else/> 随意游-suiyiyou.net
     </if></title>
-    <link rel="stylesheet" href="__PUBLIC__/Weixin/dist/route_pay.min.css?st=v1.0.1">
+    <link rel="stylesheet" href="__PUBLIC__/Weixin/dist/route_pay.min.css?st=v1.0.2">
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script>
         window.public = "__PUBLIC__";
@@ -23,6 +23,10 @@
     <p class="main-title">待支付订单</p>
     <img id="orderPic" src="" alt="">
     <div id="orderMessBox">
+        <div class="item">
+            <p class="title">过期时间 : </p>
+            <p class="mess" id="orderCount">--</p>
+        </div>
         <div class="item">
             <p class="title">订单号 : </p>
             <p class="mess" id="orderNum">--</p>
