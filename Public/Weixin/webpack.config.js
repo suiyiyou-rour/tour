@@ -21,7 +21,6 @@ var entry = {
     register: './src/register/index.js',
     route_detail: './src/route_detail/index.js',
     route_pay: './src/route_pay/index.js',
-    s_all: './src/s_all/index.js',
     search: './src/search/index.js',
     share_info: './src/share_info/index.js',
     share_poster: './src/share_poster/index.js',
