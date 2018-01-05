@@ -323,7 +323,7 @@ $.ajax({
             priceLen = priceData.length;
             mess = data.t_tick_playerInfo.val; //其他游客身份数组
             oneIdentify = data.t_tick_mobile;  //需要一个身份信息1 不需要0
-            if (data.t_tick_date == '1') {       //如果是有效期模式
+            if (data.t_tick_date == '1') {     //如果是有效期模式
                 useDate = {
                     use: data.t_tick_date,
                     limit: data.t_tick_verify_time + '~' + data.t_tick_xj_time,

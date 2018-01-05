@@ -10,7 +10,7 @@ function menu() {
             src: controller + '/order',
             icon: 'icon-dingdan',
             name: '订单'
-        },{
+        }, {
             src: controller + '/share_poster',
             icon: 'icon-earth',
             name: '推广'
@@ -28,9 +28,6 @@ function menu() {
     var box = $('<div id="bottomMenu"></div>');
     box.css({
         position: 'fixed',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
         width: '100%',
         height: '54px',
         bottom: '0',
@@ -48,19 +45,30 @@ function menu() {
 
     $('#bottomMenu i').css({
         fontSize: '24px',
-        color: '#777'
+        color: '#777',
+        display: 'block',
+        lineHeight: '38px'
     })
 
     $('#bottomMenu p').css({
         fontSize: '12px',
         color: '#777',
-        textAlign: 'center'
+        textAlign: 'center',
+        lineHeight: '16px'
+    })
+
+    $('#bottomMenu a').css({
+        display: 'inline-block',
+        textAlign: 'center',
+        width: '20%',
+        height: '54px',
+        verticalAlign: 'middle'
     })
 }
 
 
 if (typeof module !== 'undefined' && typeof exports === 'object') {
-    module.exports = new menu(); 
+    module.exports = new menu();
 } else {
     window.menu = new menu();
 }
