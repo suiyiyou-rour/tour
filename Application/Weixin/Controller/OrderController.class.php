@@ -112,7 +112,7 @@ class OrderController extends BaseController
             $this->ajaxReturn(array('code' => 304, "msg" => "库存已经不够，目前还剩" . ($groupInfo["g_no_kc_num"] + $groupInfo["g_need_kc_num"]) . "人"));
         }
 
-        $data['g_order_time'] = date("Y-m-d", time());//订单添加时间
+        $data['g_order_time'] = date("Y-m-d H:i:s", time());//订单添加时间
         if ($groupInfo['g_df_ch'] === 'true') {//判断是否开启单房差
             if ($compareata["dfcNum"] == 0) {
                 $data['g_is_dfc'] = 0;
@@ -377,6 +377,114 @@ class OrderController extends BaseController
 
     }
 
+
+    /** 订单取消
+     * @param string $orderType 产品类型
+     * @param string $orderCode  订单编号
+     * @return int  code 处理状态码
+     * @return string  msg  错误信息
+     */
+    public function CloseOrder($Type = null,$Code =null){
+        $user_account = $_SESSION["online_use_info"]["user_account"];
+        if(!$user_account){
+            $this->ajaxReturn(array('code' => 304 ,'msg' => '用户没有登陆'));
+        }
+        if($Type && $Code){
+            $orderType = $Type;
+            $orderCode = $Code;
+        }else{
+            $orderType = I('shopType');
+            $orderCode = I('orderSn');
+        }
+        if(!$orderCode || !$orderType){
+            $this->ajaxReturn(array('code' => 404 ,'msg' => '参数错误'));
+        }
+        $table = $this->getTableName($orderType);
+        $where = $this->getWhere($orderType,$orderCode,$user_account);
+        $save  =  $this->getSave($orderType);
+
+        $data =  M($table)->where($where)->Save($save);
+        if(empty($data)){
+            $this->ajaxReturn(array('code' => 400 ,'msg' => '取消错误'));
+        }
+    }
+    /**
+     * 获取删除条件
+     * @param string $type 类型识别值
+     * @return string $where 删除条件
+     */
+    private function getWhere($type,$code,$user_account){
+        switch($type){
+            case 'tick':
+                $where = array(
+                    't_order_sn'           =>   $code,
+                    't_tick_order_type'   =>    4,
+                    't_order_user_id'     =>    $user_account
+                );
+                break;
+            case 'scenery':
+                $where = array(
+                    'o_order_sn'          =>     $code,
+                    'o_order_type'        =>     4,
+                    'o_order_add_user'    =>     $user_account
+                );
+                break;
+            case 'group':
+                $where = array(
+                    'g_order_sn'            =>   $code,
+                    'g_order_type'          =>   4,
+                    'g_add_order_user'      =>   $user_account
+                );
+        }
+        return $where;
+    }
+
+    /**
+     * 获取表名
+     * @param string $type 类型识别值
+     * @return string $tableName 表名
+     */
+    private function getTableName($type){
+        switch($type){
+            case 'tick':
+                $tableName = 'tick_order';
+                break;
+            case 'scenery':
+                $tableName = 'seceny_order';
+                break;
+            case 'group':
+                $tableName = 'group_order';
+        }
+        return $tableName;
+    }
+
+    /**
+     * 保存状态值3
+     * @param $orderType
+     * @return array
+     */
+    private function getSave($orderType){
+        switch($orderType){
+            case 'tick':
+                $Save = array(
+                    't_tick_order_type'   =>    3,
+                );
+                break;
+            case 'scenery':
+                $Save = array(
+                    'o_order_type'   =>    3,
+                );
+                break;
+            case 'group':
+                $Save = array(
+                    'g_order_type'   =>    3,
+                );
+                break;
+        }
+        return $Save;
+    }
+
+
     /**
      * 跟团游订单详情显示
      */
@@ -396,6 +504,18 @@ class OrderController extends BaseController
 
             $this->GroupHeadImg($group, "g_file");    // 处理首图;
             $orderInfo["img"] = $group[0]["imgFile"];
+            if( $orderInfo["g_order_type"] == 4){
+                //返回订单时间
+                $time = time();
+                $orderTime = strtotime($orderInfo["g_order_time"]) + 1800;
+                $count = $orderTime - $time;
+                if($count >= 0){
+                    $orderInfo["count"] = $count;
+                } else{
+                    $orderInfo["count"] = -1;
+                    $this->CloseOrder("group",$orderSn);
+                }
+            }
 //            var_dump($orderInfo);
             $this->ajaxReturn(array('code' => 200, 'data' => $orderInfo));
         }
@@ -417,6 +537,19 @@ class OrderController extends BaseController
         }
         $this->HeadImg($tickInfo,"t_tick_file");    // 处理首图
         $orderInfo["img"] = $tickInfo[0]["imgFile"];
+
+        if($orderInfo["t_tick_order_type"] == 4){
+            //返回订单时间
+            $time = time();
+            $orderTime = strtotime($orderInfo["t_tick_create_time"]) + 1800;
+            $count = $orderTime - $time;
+            if($count >= 0){
+                $orderInfo["count"] = $count;
+            } else{
+                $orderInfo["count"] = -1;
+                $this->CloseOrder("tick",$orderSn);
+            }
+        }
         $this->ajaxReturn(array('code' => 200, 'data' => $orderInfo));
     }
 
@@ -436,8 +569,23 @@ class OrderController extends BaseController
         $this->SceneryHeadImg($sceneryInfo,"s_img");    // 处理首图
         $orderInfo['img'] = $sceneryInfo[0]["imgFile"];
 
+        if($orderInfo["o_order_type"] == 4){
+            //返回订单时间
+            $time = time();
+            $orderTime = strtotime($orderInfo["o_order_time"]) + 1800;
+            $count = $orderTime - $time;
+            if($count >= 0){
+                $orderInfo["count"] = $count;
+            } else{
+                $orderInfo["count"] = -1;
+                $this->CloseOrder("scenery",$orderSn);
+            }
+        }
+
+
         $this->ajaxReturn(array('code' => 200, 'data' => $orderInfo));
     }
+
 
     // 处理首图
     public function GroupHeadImg(&$list, $name)
