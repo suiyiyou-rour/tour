@@ -84,7 +84,8 @@ class ShareController extends Controller {
     }
 
     public function getPic($ImgPath,$code,$type){
-        $bigImgPath = $ImgPath;
+        $bigImgPath = explode('?',$ImgPath);
+        $bigImgPath = $bigImgPath[0];
         $qCodePath = $this->qrcode($type,$code);
 
         $image = new \Think\Image();

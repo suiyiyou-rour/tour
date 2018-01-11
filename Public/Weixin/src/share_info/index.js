@@ -7,7 +7,8 @@ var prompt = $('#prompt'),
     getImageUrl = 'http://www.suiyiyou.net/index.php/Weixin/Share/getImageUrl',
     type = GetQueryString('shopType'),
     code = GetQueryString('shopCode'),
-    showPic = $('#showPic');
+    showPic = $('#showPic'),
+    date = new date();
  // 请求是否分销商
  $.ajax({
     url: getJxsUrl,
