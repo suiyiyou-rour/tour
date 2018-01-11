@@ -100,7 +100,7 @@ class ShareController extends Controller
         } else {// 上传成功 获取上传文件信息
             $image_k="";
             //取出数组里的名字和文件夹
-            $image_k .= "./Public/Page/poster/".$info["savepath"] . $info["savename"];
+            $image_k .= "./Public/Page/poster/".$info["savepath"] . $info["savename"].'?t='.time();
             return array("code"=>1,"message"=>$image_k);
         }
     }
