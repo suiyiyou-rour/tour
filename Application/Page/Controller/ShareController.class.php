@@ -120,7 +120,7 @@ class ShareController extends Controller
                 $where = array(
                     't_code'                            =>  $code,            // 商品id
                     't_tick_type'                       =>  '4',               // 上线产品
-                    't_tick_del'                        =>  array('neq', '1'), // 未被删除
+                    't_tick_del'                        =>  array('neq', '0'), // 未被删除
                     'unix_timestamp(t_tick_sj_time)'    =>  array('elt', $dt), // 上线时间小于等于今天
                     'unix_timestamp(t_tick_xj_time)'    =>  array('egt', $dt)  // 下线时间大于等于今天
                 );
@@ -128,7 +128,7 @@ class ShareController extends Controller
             case "group":
                 $where = array(
                     'a.g_code'                      =>  array('eq',$code),
-                    'a.g_is_del'                    =>  array('neq', '1'),                  // 未删除
+                    'a.g_is_del'                    =>  array('neq', '0'),                  // 未删除
                     'a.g_is_pass'                   =>  array('eq', '5'),                   // 5为上线
                     'unix_timestamp(a.g_on_time)'   =>  array('elt', $dt),                  // 上线时间小于等于今天
                     'unix_timestamp(a.g_d_time)'    =>  array('egt', $dt)                   // 下线时间大于等于今天
@@ -138,7 +138,7 @@ class ShareController extends Controller
                 $where = array(
                     's_code'                    =>  $code,
                     's_type'                    =>  '5',
-                    's_is_del'                  =>  array('neq', '1'),    // 未删除
+                    's_is_del'                  =>  array('neq', '0'),    // 未删除
                     'unix_timestamp(s_sj_time)' =>  array('elt', $dt),    // 上线时间小于等于今天
                     'unix_timestamp(s_xj_time)' =>  array('egt', $dt)     // 下线时间大于等于今天
                 );
