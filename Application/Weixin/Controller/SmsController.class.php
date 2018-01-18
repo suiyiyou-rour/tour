@@ -128,7 +128,7 @@ class SmsController extends Controller
     public function useSendSms()
     {
         $mobile = I('mobile');
-        手机号码验证
+        //手机号码验证
         if(!is_phone($mobile)){
             $this->ajaxReturn(array('code' => 404, 'msg' => '手机号码不正确'));
         }
