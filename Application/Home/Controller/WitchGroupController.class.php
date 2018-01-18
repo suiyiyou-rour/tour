@@ -823,7 +823,7 @@ class WitchGroupController extends BaseController
             $this->ajaxReturn(array('code' => 0, 'msg' => '非法操作'));
         }
         $orderInfo = M('group_order')->where(array('g_order_sn' => $orderSn))->find();
-        $orderInfo['g_pay_time'] = date('Y-m-d H:i:s', $orderInfo['g_pay_time']);
+//        $orderInfo['g_pay_time'] = date('Y-m-d H:i:s', $orderInfo['g_pay_time']);
         $orderInfo['g_zf_info'] = json_decode($orderInfo['g_zf_info'], true);
         $orderInfo['g_identity_info'] = json_decode($orderInfo['g_identity_info'], true);
         $this->ajaxReturn($orderInfo);
