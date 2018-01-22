@@ -100,7 +100,10 @@ class BaseLoginController extends BaseController
                 );
             }
             // 登录 查看是否有openid  有就先删除原先的  再写入保存
-            M('user')->where(array('user_wx_code' => $openid))->delete();
+            M('user')->where(array(
+                'user_wx_code' => $openid,
+                'user_pwd' =>array('neq','')
+                ))->delete();
             $r = M('user')->where(array('user_id' => $useInfo['user_id']))->save($data);
             if($r){
                 session('online_use_info', $useInfo);
