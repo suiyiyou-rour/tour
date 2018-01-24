@@ -7,7 +7,8 @@ use Think\Controller;
 class HomeController extends Controller {
     public function __construct(){
         parent::__construct();
-        if(ACTION_NAME != "login" && ACTION_NAME !="index"){
+        $pass = array('login','index','show');
+        if(!in_array(ACTION_NAME,$pass)){
             if(empty(session('UserAdminLogin'))){
                 $this->display('home/index');
             }
@@ -27,16 +28,11 @@ class HomeController extends Controller {
         if(empty($user) || empty($pwd)){
             $this->error('账号密码不能为空','index',1);
         }
-        if($user != "syy" || $pwd !="suiyiyou123" ){
+        if($user != "syy" || $pwd !="syy123" ){
             $this->error('账号密码不能为空','index',1);
         }
-        echo "123";
-        exit;
+        $res = session('UserAdminLogin',1);
+        $this->display('home/back');
     }
-
-    public function kkk(){
-        echo 6;
-    }
-
 
 }

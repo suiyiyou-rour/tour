@@ -8,6 +8,9 @@
     *{
         margin: 0;
     }
+    body{
+        background-color: #ffc8c8;
+    }
     .bg{
         position:absolute;
         width:100%;
@@ -155,15 +158,4 @@
         </div>
     </div>
 </body>
-<script>
-    $(function () {
-        var num=1;
-        $(".bg").css("background-image","url("+PUBLIC+"/Page/image/backgrounds/1.jpg)");
-        window.setInterval(function() {
-            num>=3 ? num=1 : num++;
-            var image="url("+PUBLIC+"/Page/image/backgrounds/"+num+".jpg)";
-            $(".bg").css("background-image",image);
-        }, 15000);
-    })
-</script>
 </html>
