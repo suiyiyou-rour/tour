@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei';
+        }
+
+        body {
+            background-color: #f6f6f6;
+            position: absolute;
+            height: 100%;
+            min-width: 1250px;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #left {
+            height: 100%;
+            display: inline-block;
+            background-color: rgb(219, 216, 216);
+        }
+
+        #left ul {
+            margin-top: 100px;
+            padding: 25px;
+            height: 100%;
+        }
+
+        #left ul li {
+            font-size: 25px;
+            width: 200px;
+            text-align: center;
+            padding: 5px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        #left ul .active {
+            color: black;
+        }
+
+        #left ul li:hover {
+            color: black;
+        }
+
+        #right {
+            vertical-align: top;
+            width: 900px;
+            display: inline-block;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        #right .title-div {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        #right .title-text {
+            display: inline-block;
+            width: 200px;
+            font-size: 23px;
+            color: #666;
+            text-align: right;
+        }
+
+        #right .inp {
+            width: 250px;
+            height: 30px;
+            border-radius: 3px;
+            border: 1px solid #acacac;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid #666;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #bce8f1;
+            color: #3c763d;
+        }
+
+        #show {
+            padding-top: 20px;
+        }
+
+        #show .title-text {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left">
+        <ul>
+            <a href="{:U('home/show')}">
+                <li>首页</li>
+            </a>
+            <a href="{:U('home/showExtract')}">
+                <li>经销商提现</li>
+            </a>
+            <a href="{:U('home/showComment')}">
+                <li>添加评论</li>
+            </a>
+            <li class="active">订单查询</li>
+            <a href="{:U('home/showPoster')}">
+                <li>海报删除</li>
+            </a>
+        </ul>
+    </div>
+    <div id="right">
+        <div class="title-div">
+            <span class="title-text">类型：</span>
+            <select id="goodsType" class="inp">
+                <option value="group">跟团</option>
+                <option value="scenery">景酒</option>
+                <option value="tick">门票</option>
+            </select>
+        </div>
+        <div class="title-div">
+            <span class="title-text">订单号：</span>
+            <input type="text" id="orderSn" placeholder="请输入订单号" class="inp">
+        </div>
+        <div class="title-div">
+            <span class="title-text"></span>
+            <span id="submit" class="btn">确定</span>
+        </div>
+        <div id='show'></div>
+    </div>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script>
+    var url = "{:U('home/getOrder')}",
+        submitBtn = $('#submit'),
+        goodsType = $('#goodsType'),
+        orderSn = $('#orderSn'),
+        showDiv = $('#show');
+
+    // 获取订单 => 数据
+    submitBtn.click(function () {
+        $.ajax({
+            url: url,
+            data: { 'goodsType': goodsType.val(), 'orderSn': orderSn.val() },
+            success: function (res) {
+                if (res.code == 200) {
+                    createHtml(res.msg[0]);
+                } else {
+                    alert(res.msg);
+                }
+            }
+        });
+    });
+
+    // 创建订单 => html
+    function createHtml(data) {
+        var Html = '<div class="title-div">'+
+            '<span class="title-text" > 订单号：</span >'+data.orderSn+
+            '</div >'+
+            '<div class="title-div">'+
+                '<span class="title-text">产品名：</span>'+data.name+
+            '</div>'+
+            '<div class="title-div">'+
+                '<span class="title-text">下单时间：</span>'+data.time+
+            '</div>'+
+            '<div class="title-div">'+
+                '<span class="title-text">付款时间：</span>'+data.payTime+
+            '</div>'+
+            '<div class="title-div">'+
+                '<span class="title-text">经销商：</span>'+data.company+
+            '</div>';
+        showDiv.html(Html);
+    }
+</script>
+
+</html>

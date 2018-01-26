@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei';
+        }
+
+        body {
+            background-color: #f6f6f6;
+            position: absolute;
+            height: 100%;
+            min-width: 1250px;
+
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #left {
+            height: 100%;
+            display: inline-block;
+            background-color: rgb(219, 216, 216);
+        }
+
+        #left ul {
+            padding: 125px 25px 25px 25px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        #left ul li {
+            font-size: 25px;
+            width: 200px;
+            text-align: center;
+            padding: 5px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        #left ul .active {
+            color: black;
+        }
+
+        #left ul li:hover {
+            color: black;
+        }
+
+        #right {
+            vertical-align: top;
+            width: 900px;
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        .image {
+            width: 49%;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .showImage {
+            width: 200px;
+            height: 300px;
+            box-shadow: 1px 2px 15px #666;
+        }
+
+        .title {
+            display: block;
+            text-align: left;
+            padding-top: 5px;
+            padding-left: 135px;
+        }
+
+        #right .btn {
+            margin-top: 15px;
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid #666;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #bce8f1;
+            color: #3c763d;
+        }
+
+        .b-page {
+            background: #fff;
+            box-shadow: 0 1px 2px 0 #e2e2e2
+        }
+
+        .b-page .page {
+            width: 100%;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .b-page .page .first,
+        .b-page .page .prev,
+        .b-page .page .current,
+        .b-page .page .num,
+        .b-page .page .current,
+        .b-page .page .next,
+        .b-page .page .end {
+            padding: 8px 16px;
+            margin: 0 5px;
+            display: inline-block;
+            color: #008cba;
+            border: 1px solid #f2f2f2;
+            border-radius: 5px
+        }
+
+        .b-page .page .first:hover,
+        .b-page .page .prev:hover,
+        .b-page .page .current:hover,
+        .b-page .page .num:hover,
+        .b-page .page .current:hover,
+        .b-page .page .next:hover,
+        .b-page .page .end:hover {
+            text-decoration: none;
+            background: #f8f5f5
+        }
+
+        .b-page .page .current {
+            background-color: #008cba;
+            color: #fff;
+            border-radius: 5px;
+            border: 1px solid #008cba
+        }
+
+        .b-page .page .current:hover {
+            text-decoration: none;
+            background: #008cba
+        }
+        #show{
+            height: 860px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left">
+        <ul>
+            <a href="{:U('home/show')}">
+                <li>首页</li>
+            </a>
+            <a href="{:U('home/showExtract')}">
+                <li>经销商提现</li>
+            </a>
+            <a href="{:U('home/showComment')}">
+                <li>添加评论</li>
+            </a>
+            <a href="{:U('home/showOrder')}">
+                <li>订单查询</li>
+            </a>
+            <li class="active">海报删除</li>
+        </ul>
+    </div>
+    <div id="right">
+        <div id="show">
+            <foreach name="poster" item="val">
+                <div class="image">
+                    <div>
+                        <img class="showImage" src="http://www.suiyiyou.net/{$val.img_url}">
+                    </div>
+                    <div>
+                        <span class="title">产品类型：
+                            <eq name="val['good_type']" value="group">
+                                跟团
+                            </eq>
+                            <eq name="val['good_type']" value="tick">
+                                门票
+                            </eq>
+                            <eq name="val['good_type']" value="scenery">
+                                酒景
+                            </eq>
+                        </span>
+                        <span class="title">产品id：{$val.good_code}</span>
+                        <span class="title btn delete" index="{$val.id}">删除</span>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+        <span class="b-page">{$page}</span>
+    </div>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script>
+    var delBtn = $('.delete'),
+        delUrl = "{:U('home/delPoster')}";
+    delBtn.click(function(){
+        var sure = confirm('确定要删除海报？');
+        if(!sure){
+            return false;
+        }
+
+        var posterId = $(this).attr('index');
+        $.ajax({
+            url:delUrl,
+            data:{'posterId':posterId},
+            success:function(res){
+                if(res.code == 200){
+                    location.reload();
+                }else{
+                    alert(res.msg);
+                }
+            }
+        });
+    });
+</script>
+</html>

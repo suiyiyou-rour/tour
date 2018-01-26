@@ -581,8 +581,6 @@ class OrderController extends BaseController
                 $this->CloseOrder("scenery",$orderSn);
             }
         }
-
-
         $this->ajaxReturn(array('code' => 200, 'data' => $orderInfo));
     }
 

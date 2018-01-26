@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei';
+        }
+
+        body {
+            background-color: #f6f6f6;
+            position: absolute;
+            height: 100%;
+            min-width: 1250px;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #left {
+            height: 100%;
+            display: inline-block;
+            background-color: rgb(219, 216, 216);
+        }
+
+        #left ul {
+            margin-top: 100px;
+            padding: 25px;
+            height: 100%;
+        }
+
+        #left ul li {
+            font-size: 25px;
+            width: 200px;
+            text-align: center;
+            padding: 5px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        #left ul .active {
+            color: black;
+        }
+
+        #left ul li:hover {
+            color: black;
+        }
+
+        #right {
+            vertical-align: top;
+            width: 1000px;
+            display: inline-block;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .b-page {
+            background: #fff;
+            box-shadow: 0 1px 2px 0 #e2e2e2
+        }
+
+        .b-page .page {
+            width: 100%;
+            padding: 30px 15px;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .b-page .page .first,
+        .b-page .page .prev,
+        .b-page .page .current,
+        .b-page .page .num,
+        .b-page .page .current,
+        .b-page .page .next,
+        .b-page .page .end {
+            padding: 8px 16px;
+            margin: 0 5px;
+            display: inline-block;
+            color: #008cba;
+            border: 1px solid #f2f2f2;
+            border-radius: 5px
+        }
+
+        .b-page .page .first:hover,
+        .b-page .page .prev:hover,
+        .b-page .page .current:hover,
+        .b-page .page .num:hover,
+        .b-page .page .current:hover,
+        .b-page .page .next:hover,
+        .b-page .page .end:hover {
+            text-decoration: none;
+            background: #f8f5f5
+        }
+
+        .b-page .page .current {
+            background-color: #008cba;
+            color: #fff;
+            border-radius: 5px;
+            border: 1px solid #008cba
+        }
+
+        .b-page .page .current:hover {
+            text-decoration: none;
+            background: #008cba
+        }
+
+        .show_imange:hover {
+            transform: scale(10, 10);
+            transition: .3s transform;
+        }
+
+        .jumbotron {
+            height: 350px;
+        }
+
+        table {
+            min-width: 1000px;
+        }
+
+        td,
+        th {
+            min-height: 44px;
+            min-width: 30px;
+            display: table-cell;
+            vertical-align: middle !important;
+            padding: 2px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            padding: 1px 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+            margin: 1px 0;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #00baf1;
+            border-color: #46b8da;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #ef5853;
+            border-color: #d43f3a;
+        }
+        #title{
+            text-align: left;
+            padding: 10px;
+        }
+        #title span{
+            display: inline-block;
+            width: 100px;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            text-align: center;
+            color: #666;
+        }
+        #title .title-active{
+            color: red;
+            border-bottom:2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left">
+        <ul>
+            <a href="{:U('home/show')}">
+                <li>首页</li>
+            </a>
+            <li class="active">经销商提现</li>
+            <a href="{:U('home/showComment')}">
+                <li>添加评论</li>
+            </a>
+            <a href="{:U('home/showOrder')}">
+                <li>订单查询</li>
+            </a>
+            <a href="{:U('home/showPoster')}">
+                <li>海报删除</li>
+            </a>
+        </ul>
+    </div>
+    <div id="right">
+        <div id="title">
+            <a href="{:U('home/showExtract?state=4')}"> <span class="{$status==4?'title-active':''}" >提现请求</span> </a>
+            <a href="{:U('home/showExtract?state=3')}"> <span class="{$status==3?'title-active':''}">已提现</span></a>
+            <a href="{:U('home/showExtract?state=5')}"> <span class="{$status==5?'title-active':''}">拒绝</span></a>
+        </div>
+        <div class="jumbotron">
+            <table border='1' cellpadding='5' cellspacing='0' style='text-align:center' class="table table-hover table-bordered">
+                <tr>
+                    <th class="text-center">id</th>
+                    <th class="text-center">经销商标识</th>
+                    <th class="text-center">价格</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">账户余额</th>
+                    <th class="text-center">时间</th>
+                    <th class="text-center">提现拒绝备注</th>
+                    <th class="text-center">经销商留言</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                <foreach name="list" item="i">
+                    <tr>
+                        <td>{$i.tb_id}</td>
+                        <td>{$i.user_company}</td>
+                        <td>{$i.tb_money}</td>
+                        <td>
+                            <eq name="i['tb_code']" value="3">
+                                已经提现
+                            </eq>
+                            <eq name="i['tb_code']" value="4">
+                                提现请求
+                            </eq>
+                        </td>
+                        <td>{$i.tb_balance}</td>
+                        <td>{$i.tb_time}</td>
+                        <td>{$i.tb_remark_info}</td>
+                        <td>{$i.tb_jxs_message}</td>
+                        <td>
+                            <eq name="i['tb_code']" value="4">
+                                    <button name="{$i.tb_id}" class='btn btn-primary extract'>确定提现</button>
+                                    <button name="{$i.tb_id}" class='btn btn-danger refuse'>拒绝提现</button>
+                            </eq>
+                        </td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+        <span class="b-page">{$page}</span>
+    </div>
+</body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script>
+
+    var extractUrl = "{:U('home/extractYes')}",
+        extractRefuseUrl = "{:U('home/extractRefuse')}";
+    // 确认
+    $('.extract').click(function(){
+        var confirmRes =confirm('确认提现？');
+        if(confirmRes){
+            $.ajax({
+                url:extractUrl,
+                data:{'id':$(this).attr('name')},
+                success:function(res){
+                    if(res.code == 200){
+                        alert('操作成功！');
+                        location.reload();
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+        }
+    });
+    // 拒绝
+    $('.refuse').click(function(){
+        var confirmRes =confirm('确认拒绝？');
+        if(confirmRes){
+            $.ajax({
+                url:extractRefuseUrl,
+                data:{'id':$(this).attr('name')},
+                success:function(res){
+                    if(res.code == 200){
+                        alert('操作成功！');
+                        location.reload();
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+        }
+    });
+
+</script>
+</html>
