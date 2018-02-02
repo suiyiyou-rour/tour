@@ -162,7 +162,8 @@
             text-decoration: none;
             background: #008cba
         }
-        #show{
+
+        #show {
             height: 860px;
         }
     </style>
@@ -184,6 +185,12 @@
                 <li>订单查询</li>
             </a>
             <li class="active">海报删除</li>
+            <a href="{:U('Page/Share/back')}" target="_blank">
+                <li>添加海报</li>
+            </a>
+            <a href="{:U('home/showSales')}">
+                <li>销量修改</li>
+            </a>
         </ul>
     </div>
     <div id="right">
@@ -218,24 +225,25 @@
 <script>
     var delBtn = $('.delete'),
         delUrl = "{:U('home/delPoster')}";
-    delBtn.click(function(){
+    delBtn.click(function () {
         var sure = confirm('确定要删除海报？');
-        if(!sure){
+        if (!sure) {
             return false;
         }
 
         var posterId = $(this).attr('index');
         $.ajax({
-            url:delUrl,
-            data:{'posterId':posterId},
-            success:function(res){
-                if(res.code == 200){
+            url: delUrl,
+            data: { 'posterId': posterId },
+            success: function (res) {
+                if (res.code == 200) {
                     location.reload();
-                }else{
+                } else {
                     alert(res.msg);
                 }
             }
         });
     });
 </script>
+
 </html>

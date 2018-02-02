@@ -114,6 +114,7 @@
 
         #show {
             padding-top: 20px;
+            text-align: left;
         }
 
         #show .title-text {
@@ -134,16 +135,18 @@
             <a href="{:U('home/showComment')}">
                 <li>添加评论</li>
             </a>
-            <li class="active">订单查询</li>
+            <a href="{:U('home/showOrder')}">
+                <li>订单查询</li>
+            </a>
             <a href="{:U('home/showPoster')}">
                 <li>海报删除</li>
             </a>
             <a href="{:U('Page/Share/back')}" target="_blank">
                 <li>添加海报</li>
             </a>
-            <a href="{:U('home/showSales')}">
-                <li>销量修改</li>
-            </a>
+
+            <li class="active">销量修改</li>
+
         </ul>
     </div>
     <div id="right">
@@ -156,30 +159,51 @@
             </select>
         </div>
         <div class="title-div">
-            <span class="title-text">订单号：</span>
-            <input type="text" id="orderSn" placeholder="请输入订单号" class="inp">
+            <span class="title-text">商品号：</span>
+            <input type="text" id="goodId" placeholder="请输入订单号" class="inp">
         </div>
         <div class="title-div">
             <span class="title-text"></span>
-            <span id="submit" class="btn">确定</span>
+            <span id="submit" class="btn">查询</span>
         </div>
-        <div id='show'></div>
+        <div id='show'>
+            <div class="title-div">
+                <span class="title-text">商品号：</span>1346465465464
+            </div>
+            <div class="title-div">
+                <span class="title-text">原销量：</span>7
+            </div>
+            <div class="title-div">
+                <span class="title-text">新销量：</span>
+                <input type="number" id="sales" placeholder="请输入新销量" class="inp">
+            </div>
+            <div class="title-div">
+                <span class="title-text"></span>
+                <span id="sureBtn" class="btn">确认修改</span>
+            </div>
+        </div>
     </div>
 </body>
 <script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
 <script>
-    var url = "{:U('home/getOrder')}",
+    var url = "{:U('home/getGood')}",
         submitBtn = $('#submit'),
         goodsType = $('#goodsType'),
-        orderSn = $('#orderSn'),
-        showDiv = $('#show');
+        goodId = $('#goodId'),
+        showDiv = $('#show'),
+        changeUrl = "{:U('home/changeSales')}",
+        type = '',
+        goodCode = '';
 
     // 获取订单 => 数据
     submitBtn.click(function () {
         $.ajax({
             url: url,
-            data: { 'goodsType': goodsType.val(), 'orderSn': orderSn.val() },
+            data: { 'goodsType': goodsType.val(), 'goodId': goodId.val() },
             success: function (res) {
+                type = goodsType.val();
+                goodCode = goodId.val();
+
                 if (res.code == 200) {
                     createHtml(res.msg[0]);
                 } else {
@@ -189,25 +213,41 @@
         });
     });
 
-    // 创建订单 => html
-    function createHtml(data) {
+     // 创建订单 => html
+     function createHtml(data) {
         var Html = '<div class="title-div">' +
-            '<span class="title-text" > 订单号：</span >' + data.orderSn +
+            '<span class="title-text" > 商品号：</span >' + data.t_code +
             '</div >' +
             '<div class="title-div">' +
-            '<span class="title-text">产品名：</span>' + data.name +
+            '<span class="title-text">原销量：</span>' + data.t_tick_sell +
             '</div>' +
             '<div class="title-div">' +
-            '<span class="title-text">下单时间：</span>' + data.time +
-            '</div>' +
+            '<span class="title-text">新销量：</span> <input type="number" id="sales" placeholder="请输入新销量" class="inp"></div>' +
             '<div class="title-div">' +
-            '<span class="title-text">付款时间：</span>' + data.payTime +
-            '</div>' +
-            '<div class="title-div">' +
-            '<span class="title-text">经销商：</span>' + data.company +
+            '<span class="title-text"></span>'+
+            '<span id="sureBtn" class="btn">确认修改</span>'+
             '</div>';
         showDiv.html(Html);
     }
+
+    $('#show').on('click','#sureBtn',function(){
+        var num = this.value;
+        if(num == '' || num == null || num < 0){
+            alert('新销量不能为空且小于0');
+            return false;
+        }
+        $.ajax({
+            url: changeUrl,
+            data: { 'goodsType': type, 'goodId': goodCode },
+            success: function (res) {
+                if (res.code == 200) {
+                    alert('修改成功！');
+                } else {
+                    alert(res.msg);
+                }
+            }
+        });
+    })
 </script>
 
 </html>

@@ -160,11 +160,13 @@
             background-color: #ef5853;
             border-color: #d43f3a;
         }
-        #title{
+
+        #title {
             text-align: left;
             padding: 10px;
         }
-        #title span{
+
+        #title span {
             display: inline-block;
             width: 100px;
             font-size: 20px;
@@ -173,9 +175,10 @@
             text-align: center;
             color: #666;
         }
-        #title .title-active{
+
+        #title .title-active {
             color: red;
-            border-bottom:2px solid red;
+            border-bottom: 2px solid red;
         }
     </style>
 </head>
@@ -196,13 +199,25 @@
             <a href="{:U('home/showPoster')}">
                 <li>海报删除</li>
             </a>
+            <a href="{:U('Page/Share/back')}" target="_blank">
+                <li>添加海报</li>
+            </a>
+            <a href="{:U('home/showSales')}">
+                <li>销量修改</li>
+            </a>
         </ul>
     </div>
     <div id="right">
         <div id="title">
-            <a href="{:U('home/showExtract?state=4')}"> <span class="{$status==4?'title-active':''}" >提现请求</span> </a>
-            <a href="{:U('home/showExtract?state=3')}"> <span class="{$status==3?'title-active':''}">已提现</span></a>
-            <a href="{:U('home/showExtract?state=5')}"> <span class="{$status==5?'title-active':''}">拒绝</span></a>
+            <a href="{:U('home/showExtract?state=4')}">
+                <span class="{$status==4?'title-active':''}">提现请求</span>
+            </a>
+            <a href="{:U('home/showExtract?state=3')}">
+                <span class="{$status==3?'title-active':''}">已提现</span>
+            </a>
+            <a href="{:U('home/showExtract?state=5')}">
+                <span class="{$status==5?'title-active':''}">拒绝</span>
+            </a>
         </div>
         <div class="jumbotron">
             <table border='1' cellpadding='5' cellspacing='0' style='text-align:center' class="table table-hover table-bordered">
@@ -236,8 +251,8 @@
                         <td>{$i.tb_jxs_message}</td>
                         <td>
                             <eq name="i['tb_code']" value="4">
-                                    <button name="{$i.tb_id}" class='btn btn-primary extract'>确定提现</button>
-                                    <button name="{$i.tb_id}" class='btn btn-danger refuse'>拒绝提现</button>
+                                <button name="{$i.tb_id}" class='btn btn-primary extract'>确定提现</button>
+                                <button name="{$i.tb_id}" class='btn btn-danger refuse'>拒绝提现</button>
                             </eq>
                         </td>
                     </tr>
@@ -253,17 +268,17 @@
     var extractUrl = "{:U('home/extractYes')}",
         extractRefuseUrl = "{:U('home/extractRefuse')}";
     // 确认
-    $('.extract').click(function(){
-        var confirmRes =confirm('确认提现？');
-        if(confirmRes){
+    $('.extract').click(function () {
+        var confirmRes = confirm('确认提现？');
+        if (confirmRes) {
             $.ajax({
-                url:extractUrl,
-                data:{'id':$(this).attr('name')},
-                success:function(res){
-                    if(res.code == 200){
+                url: extractUrl,
+                data: { 'id': $(this).attr('name') },
+                success: function (res) {
+                    if (res.code == 200) {
                         alert('操作成功！');
                         location.reload();
-                    }else{
+                    } else {
                         alert(res.msg);
                     }
                 }
@@ -271,17 +286,17 @@
         }
     });
     // 拒绝
-    $('.refuse').click(function(){
-        var confirmRes =confirm('确认拒绝？');
-        if(confirmRes){
+    $('.refuse').click(function () {
+        var confirmRes = confirm('确认拒绝？');
+        if (confirmRes) {
             $.ajax({
-                url:extractRefuseUrl,
-                data:{'id':$(this).attr('name')},
-                success:function(res){
-                    if(res.code == 200){
+                url: extractRefuseUrl,
+                data: { 'id': $(this).attr('name') },
+                success: function (res) {
+                    if (res.code == 200) {
                         alert('操作成功！');
                         location.reload();
-                    }else{
+                    } else {
                         alert(res.msg);
                     }
                 }
@@ -290,4 +305,5 @@
     });
 
 </script>
+
 </html>

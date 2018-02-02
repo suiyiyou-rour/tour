@@ -68,54 +68,54 @@ class HomeController extends Controller {
         $this->display("home/showExtract");
     }
 
-//提现确认
-public function extractYes(){
-    $id = I("id");
-    if(empty($id)){
-        $this->ajaxReturn(array('code' => 404, 'msg' => '参数错误'));
-    }
-    $where['tb_id'] = $id;
-    $where['tb_code'] = '4';
-    $where['tb_type'] = 'extract';
-    $res = M("jxs_bill")->where($where)->find();
-    if(!$res){
-        $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求数据不存在'));
-    }
-    if(empty($id)){
-        $this->ajaxReturn(array('code' => 404, 'msg' => '参数错误'));
-    }
-    $where['tb_id'] = $id;
-    $where['tb_code'] = '4';
-    $where['tb_type'] = 'extract';
-    $res = M("jxs_bill")->where($where)->find();
-    if(!$res){
-        $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求数据不存在'));
-    }
-    $jxscode = $res["tb_jxs_code"];
-    $mres = M("jxs_money")->where(array("jxs_code" => $jxscode))->find();
-    if(!$mres){
-        $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求账户不存在'));
-    }
+    //提现确认
+    public function extractYes(){
+        $id = I("id");
+        if(empty($id)){
+            $this->ajaxReturn(array('code' => 404, 'msg' => '参数错误'));
+        }
+        $where['tb_id'] = $id;
+        $where['tb_code'] = '4';
+        $where['tb_type'] = 'extract';
+        $res = M("jxs_bill")->where($where)->find();
+        if(!$res){
+            $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求数据不存在'));
+        }
+        if(empty($id)){
+            $this->ajaxReturn(array('code' => 404, 'msg' => '参数错误'));
+        }
+        $where['tb_id'] = $id;
+        $where['tb_code'] = '4';
+        $where['tb_type'] = 'extract';
+        $res = M("jxs_bill")->where($where)->find();
+        if(!$res){
+            $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求数据不存在'));
+        }
+        $jxscode = $res["tb_jxs_code"];
+        $mres = M("jxs_money")->where(array("jxs_code" => $jxscode))->find();
+        if(!$mres){
+            $this->ajaxReturn(array('code' => 304, 'msg' => '提现请求账户不存在'));
+        }
 
-    $money = (float)$res["tb_money"];   //提现金额
-    $money = abs($money);       //正数
-    $already_money = (float)$mres["jxs_already_money"]; //账户已提现
-    $all = $money + $already_money; //总 已提现
+        $money = (float)$res["tb_money"];   //提现金额
+        $money = abs($money);       //正数
+        $already_money = (float)$mres["jxs_already_money"]; //账户已提现
+        $all = $money + $already_money; //总 已提现
 
-    $Model = M();           // 实例化一个空对象
-    $Model->startTrans();  // 开启事务
-    //更新账单表提现状态
-    $om = $Model->table('lf_jxs_bill')->where($where)->data(array("tb_code" => '3'))->save();
-    //经销商账户表
-    $pm = $Model->table('lf_jxs_money')->where(array("jxs_code" => $jxscode))->data(array("jxs_already_money" => $all))->save();
-    if ($om && $pm ) {
-        $Model->commit();
-        $this->ajaxReturn(array('code' => '200', 'msg' => '操作成功'));
-    } else {
-        $Model->rollBack();
-        $this->ajaxReturn(array('code' => '403', 'msg' => '操作失败，请联系管理员'));
+        $Model = M();           // 实例化一个空对象
+        $Model->startTrans();  // 开启事务
+        //更新账单表提现状态
+        $om = $Model->table('lf_jxs_bill')->where($where)->data(array("tb_code" => '3'))->save();
+        //经销商账户表
+        $pm = $Model->table('lf_jxs_money')->where(array("jxs_code" => $jxscode))->data(array("jxs_already_money" => $all))->save();
+        if ($om && $pm ) {
+            $Model->commit();
+            $this->ajaxReturn(array('code' => '200', 'msg' => '操作成功'));
+        } else {
+            $Model->rollBack();
+            $this->ajaxReturn(array('code' => '403', 'msg' => '操作失败，请联系管理员'));
+        }
     }
-}
      //提现拒绝
      public function extractRefuse(){
         $id = I("id");
@@ -246,7 +246,7 @@ public function extractYes(){
                 ->select();
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('poster',$posterData);                
-        $this->display();
+        $this->display('home/showPoster');
     }
     // 删除海报
     public function delPoster(){
@@ -266,5 +266,60 @@ public function extractYes(){
         if($res){
             $this->ajaxReturn(array('code' => '200', 'msg' => '删除成功'));
         }
+    }
+
+    // 订单查询
+    public function showOrder(){
+        $this->display('home/showOrder');
+    }
+
+    // 销量查询
+    public function getGood(){
+        $type = I('goodsType');
+        $goodId = I('goodId');
+        if(empty($type) || empty($goodId)){
+            $this->ajaxReturn(array('code' => '304', 'msg' => '参数错误'));
+        }
+        switch($type){
+            case 'tick':
+                $sql = 'select t_code,t_tick_sell from lf_tick where t_code='.$goodId;
+                break;
+            case 'scenery':
+                $sql = 'select s_code,s_sell from lf_scenery where s_code='.$goodId;
+                break;
+            case 'group':
+                $sql = 'select g_code,g_sell from lf_group where g_code='.$goodId;
+        }
+
+        $data = M()->query($sql);
+        if(empty($data)){
+            $this->ajaxReturn(array('code' => '404', 'msg' => '无此数据'));
+        }
+        $this->ajaxReturn(array('code' => '200', 'msg' => $data));
+    }
+
+    // 销量修改
+    public function changeSales(){
+        $type = I('goodsType');
+        $goodId = I('goodId');
+        if(empty($type) || empty($goodId)){
+            $this->ajaxReturn(array('code' => '304', 'msg' => '参数错误'));
+        }
+        switch($type){
+            case 'tick':
+                $sql = 'update lf_tick set t_tick_sell='.$goodId.' where t_code='.$goodId;
+                break;
+            case 'scenery':
+                $sql = 'update lf_scenery set s_sell='.$goodId.'  where s_code='.$goodId;
+                break;
+            case 'group':
+                $sql = 'update lf_group set g_sell='.$goodId.'   where g_code='.$goodId;
+        }
+
+        $res = M()->query($sql);
+        if(!$res){
+            $this->ajaxReturn(array('code' => '404', 'msg' => '失败'));
+        }
+        $this->ajaxReturn(array('code' => '200'));
     }
 }
