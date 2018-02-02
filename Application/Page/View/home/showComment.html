@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>随意游</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei';
+        }
+
+        body {
+            background-color: #f6f6f6;
+            position: absolute;
+            height: 100%;
+            min-width: 1250px;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #left {
+            height: 100%;
+            display: inline-block;
+            background-color: rgb(219, 216, 216);
+        }
+
+        #left ul {
+            margin-top: 100px;
+            padding: 25px;
+            height: 100%;
+        }
+
+        #left ul li {
+            font-size: 25px;
+            width: 200px;
+            text-align: center;
+            padding: 5px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        #left ul .active {
+            color: black;
+        }
+
+        #left ul li:hover {
+            color: black;
+        }
+
+        #right {
+            vertical-align: top;
+            width: 1000px;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left">
+        <ul>
+            <a href="{:U('home/show')}">
+                <li>首页</li>
+            </a>
+            <a href="{:U('home/showExtract')}">
+                <li>经销商提现</li>
+            </a>
+            <li class="active">添加评论</li>
+            <a href="{:U('home/showOrder')}">
+                <li>订单查询</li>
+            </a>
+            <a href="{:U('home/showPoster')}">
+                <li>海报删除</li>
+            </a>
+            <a href="{:U('Page/Share/back')}" target="_blank">
+                <li>添加海报</li>
+            </a>
+            <a href="{:U('home/showSales')}">
+                <li>销量修改</li>
+            </a>
+        </ul>
+    </div>
+    <div id="right">
+        <h1>暂无此功能</h1>
+    </div>
+</body>
+
+</html>
