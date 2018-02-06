@@ -248,6 +248,12 @@ class HomeController extends Controller {
         $this->assign('poster',$posterData);                
         $this->display('home/showPoster');
     }
+
+    // 订单查询
+    public function showOrder(){
+        $this->display('home/showOrder');
+    }
+
     // 删除海报
     public function delPoster(){
         $code = I('posterId');
@@ -258,9 +264,6 @@ class HomeController extends Controller {
         $fileName = $res[0]['img_url'];
         $fileName = substr($fileName,0,strpos($fileName,'?'));
         $res = unlink($fileName);
-        if(!$res){
-            $this->ajaxReturn(array('code' => '404', 'msg' => '删除失败'));
-        }
 
         $res = M('img_table')->where('id='.$code)->delete();
         if($res){
@@ -268,9 +271,14 @@ class HomeController extends Controller {
         }
     }
 
-    // 订单查询
-    public function showOrder(){
-        $this->display('home/showOrder');
+    // 添加评论
+    public function showComment(){
+        $this->display('home/showComment');
+    }
+
+    // 修改销量
+    public function showSales(){
+        $this->display('home/showSales');
     }
 
     // 销量查询
@@ -283,43 +291,50 @@ class HomeController extends Controller {
         switch($type){
             case 'tick':
                 $sql = 'select t_code,t_tick_sell from lf_tick where t_code='.$goodId;
+                $data = M()->query($sql);
+                $newData['code']=$data[0]['t_code'];
+                $newData['sell']=$data[0]['t_tick_sell'];
                 break;
             case 'scenery':
                 $sql = 'select s_code,s_sell from lf_scenery where s_code='.$goodId;
+                $data = M()->query($sql);
+                $newData['code']=$data[0]['s_code'];
+                $newData['sell']=$data[0]['s_sell'];
                 break;
             case 'group':
                 $sql = 'select g_code,g_sell from lf_group where g_code='.$goodId;
+                $data = M()->query($sql);
+                $newData['code']=$data[0]['g_code'];
+                $newData['sell']=$data[0]['g_sell'];
         }
-
-        $data = M()->query($sql);
-        if(empty($data)){
+        
+        if(empty($newData)){
             $this->ajaxReturn(array('code' => '404', 'msg' => '无此数据'));
         }
-        $this->ajaxReturn(array('code' => '200', 'msg' => $data));
+        $this->ajaxReturn(array('code' => '200', 'msg' => $newData));
     }
 
     // 销量修改
     public function changeSales(){
         $type = I('goodsType');
         $goodId = I('goodId');
+        $num = I('num');
         if(empty($type) || empty($goodId)){
             $this->ajaxReturn(array('code' => '304', 'msg' => '参数错误'));
         }
         switch($type){
             case 'tick':
-                $sql = 'update lf_tick set t_tick_sell='.$goodId.' where t_code='.$goodId;
+                $sql = 'update lf_tick set t_tick_sell='.$num.' where t_code='.$goodId;
                 break;
             case 'scenery':
-                $sql = 'update lf_scenery set s_sell='.$goodId.'  where s_code='.$goodId;
+                $sql = 'update lf_scenery set s_sell='.$num.' where s_code='.$goodId;
                 break;
             case 'group':
-                $sql = 'update lf_group set g_sell='.$goodId.'   where g_code='.$goodId;
+                $sql = 'update lf_group set g_sell='.$num.' where g_code='.$goodId;
         }
 
         $res = M()->query($sql);
-        if(!$res){
-            $this->ajaxReturn(array('code' => '404', 'msg' => '失败'));
-        }
+ 
         $this->ajaxReturn(array('code' => '200'));
     }
 }

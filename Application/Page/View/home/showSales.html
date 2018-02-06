@@ -167,20 +167,7 @@
             <span id="submit" class="btn">查询</span>
         </div>
         <div id='show'>
-            <div class="title-div">
-                <span class="title-text">商品号：</span>1346465465464
-            </div>
-            <div class="title-div">
-                <span class="title-text">原销量：</span>7
-            </div>
-            <div class="title-div">
-                <span class="title-text">新销量：</span>
-                <input type="number" id="sales" placeholder="请输入新销量" class="inp">
-            </div>
-            <div class="title-div">
-                <span class="title-text"></span>
-                <span id="sureBtn" class="btn">确认修改</span>
-            </div>
+           
         </div>
     </div>
 </body>
@@ -205,7 +192,7 @@
                 goodCode = goodId.val();
 
                 if (res.code == 200) {
-                    createHtml(res.msg[0]);
+                    createHtml(res.msg);
                 } else {
                     alert(res.msg);
                 }
@@ -215,11 +202,12 @@
 
      // 创建订单 => html
      function createHtml(data) {
+         
         var Html = '<div class="title-div">' +
-            '<span class="title-text" > 商品号：</span >' + data.t_code +
+            '<span class="title-text" > 商品号：</span >' + data.code +
             '</div >' +
             '<div class="title-div">' +
-            '<span class="title-text">原销量：</span>' + data.t_tick_sell +
+            '<span class="title-text">原销量：</span>' + data.sell +
             '</div>' +
             '<div class="title-div">' +
             '<span class="title-text">新销量：</span> <input type="number" id="sales" placeholder="请输入新销量" class="inp"></div>' +
@@ -231,17 +219,18 @@
     }
 
     $('#show').on('click','#sureBtn',function(){
-        var num = this.value;
+        var num = $('#sales').val();
         if(num == '' || num == null || num < 0){
             alert('新销量不能为空且小于0');
             return false;
         }
         $.ajax({
             url: changeUrl,
-            data: { 'goodsType': type, 'goodId': goodCode },
+            data: { 'goodsType': type, 'goodId': goodCode ,'num':num},
             success: function (res) {
                 if (res.code == 200) {
                     alert('修改成功！');
+                    submitBtn.click();
                 } else {
                     alert(res.msg);
                 }
