@@ -104,7 +104,7 @@ class BaseLoginController extends BaseController
                 'user_wx_code' => $openid,
                 'user_pwd' =>array('neq','')
                 ))->delete();
-            $r = M('user')->where(array('user_id' => $useInfo['user_id']))->save($data);
+            $r = M('user')->where(array('user_account' => $mobile, 'user_pwd' => $password))->save($data);
             if($r){
                 session('online_use_info', $useInfo);
                 if($useInfo['user_type'] == 2){ // 经销商登录
