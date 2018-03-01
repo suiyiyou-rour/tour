@@ -679,9 +679,10 @@ class SceneryController extends BaseController
         M('scenery')->where('s_code=' . $code . " and s_user_id=" . $this->userId)->save($bdata);
         $ri = I('post.rl');
         $tickType = I('post.datatype');//有效期模式 1 有效期 2 价格日历
-        if ($tickType == 0) {
+      
+        if ($tickType == 1) {
             $this->addLine($ri, $code);
-        } elseif ($tickType == 1) {
+        } elseif ($tickType == 2) {
             $this->addPriceCa($ri, $code);
         }
     }
@@ -694,8 +695,8 @@ class SceneryController extends BaseController
         $tickType = 1;//有效期模式 1 有效期 2 价格日历
         $data['s_tick_date'] = $tickType;//价格模式
         M('scenery')->where(array('s_code' => $code, 's_user_id' => $this->userId))->save($data);
-        M('scenery_yx')->where(array('y_code' => $code, 'y_user_id' => $this->userId))->delete();
-
+        M('scenery_yx')->where(array('y_code' => $code,'y_user_id' => $this->userId))->delete();
+        
         foreach ($ri as $i) {
             $ydata['y_b_time'] = $i['date'];//有效期开始时间
             $ydata['y_can_use_time'] = $i['cdate'];//可用时间c
@@ -728,7 +729,8 @@ class SceneryController extends BaseController
     {
         $tickType = 2;//有效期模式 1 有效期 2 价格日历
         M('scenery')->where(array('s_code' => $code, 's_user_id' => $this->userId))->save(array('s_tick_date' => $tickType));
-        M("seceny_price")->where(array('p_code' => $code, 'p_user_code' => $this->userId))->delete();
+        M("seceny_price")->where(array('p_code' => $code,'p_user_code' => $this->userId))->delete();
+       
         foreach ($ri as $i) {
             $date = $i['date'];//时间
             $data['p_js_price'] = $i['closeprice'];//结算价格
