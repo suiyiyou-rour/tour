@@ -102,9 +102,9 @@ class BaseLoginController extends BaseController
             // 登录 查看是否有openid  有就先删除原先的  再写入保存
             M('user')->where(array(
                 'user_wx_code' => $openid,
-                'user_pwd' =>array('neq','')
+                'user_pwd' =>''
                 ))->delete();
-            $r = M('user')->where(array('user_account' => $mobile, 'user_pwd' => $password))->save($data);
+            $r = M('user')->where(array('user_account'=>$mobile, 'user_pwd' => $password))->save($data);
             if($r){
                 session('online_use_info', $useInfo);
                 if($useInfo['user_type'] == 2){ // 经销商登录
@@ -123,7 +123,7 @@ class BaseLoginController extends BaseController
             }
         }
         session('online_use_info', $useInfo);
-            if($useInfo['user_type'] == 2){ // 经销商登录
+        if($useInfo['user_type'] == 2){ // 经销商登录
             $company = $useInfo['user_company'];
             $newPid = $useInfo['user_id'];
             $img = $useInfo['user_head_img'];

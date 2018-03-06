@@ -125,3 +125,50 @@ function createQRcode($save_path,$qr_data='PHP QR Code :)',$qr_level='L',$qr_siz
     else
         return FALSE;
 }
+
+/**
+ * 图片合成 左上方
+ * @param string $bigImagePath   大图地址
+ * @param string $qrCodePath     小图地址 
+ * @param string $savePath       保存地址
+ * @param int    $left           距离左边的位置
+ * @param int    $top            距离上方的位置
+ */
+
+function qCode($bigImagePath,$qrCodePath,$savePath,$left=0,$top=0){
+    vendor('Image.class#qCode');
+    $img = new newImage();
+    $img->qCode($bigImagePath,$qrCodePath,$savePath,$left,$top);
+}
+
+/**
+ * 图片合成 右下方
+ * @param string $bigImagePath   大图地址
+ * @param string $qrCodePath     小图地址 
+ * @param string $savePath       保存地址
+ * @param int    $right          距离右边的位置
+ * @param int    $bottom         距离下方的位置
+ */
+function lowerRight($bigImagePath,$qrCodePath,$savePath,$right=0,$bottom=0){
+    vendor('Image.class#qCode');
+    $img = new newImage();
+    $img->lowerRight($bigImagePath,$qrCodePath,$savePath,$right,$bottom);
+}
+
+/**
+ * 缩略图
+ * @param string $imagePath      图片地址
+ * @param string $savePath       保存地址
+ * @param int    $width          缩略宽度
+ * @param int    $hight          缩略长度
+ */
+
+function thumb($imagePath,$savePath,$width=0,$hight=0){
+    vendor('Image.class#qCode');
+    $img = new newImage();
+    $img->thumb($imagePath,$savePath,$width,$hight);
+}
+
+
+
+
