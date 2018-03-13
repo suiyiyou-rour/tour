@@ -196,6 +196,19 @@ class OrderController extends BaseController
             $this->ajaxReturn(array('code' => 403, 'msg' => '非法数据'));
         }
 
+        //验证最大最小购买人数
+        $peopleLimit = json_decode($tickInfo["t_yd_num"],true);
+        if ($peopleLimit["max"]) {
+            if ($num > $peopleLimit["max"]) {
+                $this->ajaxReturn(array('code' => 304, "msg" => "每单最多购买人数,不能超过" . $peopleLimit["max"] . "人"));
+            }
+        }
+        if ($peopleLimit["min"]) {
+            if ($num < $peopleLimit["min"]) {
+                $this->ajaxReturn(array('code' => 304, "msg" => "每单最少购买人数,不能小于" . $peopleLimit["min"] . "人"));
+            }
+        }
+
         # TODO 判断是否需要身份证
         if($tickInfo["t_tick_playerInfo"] == 1){
             if(empty($IdCard)){
@@ -581,6 +594,8 @@ class OrderController extends BaseController
                 $this->CloseOrder("scenery",$orderSn);
             }
         }
+
+
         $this->ajaxReturn(array('code' => 200, 'data' => $orderInfo));
     }
 
