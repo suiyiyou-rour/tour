@@ -343,7 +343,7 @@ function pageRender(data) {
 
         if (data.g_child_all_info[1].h2) {
             fyHtml += '<p><span class="title">儿童价说明</span> : ' +
-                '<p>年龄' + data.g_child_all_info[1].h1 + '至' + data.g_child_all_info[1].h2 + '厘米(含)';
+                '<p>身高' + data.g_child_all_info[1].h1 + '至' + data.g_child_all_info[1].h2 + '厘米(含)';
             childIndex = 1;
         }
 
