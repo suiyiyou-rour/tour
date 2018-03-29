@@ -1,6 +1,6 @@
 <?php
-
-class newImage
+namespace Image;
+class Imagick
 {
 
     /**
@@ -90,8 +90,4 @@ class newImage
         imagedestroy($des); 
         imagedestroy($src); 
     }
-
-    
-
-
 }
