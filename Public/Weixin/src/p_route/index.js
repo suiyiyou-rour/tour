@@ -80,7 +80,8 @@ var priceData,
     name,
     userId,
     zfInfo,     //自费项目信息
-    childZC;    //儿童是否占床位
+    childZC,    //儿童是否占床位
+    proName;
 
 $.ajax({
     url: URL,
@@ -206,13 +207,41 @@ function pageRender(data) {
     $('#beginPlace').text(data.g_go_address);  //出发地
     $('#proID').text(data.g_code);             //产品ID
     $('#proName').text(data.g_name + data.g_m_tittle + data.g_n_code);  //商品标题
+    proName = data.g_name + data.g_m_tittle + data.g_n_code;
+
+    wx.ready(function () {
+        //分享朋友圈
+        wx.onMenuShareTimeline({
+            title: proName,
+            link: link,
+            imgUrl: $('.item-pic').eq(0).prop('src')
+        });
+        //分享朋友
+        wx.onMenuShareAppMessage({
+            title: document.title,
+            desc: proName,
+            link: link,
+            imgUrl: $('.item-pic').eq(0).prop('src')
+        });
+    })
 
     //产品描述
     var ms = data.g_routing;
+    var venu = data.g_venu,
+        msHtml = '';
+
+    for (var i = 0; i < venu.length; i++) {
+        msHtml += '<p><span class="title">集合地点' + (i + 1) + ':</span> ' + venu[i].place + '</p>' +
+            '<p><span class="title">集合时间' + (i + 1) + ':</span> ' + venu[i].time + '</p>' +
+            '<p><span class="title">返回地点' + (i + 1) + ':</span> ' + venu[i].backplace + '</p>' +
+            '<p><span class="title">备注' + (i + 1) + ':</span> ' + venu[i].remark + '</p>'
+    }
+
+
     if (ms) {
 
-        var msLen = ms.length,
-            msHtml = '';
+        var msLen = ms.length;
+
 
         for (var i = 0; i < msLen; i++) {
 
@@ -220,11 +249,11 @@ function pageRender(data) {
                 '<p><span class="title">出发地</span> : ' + ms[i].startplace + '</p>' +
                 '<p><span class="title">住宿</span> : ' + ms[i].live + '</p>';
 
-            if (data.g_stay != '1') {
-                ms[i].food.breakfast.bool == 'false' ? msHtml += '<p><span class="title">用餐</span> : 不含早餐 ' : msHtml += '<p><span class="title">用餐</span> : 含早餐 ';
-                ms[i].food.lunch.bool == 'false' ? msHtml += ' 不含午餐 ' : msHtml += ' 含午餐 ';
-                ms[i].food.dinner.bool == 'false' ? msHtml += ' 不含晚餐 </p>' : msHtml += ' 含晚餐 </p>';
-            }
+
+            ms[i].food.breakfast.bool == 'false' ? msHtml += '<p><span class="title">用餐</span> : 不含早餐 ' : msHtml += '<p><span class="title">用餐</span> : 含早餐 ' + ms[i].food.breakfast.val;
+            ms[i].food.lunch.bool == 'false' ? msHtml += ' 不含午餐 ' : msHtml += ' 含午餐 ' + ms[i].food.lunch.val;
+            ms[i].food.dinner.bool == 'false' ? msHtml += ' 不含晚餐 </p>' : msHtml += ' 含晚餐 ' + ms[i].food.dinner.val + '</p>';
+
 
             msHtml += '<p><span class="title">途径线路</span> : 坐' + ms[i].way.trans;
 
@@ -620,21 +649,7 @@ if (urlKey('pid')) {
 } else {
     link = location.href + '&pid=' + getCookie('pid');
 }
-wx.ready(function () {
-    //分享朋友圈
-    wx.onMenuShareTimeline({
-        title: document.title,
-        link: link,
-        imgUrl: public + '/Weixin/image/wxbg.png'
-    });
-    //分享朋友
-    wx.onMenuShareAppMessage({
-        title: document.title,
-        desc: $('#proName').text(),
-        link: link,
-        imgUrl: public + '/Weixin/image/wxbg.png',
-    });
-})
+
 
 
 

@@ -128,6 +128,21 @@ function pageRender(data) {
     $('#proID').html(data.t_code);
     //产品名字
     $('#proName').text(data.t_tick_name + '+' + data.t_tick_cat + '+' + data.t_tick_spot);
+    wx.ready(function () {
+        //分享朋友圈
+        wx.onMenuShareTimeline({
+            title: $('#proName').text(),
+            link: link,
+            imgUrl: $('.item-pic').eq(0).prop('src')
+        });
+        //分享朋友
+        wx.onMenuShareAppMessage({
+            title: document.title,
+            desc: $('#proName').text(),
+            link: link,
+            imgUrl: $('.item-pic').eq(0).prop('src')
+        });
+    })
 
 
     //上个月
@@ -484,20 +499,6 @@ if (urlKey('pid')) {
 } else {
     link = location.href + '&pid=' + getCookie('pid');
 }
-wx.ready(function () {
-    //分享朋友圈
-    wx.onMenuShareTimeline({
-        title: document.title,
-        link: link,
-        imgUrl: public + '/Weixin/image/wxbg.png'
-    });
-    //分享朋友
-    wx.onMenuShareAppMessage({
-        title: document.title,
-        desc: $('#proName').text(),
-        link: link,
-        imgUrl: public + '/Weixin/image/wxbg.png',
-    });
-})
+
 
 
