@@ -155,7 +155,10 @@ class JsapiController extends Controller
 
     private function groupNote($orderSn,$num){//发送短信通知供应商
         //供应商短信通知
-        $payStatus = M('group_order')->field("g_user_id,g_group_name,g_name,g_pay_time")->where('g_order_sn=' . $orderSn)->find();
+        $payStatus = M('group_order')->field("g_user_id,g_group_name,g_name,g_pay_time,g_mobile")->where('g_order_sn=' . $orderSn)->find();
+        if(mb_strlen($payStatus["g_group_name"],'utf8') > 16){
+            $payStatus["g_group_name"] = msubstr($payStatus["g_group_name"], 0, 16, 'utf-8', true);
+        }
         if($payStatus["g_user_id"]){
             $pSwhere["sp_id"] = $payStatus["g_user_id"];
             $pSwhere["sp_open"] = 1;
@@ -163,27 +166,35 @@ class JsapiController extends Controller
             if($paySp["sp_mobile"]){
                 $WxSms = new \Weixin\Controller\SmsController();
                 $WxSms->SmsTo($paySp["sp_mobile"],$payStatus["g_group_name"],$payStatus["g_name"]."，共".$num."人",$payStatus["g_pay_time"]);
+                $WxSms->SmsToUser($payStatus["g_mobile"],$payStatus["g_group_name"],$payStatus["g_name"]."，共".$num."人",$payStatus["g_pay_time"]);
             }
         }
     }
 
     private function tickNote($orderSn,$num){//发送短信通知供应商
         //供应商短信通知
-        $orderInfo = M('tick_order')->field("t_tick_id,t_tick_name,t_order_user_name,t_pay_time")->where(array('t_order_sn' => $orderSn))->find();
+        $orderInfo = M('tick_order')->field("t_tick_id,t_tick_name,t_order_user_name,t_pay_time,t_order_user_mobile")->where(array('t_order_sn' => $orderSn))->find();
+        if(mb_strlen($orderInfo["t_tick_name"],'utf8') > 16){
+            $payStatus["t_tick_name"] = msubstr($orderInfo["t_tick_name"], 0, 16, 'utf-8', true);
+        }
          if($orderInfo["t_tick_id"]){
-                $pSwhere["sp_id"] = $orderInfo["t_tick_id"];
-                $pSwhere["sp_open"] = 1;
-                $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
-                if($paySp["sp_mobile"]){
-                    $WxSms = new \Weixin\Controller\SmsController();
-                    $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"]."，共".$num."人",$orderInfo["t_pay_time"]);
-                }
+            $pSwhere["sp_id"] = $orderInfo["t_tick_id"];
+            $pSwhere["sp_open"] = 1;
+            $paySp = M('sp')->field("sp_mobile")->where($pSwhere)->find();
+            if($paySp["sp_mobile"]){
+                $WxSms = new \Weixin\Controller\SmsController();
+                $WxSms->SmsTo($paySp["sp_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"]."，共".$num."人",$orderInfo["t_pay_time"]);
+                $WxSms->SmsToUser($orderInfo["t_order_user_mobile"],$orderInfo["t_tick_name"],$orderInfo["t_order_user_name"]."，共".$num."人",$orderInfo["t_pay_time"]);
             }
+        }
     }
 
     private function sceneryNote($orderSn,$num){//
         //供应商短信通知
-        $orderInfo = M('seceny_order')->field("o_user_id,o_seceny_name,o_name,o_pay_time")->where(array('o_order_sn' => $orderSn))->find();
+        $orderInfo = M('seceny_order')->field("o_user_id,o_seceny_name,o_name,o_pay_time,o_mobile")->where(array('o_order_sn' => $orderSn))->find();
+        if(mb_strlen($orderInfo["o_seceny_name"],'utf8') > 16){
+            $payStatus["o_seceny_name"] = msubstr($orderInfo["o_seceny_name"], 0, 16, 'utf-8', true);
+        }
         if($orderInfo["o_user_id"]){
             $pSwhere["sp_id"] = $orderInfo["o_user_id"];
             $pSwhere["sp_open"] = 1;
@@ -191,6 +202,7 @@ class JsapiController extends Controller
             if($paySp["sp_mobile"]){
                 $WxSms = new \Weixin\Controller\SmsController();
                 $WxSms->SmsTo($paySp["sp_mobile"],"景酒套餐名称：".$orderInfo["o_seceny_name"],$orderInfo["o_name"]."，共".$num."人",$orderInfo["o_pay_time"]);
+                $WxSms->SmsToUser($orderInfo["o_mobile"],"景酒套餐名称：".$orderInfo["o_seceny_name"],$orderInfo["o_name"]."，共".$num."人",$orderInfo["o_pay_time"]);
             }
         }
     }

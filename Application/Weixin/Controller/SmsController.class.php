@@ -204,6 +204,37 @@ class SmsController extends Controller
         }
     }
 
+    /** 用户购买发送给用户 短信验证码
+     *  @param mobile：供应商手机号
+     *  @param productName：产品名
+     *  @param userName：用户名
+     *  @param time：下单时间
+     */
+    public function SmsToUser($mobile,$productName,$userName,$time)
+    {
+        // 参数校验
+        if(!$mobile || !$productName || !$userName || !$time){
+            return 0;
+        }
+
+        // 配置阿里云短信 -- 模板参数
+        $params["PhoneNumbers"] =  $mobile;
+        $params["SignName"] = "随意游网络";
+        $params["TemplateCode"] = "SMS_129760825";
+        $params['TemplateParam'] = Array (
+            "productName" => $productName,
+            "userName" => $userName,
+            "time" => $time,
+        );
+
+        $result = $this->sendVerify($params);
+        if($result){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+
     // 随机生成6位数验证码 pow() -> 求幂
     public function generate_code($length = 6)
     {
