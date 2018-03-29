@@ -1,2 +1,4 @@
-node_modules/*
-dist/*
+/Public/Weixin/node_modules
+/Public/Page/node_modules
+/Public/Weixin/dist
+/Public/Page/dist
