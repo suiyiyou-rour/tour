@@ -59,9 +59,62 @@
 
         #right {
             vertical-align: top;
-            width: 1000px;
+            width: 900px;
             display: inline-block;
             text-align: center;
+            margin-top: 80px;
+        }
+
+        #right .title-div {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        #right .title-text {
+            display: inline-block;
+            width: 200px;
+            font-size: 23px;
+            color: #666;
+            text-align: right;
+        }
+
+        #right .inp {
+            width: 250px;
+            height: 30px;
+            border-radius: 3px;
+            border: 1px solid #acacac;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid #666;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #bce8f1;
+            color: #3c763d;
+        }
+
+        .title {
+            padding: 0 0 15px 15px;
+            border-bottom: 1px solid red;
         }
     </style>
 </head>
@@ -91,8 +144,89 @@
         </ul>
     </div>
     <div id="right">
-        <h1>暂无此功能</h1>
-    </div>
+        <div class="title-div">
+            <span class="title-text">类型：</span>
+            <select id="onlineType" class="inp">
+                <option value="1">跟团</option>
+                <option value="3">景酒</option>
+                <option value="2">门票</option>
+            </select>
+        </div>
+        <div class="title-div">
+            <span class="title-text">商品号：</span>
+            <input type="text" id='code' class="inp">
+        </div>
+        <div class="title-div">
+            <span class="title-text"></span>
+            <input type="button" value="上线" class="btn" id='btn'>
+        </div>
+        <div class="title"></div>
+        <div class="title-div">
+            <span class="title-text">类型：</span>
+            <select id="goodsType" class="inp">
+                <option value="1">跟团</option>
+                <option value="3">景酒</option>
+                <option value="2">门票</option>
+            </select>
+        </div>
+
+        <div class="title-div">
+            <span class="title-text">订单号：</span>
+            <input type="text" id="orderSn" placeholder="请输入订单号" class="inp">
+        </div>
+        <div class="title-div">
+            <span class="title-text"></span>
+            <span id="refund" class="btn">退款</span>
+        </div>
+        <div class="title"></div>
 </body>
+<script src="__PUBLIC__/common/jquery-2.1.1.min.js"></script>
+<script>
+
+    var code = $('#code'), btn = $('#btn'), refund = $('#refund'), orderSn = $('#orderSn'), goodsType = $('#goodsType'),onlineType=$('#onlineType');
+
+    // 商品上线
+    btn.click(function () {
+      
+        var confirmRes = confirm('确认上线？');
+        
+        if (confirmRes) {
+            $.ajax({
+                url: "{:U('home/goodsOnline')}",
+                data: { 'code': code.val() ,'type': onlineType.val()},
+                success: function (res) {
+                    if (res.code == 200) {
+                        alert('操作成功！');
+                        location.reload();
+                    } else {
+                        alert(res.msg);
+                    }
+                }
+            })
+        }
+    });
+
+    // 订单退款
+    refund.click(function () {
+        
+        var confirmRes = confirm('确认退款？'), url = "{:U('home/goodsRefund')}";
+        
+        if (confirmRes) {
+            $.ajax({
+                url: url,
+                data: { 'orderSn': orderSn.val(), 'type': goodsType.val() },
+                success: function (res) {
+                    if (res.code == 200) {
+                        alert('操作成功！');
+                        location.reload();
+                    } else {
+                        alert(res.msg);
+                    }
+                }
+            })
+        }
+    });
+
+</script>
 
 </html>
