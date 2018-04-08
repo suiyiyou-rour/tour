@@ -337,4 +337,146 @@ class HomeController extends Controller {
  
         $this->ajaxReturn(array('code' => '200'));
     }
+
+    //上线
+    public function goodsOnline(){
+        $type = I("type");
+        $code = I("code");
+        if(empty($type) || empty($code)){
+            $this->ajaxReturn(array('code' => '404', 'msg' => '参数错误'));
+        }
+        if($type == 1){ //跟团
+            $this->groupOnline($code);
+        }else if($type == 2){   //门票
+            $this->ticketOnline($code);
+        }else if($type == 3){   //景酒
+            $this->sceneryOnline($code);
+        }
+    }
+
+    //退款
+    public function goodsRefund(){
+        $type = I("type");
+        $orderSn = I("orderSn");
+        if(empty($type) || empty($orderSn)){
+            $this->ajaxReturn(array('code' => '404', 'msg' => '参数错误'));
+        }
+        if($type == 1){ //跟团
+            $this->groupRefund($orderSn);
+        }else if($type == 2){   //门票
+            $this->ticketRefund($orderSn);
+        }else if($type == 3){   //景酒
+            $this->sceneryRefund($orderSn);
+        }
+    }
+
+    //跟团上线
+    private function groupOnline($code){
+        $where['g_code']        =  $code;
+        $where['g_is_del']      =  array('neq', '1');
+        $group = M("group")->field("g_id,g_is_pass")->where($where)->find();
+        if(!$group){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这个商品'));
+        }
+        if($group["g_is_pass"] == 5){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这个商品已经在上线状态'));
+        }
+        $result = M('group')->where($where)->save(array("g_is_pass"=>5));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '上线成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '上线失败'));
+        }
+    }
+
+    //门票上线
+    private function ticketOnline($code){
+        $where['t_code']         =  $code;
+        $where['t_tick_del']     =  array('neq', '1');
+        $tick = M("tick")->field("t_id,t_tick_type")->where($where)->find();
+        if(!$tick){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这个商品'));
+        }
+        if($tick["t_tick_type"] == 4){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这个商品已经在上线状态'));
+        }
+        $result = M('tick')->where($where)->save(array("t_tick_type"=>4));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '上线成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '上线失败'));
+        }
+    }
+
+    //景酒上线
+    private function sceneryOnline($code){
+        $where['s_code']         =  $code;
+        $where['s_is_del']       =  array('neq', '1');
+        $tick = M("scenery")->field("s_id,s_type")->where($where)->find();
+        if(!$tick){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这个商品'));
+        }
+        if($tick["s_type"] == 5){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这个商品已经在上线状态'));
+        }
+        $result = M('scenery')->where($where)->save(array("s_type"=>5));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '上线成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '上线失败'));
+        }
+    }
+
+    //跟团退款
+    private function groupRefund($order_sn){
+        $order = M("group_order")->field("g_order_id,g_order_type")->where(array("g_order_sn" => $order_sn))->find();
+        if(!$order){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这条订单'));
+        }
+        if($order["g_order_type"] == 6){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这条订单已经是退款状态了'));
+        }
+        $result = M('group_order')->where(array("g_order_sn" => $order_sn))->save(array("g_order_type"=>"6"));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '退款状态改变成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '退款状态改变失败'));
+        }
+    }
+
+    //门票退款
+    private function ticketRefund($order_sn){
+        $order = M("tick_order")->field("t_order_id,t_tick_order_type")->where(array("t_order_sn" => $order_sn))->find();
+        if(!$order){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这条订单'));
+        }
+        if($order["t_tick_order_type"] == 6){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这条订单已经是退款状态了'));
+        }
+        $result = M('tick_order')->where(array("t_order_sn" => $order_sn))->save(array("t_tick_order_type"=>"6"));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '退款状态改变成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '退款状态改变失败'));
+        }
+    }
+
+    //景酒退款
+    private function sceneryRefund($order_sn){
+        $order = M("seceny_order")->field("o_id,o_order_type")->where(array("o_order_sn" => $order_sn))->find();
+        if(!$order){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '没有这条订单'));
+        }
+        if($order["o_order_type"] == 6){
+            $this->ajaxReturn(array('code' => '403', 'msg' => '这条订单已经是退款状态了'));
+        }
+        $result = M('seceny_order')->where(array("o_order_sn" => $order_sn))->save(array("o_order_type"=>"6"));
+        if($result){
+            $this->ajaxReturn(array('code' => '200', 'msg' => '退款状态改变成功'));
+        }else{
+            $this->ajaxReturn(array('code' => '405', 'msg' => '退款状态改变失败'));
+        }
+    }
+
+
 }
