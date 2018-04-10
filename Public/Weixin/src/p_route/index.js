@@ -309,7 +309,9 @@ function pageRender(data) {
     if (data.g_play_spot.length > 0) {
         fyHtml += '<p><span class="title">门票</span> : ';
         for (var i = 0; i < data.g_play_spot.length; i++) {
-            fyHtml += '<span>' + data.g_play_spot[i].name + '门票</span> ';
+            if(data.g_play_spot[i].selected === 'true') {
+                fyHtml += '<span>' + data.g_play_spot[i].name + '门票</span> ';
+            }
         }
     }
     fyHtml += '</p>';
