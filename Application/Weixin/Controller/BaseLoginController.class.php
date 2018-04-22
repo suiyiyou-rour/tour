@@ -105,7 +105,7 @@ class BaseLoginController extends BaseController
                 'user_pwd' =>''
                 ))->delete();
             $r = M('user')->where(array('user_account'=>$mobile, 'user_pwd' => $password))->save($data);
-            if($r){
+            if($r !== false){
                 session('online_use_info', $useInfo);
                 if($useInfo['user_type'] == 2){ // 经销商登录
                     $company = $useInfo['user_company'];
