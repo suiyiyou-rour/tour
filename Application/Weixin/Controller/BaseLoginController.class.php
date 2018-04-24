@@ -83,6 +83,9 @@ class BaseLoginController extends BaseController
         }
         // 查看用户是否存在
         $useInfo = M('user')->where(array('user_account' => $mobile, 'user_pwd' => $password))->find();
+        if(!$useInfo){
+            $this -> ajaxReturn(array('code' => 403, 'msg' => '账号或者密码错误'));
+        }
         if(!$useInfo['user_wx_code']){
             // 获取微信头像
             $imgUrl = $this->getImg(); 
@@ -102,7 +105,7 @@ class BaseLoginController extends BaseController
             // 登录 查看是否有openid  有就先删除原先的  再写入保存
             M('user')->where(array(
                 'user_wx_code' => $openid,
-                'user_pwd' =>''
+                'user_pwd' => array('EXP','IS NULL')
                 ))->delete();
             $r = M('user')->where(array('user_account'=>$mobile, 'user_pwd' => $password))->save($data);
             if($r !== false){
