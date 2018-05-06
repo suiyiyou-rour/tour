@@ -360,6 +360,10 @@ function pageRender(data) {
         fyHtml += '</p>';
     }
 
+    if(data.g_bc_info) {
+        fyHtml += '<p><span class="title">补充说明</span> : ' + data.g_bc_info + '</p>';
+    }
+
     fyHtml += '<p class="main-title">费用不包含 : </p>';
     if (data.g_bkkl == 'true') {
         fyHtml += '<p><span class="title">支持部分退款</span> : 因交通延阻、罢工、天气、飞机、机器故障、航班取消或更改时间等不可抗力原因所导致的额外费用</p>';
