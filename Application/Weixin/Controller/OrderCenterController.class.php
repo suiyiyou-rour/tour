@@ -28,7 +28,7 @@ class OrderCenterController extends BaseController
         $userPid = M('user')->field('user_id,user_account')->where('user_account='.$userCode)->find();
         $userPid = $userPid['user_id'];
         $page = I('page');
-        $page = $page ? 0 : $page - 1;
+        $page = empty($page) ? 0 : $page - 1;
 
         if($type == 'group'){
             $res = $this -> getGroup($status,$userCode,$userPid,$page,$usertype);
@@ -80,7 +80,7 @@ class OrderCenterController extends BaseController
         return $data;
     }
 
-    private function getTick($status,$userCode,$userPid,$page){
+    private function getTick($status,$userCode,$userPid,$page,$usertype){
 //        $userCode = '18060481803'; // 模拟数据
         $where = 't_tick_order_type='.$status.' and  t_order_user_id='.$userCode;
         if($usertype == 2){
@@ -111,7 +111,7 @@ class OrderCenterController extends BaseController
     }
     
 
-    private function getScenery($status,$userCode,$userPid,$page){
+    private function getScenery($status,$userCode,$userPid,$page,$usertype){
 //        $userCode = '18060481803'; // 模拟数据
         $where = 'o_order_type='.$status.'  and  o_order_add_user='.$userCode;
         if($usertype == 2){
